@@ -1,0 +1,91 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    
+    <div class="row">
+        
+        <div class="offset-4 col-4 offset-4 page_content">
+        
+            <h1 class="col-12 text-center">Inscription</h1>
+
+            {{ form_start(form, {'action': path('user_new'), 'method': 'post', 'attr': {'novalidate': 'novalidate'}}) }}
+                <div class="form-group row">
+                    {{ form_label(form.firstname, 'Nom', {'label_attr': {'class': 'col-4'} }) }}
+                    {{ form_widget(form.firstname, {'attr': {'class': 'form-control col-8'} }) }}
+                </div>
+                <div class="form-group row">
+                    {{ form_label(form.lastname, 'Prénom', {'label_attr': {'class': 'col-4'} }) }}
+                    {{ form_widget(form.lastname, {'attr': {'class': 'form-control col-8'} }) }}
+                </div>
+                <div class="form-group row">
+                    {{ form_label(form.username, 'Pseudo', {'label_attr': {'class': 'col-4'} }) }}
+                    {{ form_widget(form.username, {'attr': {'class': 'form-control col-8'} }) }}
+                </div>
+                <div class="form-group row">
+                    {{ form_label(form.email, 'Adresse email', {'label_attr': {'class': 'col-4'} }) }}
+                    {{ form_widget(form.email, {'attr': {'class': 'form-control col-8'} }) }}
+                </div>
+                <div class="form-group row">
+                    {{ form_label(form.password, 'Mot de passe', {'label_attr': {'class': 'col-4'} }) }}
+                    {{ form_widget(form.password, {'attr': {'class': 'form-control col-8'} }) }}
+                </div>
+                <div class="form-group row">
+                    {{ form_label(form.confirm_password, 'Confirmer le mot de passe', {'label_attr': {'class': 'col-4'} }) }}
+                    {{ form_widget(form.confirm_password, {'attr': {'class': 'form-control col-8'} }) }}
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-1 col-3">
+                        <input class="btn btn-primary button-size" type="submit" value="Valider" />
+                    </div>
+                </div>
+            {{ form_end(form) }}
+            
+            <!-- Liste des erreurs -->
+
+            {% if errors is defined %}
+            <div class="col-12">
+                <div class="alert alert-danger" style="margin-top: 5%">
+                    {% for error in errors %}
+                        <div class="row">
+                            <div class="col-12 form-error text-center"> 
+                                {{ error.message }} 
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+           
+            <!-- Message d'erreur spécifique -->
+
+            {% if message is defined and message is not null %}
+            <div class="col-12">
+                <div class="row alert alert-danger" style="margin-top: 5%">
+                    {% for error in message %}
+                        <div class="col-12 form-error text-center"> 
+                            {{ error }} 
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Message flash spécifique -->
+
+            {% for flash in app.flashes('success') %}
+            <div class="col-12">
+                <div class="alert alert-primary" style="margin-top: 5%">
+                    <div class="row">
+                        <div class="col-12 text-center"> 
+                            {{ flash }} 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+
+    </div>
+    
+{% endblock %}

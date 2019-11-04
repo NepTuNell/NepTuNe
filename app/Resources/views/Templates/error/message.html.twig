@@ -1,0 +1,16 @@
+
+<!-- Message d'erreur spécifique -->
+
+{% if message is defined and message is not null %}
+    <div class="offset-1 col-10 offset-1">
+        <div class="row alert alert-danger" style="margin-top: 5%">
+            {% for error in message %}
+                <div class="col-12 form-error text-center"> 
+                    {{ error }} 
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+                
+

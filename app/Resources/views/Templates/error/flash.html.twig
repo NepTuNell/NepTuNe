@@ -1,0 +1,16 @@
+
+<!-- Message flash spécifique -->
+
+{% for flash in app.flashes('success') %}
+    <div class="offset-lg-3 col-lg-6 offset-lg-3 offset-2 col-8 offset-2">
+        <div class="alert alert-primary" style="margin-top: 5%">
+            <div class="row">
+                <div class="col-12 text-center"> 
+                    {{ flash }} 
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+                
+
