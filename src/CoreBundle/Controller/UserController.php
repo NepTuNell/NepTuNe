@@ -3,16 +3,22 @@
 namespace CoreBundle\Controller;
 
 use CoreBundle\Entity\User;
+use BackendBundle\Entity\Theme;
 use CoreBundle\Services\Mailer;
+use BackendBundle\Entity\Univers;
+use CoreBundle\Entity\PictureProfile;
+use CoreBundle\Form\PictureProfileType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 /**
  * @Route("home")
@@ -49,7 +55,15 @@ class UserController extends Controller
      */
     public function index()
     {
-        return $this->render('User/index.html.twig');
+
+        $universList = $this->manager->getRepository(Univers::class)->findAll();
+
+        return $this->render('index.html.twig', [
+
+            'universList' => $universList,
+           
+        ]);
+
     }
 
     /**
@@ -65,12 +79,18 @@ class UserController extends Controller
         $user    = new User;
         $form    = $this->createForm('CoreBundle\Form\UserType', $user);
         
+        /**
+         * Vérifiaction type de requête
+         */
         if("POST" === $request->getMethod()) {
             
             $form->handleRequest($request);
             
             if ( $form->isSubmitted() && $form->isValid() ) {
                 
+                /**
+                 * Mots de passe saisies
+                 */
                 if (  $form["password"]->getData() === $form["confirm_password"]->getData() ) {
                     
                     /**
@@ -149,6 +169,7 @@ class UserController extends Controller
                          ->add('lastname', TextType::class)
                          ->add('username', TextType::class)
                          ->add('email', EmailType::class)
+                         ->add('pictureProfile', PictureProfileType::class)
                          ->add('password', PasswordType::class, [
                             'mapped' => false
                         ])
@@ -190,7 +211,8 @@ class UserController extends Controller
         } else {
             
             return $this->render('User/Profile/edit.html.twig', [
-                'form' => $form->createview()
+                'form' => $form->createview(),
+                'user' => $user,
             ]);
             
         }

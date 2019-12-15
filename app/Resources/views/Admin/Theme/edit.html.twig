@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+
+		<div class="offset-3 col-6 offset-3">
+            <div class="text-center form-Header">Administration</div>
+			<div class="form-group">
+				
+                <table class="table">
+
+                    <tr class="profileHeaderTr">
+                        <th>
+                            <div class="col-12 text-center">Thème</div>
+                        </th>
+                    </tr>
+					{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+					    <tr>
+						    <td>
+                                <div class="form-group row">
+                                    {{ form_label(form.libelle, 'Libelle', {'label_attr': {'class': 'col-6'}}) }}
+                                    {{ form_widget(form.libelle, {'attr': {'class': 'form-control col-6'} }) }}
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.subdivise, 'Divisé en section', {'label_attr': {'class': 'col-6'}}) }}
+                                    {{ form_widget(form.subdivise, {'attr': {'class': 'form-control col-1'} }) }}
+                                </div>
+						    </td>
+					    </tr>
+			            <tr>
+                            <td>
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <input class="btn btn-primary" type="submit" value="Valider"/>
+                                    </div>
+                                    <div class="col-2">
+                                        <input type="button" class="btn btn-dark" value="Retour" onclick="window.location.href='{{path('admin_show_entity')}}'"/>
+                                    </div>
+                                </div>
+                            </td>
+			            </tr>
+			        {{ form_end(form) }}
+
+                </table>
+
+            </div>
+
+            {{ include('Templates/Error/flash.html.twig') }}
+            {{ include('Templates/Error/error.html.twig') }}
+            {{ include('Templates/Error/message.html.twig') }}
+
+        </div>
+
+    </div>
+
+{% endblock %}

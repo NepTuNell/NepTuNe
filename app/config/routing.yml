@@ -1,3 +1,7 @@
+backend_univers:
+    resource: "@BackendBundle/Controller/UniversController.php"
+    type:     annotation
+
 core:
     resource: "@CoreBundle/Controller/"
     type:     annotation

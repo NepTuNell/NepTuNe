@@ -2,10 +2,15 @@
 
 namespace CoreBundle\Entity;
 
+use Serializable;
+use CoreBundle\Entity\Post;
+use CoreBundle\Entity\Sujet;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -25,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="CoreBundle\Repository\UserRepository")
  */
-class User implements UserInterface
+class User implements UserInterface  
 {
     /**
      * @var int
@@ -35,6 +40,12 @@ class User implements UserInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+   /**
+     * @ORM\OneToOne(targetEntity="PictureProfile", cascade={"persist", "remove"}, inversedBy="user")
+     * One profile's picture has one user
+     */
+    private $pictureProfile;
 
     /**
      * @var string
@@ -106,13 +117,22 @@ class User implements UserInterface
     private $registerKey;
 
     /**
+     * @ORM\OneToMany(targetEntity=Sujet::class, mappedBy="user")
+     */
+    private $sujets;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Post::class, mappedBy="user")
+     */
+    private $posts;
+
+    /**
      * Compte non actif à la génération
      */
     public function __construct()
     {
-
         $this->setIsActive(false);
-
+        $this->sujets = new ArrayCollection();
     }
 
     /**
@@ -124,6 +144,24 @@ class User implements UserInterface
     {
         return $this->id;
     }
+
+    /**
+     * 
+     */
+    public function getPictureProfile()
+    {
+        return $this->pictureProfile;
+    }
+
+    /**
+     * 
+     */
+    public function setPictureProfile($pictureProfile = null)
+    {
+        $this->pictureProfile = $pictureProfile;
+
+        return $this;
+    }    
 
     /**
      * Set firstname

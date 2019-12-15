@@ -1,0 +1,168 @@
+{% extends 'index.html.twig' %}
+
+{% block content %}
+
+    <div id="app"> 
+    
+        {% if section is defined and section is not null %}
+            <div class="text-center col-12 title-Header">Section : {{section.libelle}}</div>
+            <label class="offset-2 col-2" for="filtre">Rechercher :</label> 
+            <input class="col-2" type="text" v-model="input" id="{{theme.id}},{{section.id}}" v-on:keyup="handleSearch({{theme.id}},{{section.id}})"/>
+        {% else %}
+            <div class="text-center col-12 title-Header">Theme : {{theme.libelle}}</div>
+            <label class="offset-2 col-2" for="filtre">Rechercher :</label> 
+            <input class="col-2" type="text" v-model="input" id="{{theme.id}}" v-on:keyup="handleSearch({{theme.id}})"/>
+        {% endif %}
+               
+        <div class="offset-2 col-8 offset-2 tableContent">
+            <table class="table table-hover">
+                <tr style="background-color: rgba(70, 65, 65, 0.5);">
+                    <th>Titre du sujet</th>
+                    <th>Date de création</th>
+                </tr>
+                <tr v-for="sujet in sujets">
+                    <td>[[ sujet.libelle ]]</td>
+                    <td>
+                        [[ sujet.date | dateFR ]] 
+                        <a style="float: right; margin-right:5%;" href="#" v-on:click="generateUrl([[sujet.id]])">
+                            <i class="fas fa-plus-circle"></i>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+                
+        {% if section is defined and section is not null %}
+            <button style="margin-top:5%;" type="button" class="offset-2 btn btn-primary" onclick="window.location.href='{{path('sujet_new_section',{'theme':theme.id, 'section':section.id})}}'">
+                Nouveau
+            </button>
+        {% else %}
+            <button style="margin-top:5%;" type="button" class="offset-2 btn btn-primary" onclick="window.location.href='{{path('sujet_new_theme',{'theme': theme.id})}}'">
+                Nouveau
+            </button>
+        {% endif %}
+
+    </div>
+            <script>
+
+                Vue.filter('dateFR', function (value) {
+                    
+                    if ( !value ) {
+
+                        return ''
+                        
+                    }
+
+                    var date = value.date.split(" ", 1).join();
+
+                    return date.split("-").reverse().join('/');
+                 
+                })
+
+                new Vue({
+                    
+                    el: '#app',
+                    delimiters: ['[[' , ']]'],
+                    data: {
+
+                        input:   null,
+                        sujets:  [],
+
+                    } ,
+                    methods: {
+
+                        handleSearch: function (theme, section = null)  { 
+                               
+                            if ( null !== section ) {
+
+                                 if ( null === this.input || "" === this.input.trim() ) {
+
+                                    var $url = Routing.generate('sujet_list_search_section', {
+                                        'theme': theme,
+                                        'section': section, 
+                                    });
+
+                                } else  {
+
+                                    var $url = Routing.generate('sujet_list_search_section', {
+                                        'theme': theme,
+                                        'section': section, 
+                                        'libelle': this.input.trim()
+                                    });
+
+                                }
+
+                            } else {
+
+                                if ( null === this.input || "" === this.input.trim() ) {
+
+                                    var $url = Routing.generate('sujet_list_search_theme', {
+                                        'theme': theme, 
+                                    });
+
+                                } else  {
+
+                                    var $url = Routing.generate('sujet_list_search_theme', {
+                                        'theme': theme, 
+                                        'libelle': this.input.trim()
+                                    });
+
+                                }
+
+                            }
+
+                            axios ({
+
+                                method: 'get',
+                                url: $url,
+                                responseType: 'json',
+                                
+                            }) 
+                            .then((response)  => { 
+
+                                this.sujets = response.data; 
+                               
+                            })
+                            .catch ( function (error) {
+                            
+                                console.log(error);
+                            
+                            })
+
+                        },
+
+                        generateUrl: function (id) {
+
+                            $url =  Routing.generate('post_view', {
+                                        'sujet': id,
+                                    });
+
+                            window.location.href = $url;
+
+                        }
+
+                    }, 
+                    mounted() {
+
+                        var params = $("input").attr("id").split(",");
+                        
+                        if ( params.length > 1 ) {
+
+                            this.handleSearch(params[0], params[1]);
+
+                        } else {
+
+                            this.handleSearch(params[0]);
+
+                        }
+                        
+
+                    }
+
+                });
+
+            </script>
+    
+
+{% endblock %}
+

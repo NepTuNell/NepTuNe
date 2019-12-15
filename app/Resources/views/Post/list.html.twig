@@ -1,0 +1,199 @@
+{% extends 'index.html.twig' %}
+
+{% block content %}
+
+    <div id="app"> 
+        <span name="sujet" id="{{sujet.id}}" style="display: none"></span> 
+
+        <div style="margin-top: 5%; margin-bottom: 5%;">
+            <div v-for="comment in comments" class="offset-1 col-10 offset-1" style="margin-bottom: 2%;">
+
+                <div class="userPostUsername">
+                    <span>[[comment.username]]</span>
+                    <span v-if="[[comment.id_user]] == {{app.user.id}}">
+                        <a style="float: right; margin-right:5%;" v-on:click="editComment([[comment.id_user]]+'_'+[[comment.id]])"><i class="fas fa-edit"></i></a>
+                    </span>
+                    <span style="float: right">[[comment.date | dateFR ]]</span>
+                </div>
+
+                <div class="userPost">
+                    <span v-html="comment.commentaire"></span>
+                </div>
+
+                <div style="display: none">
+                    <textarea v-bind:id="[[comment.id_user]]+'_'+[[comment.id]]" v-html="comment.commentaire" class="col-12"></textarea>
+                    <a style="margin-right:5%;" v-on:click="postComment([[comment.id_user]]+'_'+[[comment.id]])"><i class="fas fa-edit"></i></a>
+                </div>
+
+            </div>
+        </div>
+        
+        <div style="margin-top: 10%">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            {{ form_label(form.commentaire, 'Nouveau commentaire :', {'label_attr': {'class': 'offset-1 col-11', 'style': 'font-weight: bold; font-size: 1.2em'}}) }}
+                            {{ form_widget(form.commentaire, {'attr': {'class': 'form-control offset-1 col-10 offset-1'} }) }}
+                        </div>
+                    </td>
+                </tr>
+            {{ form_end(form) }}
+            <div class="form-group row">
+                <div class="offset-1 col-2">
+                    <button class="btn btn-primary" type="button" v-on:click="postComment()">
+                        Valider
+                    </button>
+                </div>
+                <div class="col-2">
+                    <input type="" class="btn btn-dark" value="Retour" v-on:click="postComment({{sujet.id}})"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+ 
+        Vue.filter('dateFR', function (value) {
+                    
+            if ( !value ) {
+
+                return ''
+                        
+            }
+
+            var date = value.date.split(" ", 1).join();
+            return date.split("-").reverse().join('/');
+                 
+        })
+
+        vuePost = new Vue({
+                    
+            el: '#app',
+            delimiters: ['[[' , ']]'],
+            data: {
+
+                input:   null,
+                user:    null,
+                comments:  []
+
+            },
+            methods: {
+
+                refreshComment: function() {
+
+                    var $id = $("span[name='sujet']").attr("id");
+                    
+                    var $url = Routing.generate('post_list', {
+                        'sujet': $id,
+                    });
+                   
+                    axios ({
+
+                        method: "get",
+                        url:    $url,
+                        responseType: 'json'
+
+                    })            
+                    .then( (response) => {
+                        this.comments = response.data;
+                    })
+                    .catch ( function (error) {
+                                
+                        console.log(error);
+                                
+                    })
+                
+                },
+
+                postComment: function($post = null) {
+
+                    var $content = null;
+                    var $postId  = null;
+                    var $sujetId = $("span[name='sujet']").attr("id");
+
+                    /**
+                     *  Routage spécifique si il y a un commentaire
+                     *  alors édition sinon création
+                     */
+                    if ( null !== $post ) {
+
+                        $content = $("#"+$post).val();
+                        $postId  = $post.split('_', 2)[1];
+
+                        var $url     = Routing.generate('post_edit', {
+                            'sujet': $sujetId,
+                            'post':  $postId
+                        });
+  
+                    } else {
+
+                        var $content = $.trim($("#corebundle_post_commentaire").val());
+
+                        var $url = Routing.generate('post_new', {
+                            'sujet': $sujetId,
+                        });
+
+                    }
+
+                    /**
+                     * Nécessaire d'instancier un objet FormData pour l'envoi en Post
+                     */
+                    var $data = new FormData();
+                    $data.set('content', $content);
+                    
+                    axios ({
+                        
+                        method: 'post',
+                        url: $url,
+                        data: $data
+
+                    })            
+                    .then( (response) => {
+
+                        /**
+                         *  Passage des commentaires en édition à non visible
+                         */
+                        $(".PostShown").css('display', 'none');
+
+                        /**
+                         * Actualisation des commentaires
+                         */
+                        this.comments = response.data;
+
+                    })
+                    .catch ( function (error) {
+                                
+                        console.log(error);
+                                
+                    })
+                    
+                },
+
+                editComment: function ($post) {
+
+                    /**
+                     *  Ajout d'une classe pour déterminer le commentaire en édition
+                     *  et affichage de celui-ci
+                     */
+                    $('#'+$post).parent().addClass('PostShown');
+                    $('#'+$post).parent().css('display', 'block');
+
+                }
+
+            }, 
+            mounted() {
+
+                /**
+                 *  Affichage des commentaires au chargement de l'instance de vue et donc de la page
+                 */
+                this.refreshComment();
+            }
+
+        });
+
+    </script>
+    
+
+{% endblock %}
+

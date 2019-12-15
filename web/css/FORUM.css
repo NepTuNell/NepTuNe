@@ -5,6 +5,8 @@
 body {
     position: relative;
     min-height: 100vh;
+    margin: 0;
+    font-size: 1vw;
     font-family: "Corbel";
 }
 
@@ -18,17 +20,21 @@ body {
 /////////////////////////////////////////////*/    
 
 /**
-*   Barre de navigation
+*   Barre de navigation principale
 */
-.navbar a {
+#my1stNavBar {
+    height: 8vh;
+}
+
+#my1stNavBar a {
     color: white;
 }
 
-.nav-item {
+#my1stNavBar .nav-item {
     margin-right: 10%;
 }
 
-.link {
+#my1stNavBar .link {
     white-space: nowrap;
     color: rgba(255,255,255,1);
 }
@@ -58,15 +64,96 @@ body {
     font-size: 1.5em;
 }
 
+/*///////////////////////////////////////////
+//         NAVIGATION ENTRE UNIVERS        //
+///////////////////////////////////////////*/
+
+#mainNav {
+    background-color: rgba(135, 130, 130, 0.5);
+}
+
+/**
+ * Liens principals dans la barre de navigation
+ */
+.mainNavLi {
+    white-space: nowrap;
+    font-weight: bold;
+    font-size: 1vw;
+    color: black;
+    height: auto;
+}
+
+.mainNavLi:hover {
+    background-color: rgba(135, 130, 130, 0.7);
+    cursor: pointer;
+}
+
+/**
+ * Liens secondaires dans la barre de navigation
+ * Affichage en flex pour contrôler le libelle et la flêche de l'item
+ */
+.mainNavA {
+    display : flex;
+    justify-content: flex-start;  
+    align-items: center;
+}
+
+.one {
+    flex: 1 1 auto;
+    margin-right: 5%;
+}
+
+.two{
+    flex: 1 1 auto;  
+}
+
+/**
+ *  Menu caché
+ */
+.dropdown-menu {
+    background-color: rgba(135, 130, 130, 0.5);
+}
+
+/**
+ *  Liens contenus dans les listes du menu caché
+ */
+.dropdown-item {
+    font-size: 0.8vw;
+    color: black;
+}
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+}
+
+.nav-link {
+    height: auto;
+    padding: 0.5vh 1vw;
+    border-width: 1px;
+}
+
+/*///////////////////////////////////////////////////////////////////////////////
+//         NAVIGATION PRINCIPALE ENTRE LES SUJETS ET LES COMMENTAIRES          //
+///////////////////////////////////////////////////////////////////////////////*/
+
+#mainContainer {
+    background-color: rgba(192, 192, 192, 0.5);
+    min-height: 80vh;
+}
+
 /*///////////////////////////////////////////////
 //          TRAITEMENT DU CORPS DE PAGE        //
 ///////////////////////////////////////////////*/
 
 #backGround {
-    background-color: rgba(90, 90, 90, 0.3);
-    padding-top: 2%;
-    padding-bottom: 6vh;
-    height: 88vh;
+    background-color: rgba(90, 90, 90, 0.2);
+    min-height: 80vh;
     border-right: 1px solid grey;
     border-left: 1px solid grey;
 }
@@ -93,8 +180,8 @@ body {
 }
 
 /*
-*   Généralités (liste, image...)
-*/
+ * Généralités (liste, image...)
+ */
 ul {
     list-style: none;
 }
@@ -103,6 +190,10 @@ i  {
     margin-right: 3%;
 }
 
+
+/**
+ * Carousel
+ */
 .image_carousel {
     max-width: 100%;
     max-height: 650px;
@@ -116,11 +207,75 @@ i  {
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
 }
 
+/*////////////////////////////////////////////////
+//            TRAITEMENT FORMULAIRE             //
+////////////////////////////////////////////////*/
+
+.table td {
+    padding: .30rem;
+    vertical-align: top;
+}
+
+/**
+ * Ligne d'entête du profil utilisateur
+ */
+.profileHeaderTr {
+    width: 100%;
+    font-size: 1.5em;
+    background-color: rgba(70, 65, 65, 0.8);
+    color: white;
+}
+
+/**
+ * Header des formulaires
+ */
+.title-Header {
+    font-weight: bold;
+    font-size: 1.5em;
+    /*background-image: linear-gradient(to right, #3e3f48, #ffffff);*/
+    margin-top:    5vh;
+    margin-bottom: 2vh;
+}
+
+.label {
+    font-weight: bold;
+}
+
+/*///////////////////////////////////////////////
+//           TRAITEMENT COMMENTAIRE            //
+///////////////////////////////////////////////*/
+
+.userPostUsername {
+    width: 100%;
+    background-color: rgba(85, 80, 80, 0.5);
+    font-weight: bold;      
+}
+
+.userPost { 
+    width: 100%;
+    min-height: 5vh;
+    background-color: rgba(192, 192, 192, 0.5);
+}
+
+.userPost:hover { 
+    background-color: rgba(168, 168, 168, 0.8);
+}
+
+/*////////////////////////////////////////////////////////
+//          TRAITEMENT DES LIMITES DES TABLES           //
+////////////////////////////////////////////////////////*/
+.tableContent {
+    max-height: 50vh;
+    overflow-y: scroll;
+}
+
+
 /*////////////////////////////////////////
 //          TRAITEMENT DU FOOTER        //
 ////////////////////////////////////////*/
 
 #main_footer{  
+    min-height: 7vh;
     color: white;
     width: 100%;
 }

@@ -1,0 +1,87 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+	<div class="row">
+
+        <div class="offset-2 col-8 offset-2 text-center form-Header">Mon compte</div>
+		<div class="offset-3 col-6 offset-3">
+
+			<div class="form-group">
+				
+                <table class="table">
+
+                    <tr class="profileHeaderTr">
+                        <th>
+                            <div class="col-12 text-center">Informations générales</div>
+                        </th>
+                    </tr>
+					{{ form_start(form, {'action': path('user_edit'), 'method': 'post', 'attr': {'novalidate': 'novalidate'}}) }}
+                    
+                        <tr>
+						    <td>
+                                <div class="form-group row">
+                                    {{ form_label(form.firstname, 'Nom', {'label_attr': {'class': 'col-6'} }) }}
+                                    {{ form_widget(form.firstname, {'attr': {'class': 'form-control col-6'} }) }}
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.lastname, 'Prénom', {'label_attr': {'class': 'col-6'} }) }}
+                                    {{ form_widget(form.lastname, {'attr': {'class': 'form-control col-6'} }) }}
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.username, 'Pseudo', {'label_attr': {'class': 'col-6'} }) }}
+                                    {{ form_widget(form.username, {'attr': {'class': 'form-control col-6'} }) }}
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.email, 'Adresse email', {'label_attr': {'class': 'col-6'} }) }}
+                                    {{ form_widget(form.email, {'attr': {'class': 'form-control col-6'} }) }}
+                                </div>
+						    </td>
+					    </tr>
+                        <tr class="profileHeaderTr">
+                            <th>
+                                <div class="col-12 text-center">Image de profil</div>
+                            </th>
+                        </tr>
+					    <tr>
+						    <td>
+                                <div class="form-group row">
+                                    {{ form_label(form.pictureProfile, 'Image de profil', {'label_attr': {'class': 'col-6'} }) }}
+                                    {{ form_widget(form.pictureProfile) }} 
+                                </div>
+                                {% if user.pictureProfile is defined and user.pictureProfile is not null %}
+                                    <div class="form-group row">
+                                        <label class="col-6">Image actuelle</label>
+                                        <img class="col-2" src="{{user.pictureProfile.path ~ '/' ~ user.pictureProfile.pictureFullName}}">
+                                    </div>
+                                {% endif %}
+						    </td>
+					    </tr>
+			            <tr>
+                            <td>
+                                <div class="form-group row">
+                                    {{ form_label(form.password, 'Mot de passe', {'label_attr': {'class': 'col-6'}, 'placeholder': 'Renseignez votre mot de passe...' }) }}
+                                    {{ form_widget(form.password, {'attr': {'class': 'form-control col-6'} }) }}
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-1 col-3">
+                                        <input class="btn btn-dark" type="submit" value="Modifier"/>
+                                    </div>
+                                </div>
+                            </td>
+			            </tr>
+                        
+			        {{ form_end(form) }}
+
+                </table>
+        
+            </div>
+
+        </div>
+
+        {{ include('Templates/Error/error.html.twig') }}
+        {{ include('Templates/Error/message.html.twig') }}
+
+    </div>
+
+{% endblock %}

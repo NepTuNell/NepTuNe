@@ -79,13 +79,22 @@ class SecurityController extends Controller
         
         $user    = $this->get('security.token_storage')->getToken()->getUser();
         
+        /**
+         * Vérification du type de requête
+         */
         if ( 'POST' === $request->getMethod() ) {
         
             $password        = $user->getPassword();
             $confirmPassword = $request->request->get('password');
             
-            if ( !empty($request->request->get('confirmPassword1')) && !empty($request->request->get('confirmPassword2')) && !empty($confirmPassword )) {
+            /**
+             * Vérification du contenu des mots de passe saisies
+             */
+            if ( !empty($request->request->get('confirmPassword1')) && !empty($request->request->get('confirmPassword2')) && !empty($confirmPassword) ) {
                 
+                /**
+                 * Vérification de la concordance des mots de passe
+                 */
                 if ( password_verify($confirmPassword, $password) ) {
                     
                     if ( $request->request->get('confirmPassword1') === $request->request->get('confirmPassword2') ) {

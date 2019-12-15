@@ -4,31 +4,23 @@
 
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>NepTuNe</title>
+        <title>NepTuNe.com</title>
 
         <!-- Bibliothèques Jquery -->
         <script src="{{ asset('js/jquery.js') }}"></script>
+        <script src="{{ asset('js/jquery-ui-1.12.1.custom/jquery-ui.js') }}"></script>
 
+        <!-- Bibliothèque Popper.js -->
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+ 
         <!-- Bibliothèques Boostrap-->
         <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
         <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"/>
 
-        <!-- Lien icone font awesome et CSS personnel -->
+        <!-- Lien icone font awesome et CSS -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-        <link href="{{ asset('css/FORUM.css') }}" rel="stylesheet"/>
-
-        <!-- Plugin TinyMCE -->
-        <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js"></script>
-        <script>
-            tinymce.init({
-                selector: 'textarea',
-                width: '100%',
-                height: 500,
-                branding: false,
-                mode: 'exact',
-                keep_styles: false
-            });
-        </script>
+        <link rel="stylesheet" href="{{ asset('js/jquery-ui-1.12.1.custom/jquery-ui.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('css/FORUM.css') }}"/>
 
         <!-- FOS Routing Bundle -->
         <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
@@ -36,17 +28,26 @@
 
         <!-- development version, includes helpful console warnings -->
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue-mce@latest/dist/vue-mce.web.js"></script>
+
     </head>
 
     <body>
         <!-- HEADER -->
         <header>
             <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="myNavBar">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="my1stNavBar">
                 <div class="collapse navbar-collapse container">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="link" href="">
+                            <a class="link" href="{{path('user_index')}}">
+                                <i class="fas fa-user"></i>
+                                Mon espace
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="link" href="{{path('user_index')}}">
                                 <i class="fas fa-user"></i>
                                 Mon espace
                             </a>
@@ -73,7 +74,7 @@
                                 {{ app.user.username | striptags | nl2br }}
                             </div>
                             <div class=" text-center col-12 modalDiv">
-                                <a href="">
+                                <a href="{{path('user_edit')}}">
                                     <i class="fas fa-user-edit"></i>Mon compte
                                 </a>
                             </div>
@@ -117,15 +118,13 @@
         <!-- Footer -->
 
         <!-- Chargement des fonctions javascript personnelles si l'utilisateur est connecté -->
-        {% if app.user %}
-            <script>
-                {{ include('Javascript/baseJS.js') }}
-                {% block javascripts %}
+        <script>
+            {{ include('Javascript/baseJS.js') }}
+            {% block javascripts %}
 
-                {% endblock %}
-            </script>
-        {% endif %}
-
+            {% endblock %}
+        </script>
+       
     </body>
 
 </html>
