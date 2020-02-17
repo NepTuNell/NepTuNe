@@ -65,7 +65,6 @@ class Mailer extends Controller
 
     }
 
-
     /**
      * Undocumented function
      *

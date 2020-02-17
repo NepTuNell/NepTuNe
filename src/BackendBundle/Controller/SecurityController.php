@@ -2,11 +2,12 @@
 
 namespace BackendBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Doctrine\Common\Persistence\ObjectManager;
 use CoreBundle\Entity\User;
+use BackendBundle\Entity\Univers;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 
 class SecurityController extends Controller
@@ -34,7 +35,6 @@ class SecurityController extends Controller
         $this->manager = $manager;
     
     }
-    
 
     /**
      * Undocumented function
@@ -47,8 +47,10 @@ class SecurityController extends Controller
         
         $error        = $this->get('security.authentication_utils')->getLastAuthenticationError();
         $lastUsername = $this->get('security.authentication_utils')->getLastUsername();
+        $univers      = $this->manager->getRepository(Univers::class)->findAll();
         
         return $this->render('User/Security/login.html.twig',  [
+            'universList'   => $univers,
             'last_username' => $lastUsername,
             'error'         => $error,
         ]);
@@ -68,7 +70,11 @@ class SecurityController extends Controller
     }
     
     /**
-     * Réinitialisation du mot de passe
+     * Undocumented function
+     * 
+     * @Route("/home/password", name="user_reset_password", methods={"GET", "POST"})
+     * @param Request $request
+     * @return void
      */
     public function resetPassword (Request $request)
     {
@@ -77,8 +83,10 @@ class SecurityController extends Controller
             throw $this->createAccessDeniedException('Veuillez vous connecter !');
         }
         
-        $user    = $this->get('security.token_storage')->getToken()->getUser();
-        
+        $univers  = $this->manager->getRepository(Univers::class)->findAll();
+        $user     = $this->get('security.token_storage')->getToken()->getUser();
+        $message  = null;
+
         /**
          * Vérification du type de requête
          */
@@ -109,27 +117,23 @@ class SecurityController extends Controller
                     }
 
                     $message[] = 'Les mots de passe ne sont pas identique !';
-                    return $this->render('User/Security/resetPassword.html.twig', [
-                        'message' => $message
-                    ]);
                     
                 }
 
                 $message[] = "Le mot de passe saisi n'est pas correct";
-                return $this->render('User/Security/resetPassword.html.twig', [
-                    'message' => $message
-                ]);
+            
+            } else {
+            
+                $message[] = "Veuillez renseigner tous les champs !";
             
             }
             
-            $message[] = "Veuillez renseigner tous les champs !";
-            return $this->render('User/Security/resetPassword.html.twig', [
-                'message' => $message
-            ]);
-            
         }
         
-        return $this->render('User/Security/resetPassword.html.twig');
+        return $this->render('User/Security/resetPassword.html.twig', [
+            'message'     =>  $message,
+            'universList' =>  $univers
+        ]);
         
     }
     

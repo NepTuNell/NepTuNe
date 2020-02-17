@@ -1,0 +1,101 @@
+{% extends 'index.html.twig' %}
+
+{% block content %}
+    <div class="row">
+
+		<div class="offset-2 col-8 offset-2">
+        
+            <div class="text-center title-Header">Contrôle compte utilisateur</div>
+		
+            {% if user is defined and user is not null %}
+                <div class="row">
+
+                    <table class="col-12 table table-hover textColor" style="margin-top: 2%; margin-bottom: 5%;">
+                        <thead>
+                            <tr>
+                                <th colspan="2" class="col-12 text-center tableHeaderUserAccount">Généralités</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="libAdminUserAccount">Pseudo :</td>
+                                <td>{{user.username}}</td>
+                            </tr>
+                            <tr>
+                                <td class="libAdminUserAccount">Nom :</td>
+                                <td>{{user.firstname}}</td>
+                            </tr>
+                            <tr>
+                                <td class="libAdminUserAccount">Prénom :</td>
+                                <td>{{user.lastname}}</td>
+                            </tr>
+                            <tr>
+                                <td class="libAdminUserAccount">Adresse email :</td>
+                                <td>{{user.email}}</td>
+                            </tr>
+                            <tr>
+                                <td class="libAdminUserAccount">Rôle</td>
+                                <td>
+                                    {% if user.roles is not empty %}
+                                        {% if user.roles[0] == 'ROLE_ADMIN' %}
+                                            Administrateur
+                                        {% else %}
+                                            {% if user.roles[0] == 'ROLE_MODERATOR' %}
+                                                Modérateur
+                                            {% else %}
+                                                Utilisateur
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                            </tr>       
+                        </tbody>
+                    </table>
+
+                    <table class="col-12 table table-hover text-center">
+                        <thead>
+                            <tr>
+                                <th class="tableHeaderUserAccount">Contrôte de l'utlisateur</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    {% if user.roles is not empty %}
+                                        {% if user.roles[0] == 'ROLE_ADMIN' %}
+                                            <a href="{{path('admin_control_role', {'user': user.id, 'param': 1})}}">Rétrograder modérateur</a>
+                                        {% elseif user.roles[0] == 'ROLE_MODERATOR' %}
+                                            <a style="margin-right:5%;" href="{{path('admin_control_role', {'user': user.id, 'param': 2})}}">Promouvoir administrateur</a>
+                                            <a style="margin-left:5%;" href="{{path('admin_control_role', {'user': user.id, 'param': 0})}}">Rétrograder utlisateur</a>
+                                        {% elseif user.roles[0] == 'ROLE_USER' %}
+                                            <a href="{{path('admin_control_role', {'user': user.id, 'param': 1})}}">Promouvoir modérateur</a>
+                                        {% endif %}
+                                    {% else %}
+                                        <a href="{{path('admin_control_role', {'user': user.id, 'param': 0})}}">Promouvoir utlisateur</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    {% if user.isActive == '1' %}
+                                        <a href="{{path('admin_control_account', {'user': user.id, 'param': 0})}}">Désactiver le compte</a>
+                                    {% else %}
+                                        <a href="{{path('admin_control_account', {'user': user.id, 'param': 1})}}">Activer le compte</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <button style="margin-top: 5%; margin-bottom: 2%;" type="button" class="col-2 btn btn-primary" onclick="window.location.href='{{path('admin_view_accounts')}}'">
+                        Retour
+                    </button>
+
+                </div>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+{% endblock %}

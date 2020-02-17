@@ -1,0 +1,38 @@
+{% extends 'index.html.twig' %}
+
+{% block content %}
+    
+    <div class="row page_content">
+       
+        <div class="offset-2 col-8 text-center title-Header">Tableau de bord</div>
+        
+        <table class="table table-hover offset-2 col-8 offset-2" id="table_admin">
+            <tr>
+                <th>Contrôle du forum</th>
+                <td>
+                    <button class="btn btn-secondary button-size" onclick="window.location.href='{{path('admin_control_forum')}}'">      
+                        Voir
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <th>Eléments supects</th>
+                <td>
+                    <button class="btn btn-secondary button-size">      
+                        Voir
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <th>Contrôle des comptes utilisateurs</th>
+                <td>
+                    <button class="btn btn-secondary button-size" onclick="window.location.href='{{path('admin_view_accounts')}}'">      
+                        Voir
+                    </button>
+                </td>
+            </tr>
+        </table>
+        
+    </div>
+        
+{% endblock %}

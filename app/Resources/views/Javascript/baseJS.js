@@ -1,55 +1,50 @@
 
-//////////////////////////////////////////////
-//            FONCTIONS GLOBALES            //
-//////////////////////////////////////////////
 $(document).ready(function () {
 
-    //////////////////////////////////////////////
-    //      GESTION DES COLLISIONS GLOBALES     //
-    //////////////////////////////////////////////
+    /********************************************* 
+     *          Gestion des collisions   
+     ********************************************/
     $('body').on("click", function (event) {
 
         if (window.event) {
             event = window.event;
         }
 
-        //////////////////////////////////////////////////
-        //      TRAITEMENT DE LA POPUP UTILISATEUR      //
-        //////////////////////////////////////////////////
-        var imgMod = document.getElementById("modalImage");
-        var winMod = document.getElementById("modalWindow");
-        var navBar = document.getElementById("my1stNavBar");
+        /******************************************
+         *   Traitement de la popup utilisateur
+         *****************************************/
+
+        var imgMod          = document.getElementById("modalImage");
+        var winMod          = document.getElementById("modalWindow");
+        var firstNavBar     = document.getElementById("my1stNavBar");
+        var secondNavBar    = document.getElementById("mainNav");
 
         /**
          * Valable si utilisateur connecté
          */
         if ( null !== winMod || null !== imgMod ) {
 
-            /**
-             * Position de la liste de type dropdown 
-             * Position de la popup utilisateur
-             * Position de l'icone utilisateur
-             * Position de la barre de navigation principale
-             */
+            // Position des éléments
             var winModPosition = winMod.getBoundingClientRect(); 
             var imgModPosition = imgMod.getBoundingClientRect();
-            var navPosition    = navBar.getBoundingClientRect();
+            var navPosition    = firstNavBar.getBoundingClientRect();
+            var nav2Position   = secondNavBar.getBoundingClientRect();
 
-            /**
-             * Calcul de la position de la popup utilisateur
-             */
-            var modalWidth = document.documentElement.clientWidth*15/100;
+            // Calcul de la position de la popup utilisateur
+
+            if (window.matchMedia("(min-width: 769px)").matches) {
+                var modalWidth = document.documentElement.clientWidth*17/100;
+            } else {
+                var modalWidth = document.documentElement.clientWidth*50/100;
+            }
+
             var position = imgModPosition['right'] - modalWidth;
 
-            /**
-             * Positionnement de la fenêtre Popup sur la position de l'image Utilisateur
-             */
+            // Positionnement de la fenêtre Popup sur la position de l'image Utilisateur
             winMod.style.left = position+"px";
-            winMod.style.top  = navPosition['bottom']+1+"px";
+            winMod.style.top  = navPosition['bottom']+nav2Position['height']+1+"px";
 
-            /**
-             * Test des positions du curseur pour affichage ou fermeture de la popup
-             */
+            // Test des positions du curseur pour affichage ou fermeture de la popup 
             if (event.clientY < imgModPosition['bottom'] && event.clientY > imgModPosition['top'] &&
                 event.clientX > imgModPosition['left'] && event.clientX < imgModPosition['right']) {
 
@@ -72,59 +67,57 @@ $(document).ready(function () {
 
         }
         
+        /******************************************************
+         *        Traitement de la barre de navigation      
+         *****************************************************/
 
-        ////////////////////////////////////////////////////
-        //      TRAITEMENT DE LA BARRE DE NAVIGATION      //
-        ////////////////////////////////////////////////////
-
-        /**
-         * Position de la liste de type dropdown 
-         * Position du lien pour accéder à la liste
-         */
         var containerPos   = $('.dropdown-submenu ul.dropdown-menu')[0].getBoundingClientRect();
-        var dropdownLiPos  = $('.dropdown-submenu > a')[0].getBoundingClientRect();
 
-        /**
-         * Test de la position du curseur
-         * Fermeture des listes 
-         */
+        // Test de la position du curseur Fermeture des listes  
         if ( event.clientY > containerPos['bottom'] && event.clientY < containerPos['top'] &&
              event.clientX > containerPos['left'] && event.clientX < containerPos['right'] ) {
-
+            
             return;
 
         } else {
 
-            /**
-             * Fermeture de toutes les fenêtres ouvertes
-             */
+            // Fermeture de toutes les fenêtres ouvertes
             $('.dropdown-submenu > a').next('ul').css("display", "none");
 
         }
 
+        /****************************************************************
+         *    Traitement des submenus de la barre de navigation
+         ****************************************************************/
+
+        $('.dropdown-submenu > a').on("click", function (event) {
+            
+            // Fermeture de toutes les fenêtres ouvertes
+            $('.dropdown-submenu > a').next('ul').css("display", "none");
+
+            // Ouverture de celle sur laquelle l'utilisateur a cliqué
+            $(this).next('ul').toggle();
+            event.stopPropagation();
+            event.preventDefault();
+
+        });
+
     });
 
-    ///////////////////////////////////////////////////////////
-    //      AFFICHAGE LA BARRE DE NAVIGATION PRINCIPALE      //
-    ///////////////////////////////////////////////////////////
+    /******************************************* 
+     *      Déclaration des filtres Vue 
+     *******************************************/
+    Vue.filter('dateFR', function (value) {
+                        
+        if ( !value ) {
 
-    /**
-     * Affichage des univers, des thèmes et des sections si elles existent
-     */
-    $('.dropdown-submenu > a').on("click", function (event) {
-        
-        /**
-         * Fermeture de toutes les fenêtres ouvertes
-         */
-        $('.dropdown-submenu > a').next('ul').css("display", "none");
+            return ''
+                            
+        }
 
-        /**
-         * Ouverture de celle sur laquelle l'utilisateur a cliqué
-         */
-        $(this).next('ul').toggle();
-        event.stopPropagation();
-        event.preventDefault();
-
+        var date = value.date.split(" ", 1).join();
+        return date.split("-").reverse().join('/');
+                    
     });
 
 });

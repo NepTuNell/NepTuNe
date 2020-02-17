@@ -3,165 +3,89 @@
 {% block content %}
 
     <div id="app"> 
-    
-        {% if section is defined and section is not null %}
-            <div class="text-center col-12 title-Header">Section : {{section.libelle}}</div>
-            <label class="offset-2 col-2" for="filtre">Rechercher :</label> 
-            <input class="col-2" type="text" v-model="input" id="{{theme.id}},{{section.id}}" v-on:keyup="handleSearch({{theme.id}},{{section.id}})"/>
-        {% else %}
-            <div class="text-center col-12 title-Header">Theme : {{theme.libelle}}</div>
-            <label class="offset-2 col-2" for="filtre">Rechercher :</label> 
-            <input class="col-2" type="text" v-model="input" id="{{theme.id}}" v-on:keyup="handleSearch({{theme.id}})"/>
-        {% endif %}
-               
-        <div class="offset-2 col-8 offset-2 tableContent">
-            <table class="table table-hover">
-                <tr style="background-color: rgba(70, 65, 65, 0.5);">
-                    <th>Titre du sujet</th>
-                    <th>Date de création</th>
-                </tr>
-                <tr v-for="sujet in sujets">
-                    <td>[[ sujet.libelle ]]</td>
-                    <td>
-                        [[ sujet.date | dateFR ]] 
-                        <a style="float: right; margin-right:5%;" href="#" v-on:click="generateUrl([[sujet.id]])">
-                            <i class="fas fa-plus-circle"></i>
-                        </a>
-                    </td>
-                </tr>
+
+        <div class="offset-lg-1 col-lg-10 col-xs-12 col-sm-12">
+
+            {% if section is defined and section is not null %}
+                <div class="col-12 text-center title-Header">Section : {{section.libelle}}</div>
+                <div class="col-12">
+                    <label class="textColor textSize" for="filtre">Rechercher :</label> 
+                    <input type="text" v-model="input" id="{{theme.id}},{{section.id}}"/>
+                    <a href="#" v-on:click="handleSearch({{theme.id}},{{section.id}})"><i class="fas fa-search"></i></a>
+                    <label class="textColor textSize" for="select">Filtre :</label>
+                    <select name="select" class="textColor textSize">
+                        <option>Commence par</option>
+                        <option>Contient</option>
+                    </select>
+                </div>
+            {% else %}
+                <div class="col-12 text-center title-Header">Theme : {{theme.libelle}}</div>
+                <div class="col-12">
+                    <label class="textColor textSize" for="filtre">Rechercher :</label> 
+                    <input type="text" v-model="input" id="{{theme.id}}"/>
+                    <a href="#" v-on:click="handleSearch({{theme.id}})"><i class="fas fa-search searchIco"></i></a>
+                    <label class="textColor textSize" for="select">Filtre :</label>
+                    <select name="select" class="textColor textSize">
+                        <option>Commence par</option>
+                        <option>Contient</option>
+                    </select>
+                </div>
+            {% endif %}
+
+            <table class="table table-hover textSize" id="myDataTable" style="margin-top: 2%;">
+                <thead>
+                    <tr>
+                        <th>Titre du sujet</th>
+                        <th>Date de création</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="sujet in sujets">                         
+                        <td>
+                            <a style="float: right; margin-right:5%;" href="#" v-on:click="redirectSubject([[sujet.id]])">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <span class="textColor">[[ sujet.libelle ]]</span>
+                        </td>
+                        <td>       
+                            <span class="textColor" style="margin-right:5%; float: left;">[[ sujet.date | dateFR ]]</span> 
+
+                            <a v-if="sujet.id_user === userID || userAuthorised === true" style="float: right" href="#" v-on:click="deleteSubject([[sujet.id]])">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        
+                            <a v-if="sujet.id_user === userID || userAuthorised === true" style="float: right; margin-right:5%;" href="#" v-on:click="editSubject([[sujet.id]])">
+                                <i class="fas fa-edit"></i>
+                            </a>
+
+                            <span class="textColor" style="float: right; white-space: nowrap; margin-right:5%;">
+                                <i v-if="sujet.nbPost > 0">[[sujet.nbPost]] réponses</i>
+                                <i v-else>[[sujet.nbPost]] réponse</i>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
+
         </div>
                 
         {% if section is defined and section is not null %}
-            <button style="margin-top:5%;" type="button" class="offset-2 btn btn-primary" onclick="window.location.href='{{path('sujet_new_section',{'theme':theme.id, 'section':section.id})}}'">
+            <button style="margin-top: 5%; margin-bottom: 2%;" type="button" class="offset-lg-1 btn btn-primary textSize" onclick="window.location.href='{{path('sujet_new_section',{'theme':theme.id, 'section':section.id})}}'">
                 Nouveau
             </button>
         {% else %}
-            <button style="margin-top:5%;" type="button" class="offset-2 btn btn-primary" onclick="window.location.href='{{path('sujet_new_theme',{'theme': theme.id})}}'">
+            <button style="margin-top: 5%; margin-bottom: 2%;" type="button" class="offset-lg-1 btn btn-primary textSize" onclick="window.location.href='{{path('sujet_new_theme',{'theme': theme.id})}}'">
                 Nouveau
             </button>
         {% endif %}
 
+        {{ include('Templates/Error/flash.html.twig') }}
+
     </div>
-            <script>
-
-                Vue.filter('dateFR', function (value) {
-                    
-                    if ( !value ) {
-
-                        return ''
-                        
-                    }
-
-                    var date = value.date.split(" ", 1).join();
-
-                    return date.split("-").reverse().join('/');
-                 
-                })
-
-                new Vue({
-                    
-                    el: '#app',
-                    delimiters: ['[[' , ']]'],
-                    data: {
-
-                        input:   null,
-                        sujets:  [],
-
-                    } ,
-                    methods: {
-
-                        handleSearch: function (theme, section = null)  { 
-                               
-                            if ( null !== section ) {
-
-                                 if ( null === this.input || "" === this.input.trim() ) {
-
-                                    var $url = Routing.generate('sujet_list_search_section', {
-                                        'theme': theme,
-                                        'section': section, 
-                                    });
-
-                                } else  {
-
-                                    var $url = Routing.generate('sujet_list_search_section', {
-                                        'theme': theme,
-                                        'section': section, 
-                                        'libelle': this.input.trim()
-                                    });
-
-                                }
-
-                            } else {
-
-                                if ( null === this.input || "" === this.input.trim() ) {
-
-                                    var $url = Routing.generate('sujet_list_search_theme', {
-                                        'theme': theme, 
-                                    });
-
-                                } else  {
-
-                                    var $url = Routing.generate('sujet_list_search_theme', {
-                                        'theme': theme, 
-                                        'libelle': this.input.trim()
-                                    });
-
-                                }
-
-                            }
-
-                            axios ({
-
-                                method: 'get',
-                                url: $url,
-                                responseType: 'json',
-                                
-                            }) 
-                            .then((response)  => { 
-
-                                this.sujets = response.data; 
-                               
-                            })
-                            .catch ( function (error) {
-                            
-                                console.log(error);
-                            
-                            })
-
-                        },
-
-                        generateUrl: function (id) {
-
-                            $url =  Routing.generate('post_view', {
-                                        'sujet': id,
-                                    });
-
-                            window.location.href = $url;
-
-                        }
-
-                    }, 
-                    mounted() {
-
-                        var params = $("input").attr("id").split(",");
-                        
-                        if ( params.length > 1 ) {
-
-                            this.handleSearch(params[0], params[1]);
-
-                        } else {
-
-                            this.handleSearch(params[0]);
-
-                        }
-                        
-
-                    }
-
-                });
-
-            </script>
+    
+    <script>
+        {{ include('Javascript/sujetJS.js') }}
+    </script>
     
 
 {% endblock %}

@@ -5,6 +5,7 @@ namespace BackendBundle\Entity;
 use CoreBundle\Entity\Sujet;
 use Doctrine\ORM\Mapping as ORM;
 use BackendBundle\Entity\Univers;
+use BackendBundle\Entity\Activity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -30,12 +31,19 @@ class Theme
     /**
      * @var Univers
      *
+     * @ORM\OneToMany(targetEntity=Activity::class, mappedBy="theme", cascade={"persist", "remove"})
+     */
+    private $activities;
+
+    /**
+     * @var Univers
+     *
      * @ORM\ManyToOne(targetEntity=Univers::class, inversedBy="themes")
      */
     private $univers;
 
     /**
-     * @ORM\OneToMany(targetEntity=Section::class, mappedBy="theme")
+     * @ORM\OneToMany(targetEntity=Section::class, mappedBy="theme" , cascade={"persist", "remove"})
      */
     private $sections;
 
@@ -141,11 +149,23 @@ class Theme
     }
 
     /**
+     * get Subdivise
      * 
+     * @return Booleen
      */
     public function getSubdivise()
     {
         return $this->subdivise;
+    }
+
+    /**
+     * get Activities
+     * 
+     * @return ArrayCollection
+     */
+    public function getActivities()
+    {
+        return $this->activities;
     }
 
     /****************************************************

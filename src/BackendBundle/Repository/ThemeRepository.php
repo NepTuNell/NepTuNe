@@ -2,6 +2,8 @@
 
 namespace BackendBundle\Repository;
 
+use BackendBundle\Entity\Theme;
+
 /**
  * ThemeRepository
  *
@@ -10,4 +12,22 @@ namespace BackendBundle\Repository;
  */
 class ThemeRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Nombre de theme pour un univers
+     */
+    public function getThemeByUnivers(Univers $univers)
+    {
+
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();  
+        
+        $result = $queryBuilder ->select('COUNT(t)')
+                                ->from(Theme::class, 't')
+                                ->where('t.univers = :univers')
+                                ->setParameter('univers', $univers)
+                                ->getQuery();
+
+        return $result->getSingleScalarResult();
+
+    }
+
 }

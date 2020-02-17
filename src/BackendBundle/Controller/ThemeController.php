@@ -3,7 +3,9 @@
 namespace BackendBundle\Controller;
 
 use CoreBundle\Entity\User;
+use CoreBundle\Entity\Sujet;
 use BackendBundle\Entity\Theme;
+use BackendBundle\Entity\Section;
 use BackendBundle\Entity\Univers;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -36,7 +38,6 @@ class ThemeController extends Controller
     }
 
     /**
-     * Creates a new theme entity.
      *
      * @Route("/new/{univers}", name="theme_new", requirements={"univers"="\d+"})
      * @Method({"GET", "POST"})
@@ -50,8 +51,10 @@ class ThemeController extends Controller
 
         }
 
-        $theme = new Theme();
-        $form  = $this->createForm('BackendBundle\Form\ThemeType', $theme);
+        $errors         = null;
+        $theme          = new Theme();
+        $universList    = $this->manager->getRepository(Univers::class)->findAll();
+        $form           = $this->createForm('BackendBundle\Form\ThemeType', $theme);
         $form->handleRequest($request);
 
         if ( "POST" === $request->getMethod() ) {
@@ -62,7 +65,7 @@ class ThemeController extends Controller
                 $theme->setUnivers($univers);
                 $this->manager->persist($theme);
                 $this->manager->flush();
-                $this->addFlash('success', 'Un nouveau a été créé !');
+                $this->addFlash('success', 'Un nouveau thème a été créé !');
                 
                 return $this->redirectToRoute('theme_edit', ['theme' => $theme->getId()]);
 
@@ -70,28 +73,21 @@ class ThemeController extends Controller
 
             $errors = $this->get('validator')->validate($theme);
 
-            return $this->render('Admin/Theme/edit.html.twig', array(
-
-                'theme' => $theme,
-                'form' => $form->createView(),
-                'errors' => $errors
-
-            ));
-
         }
 
         return $this->render('Admin/Theme/edit.html.twig', array(
 
-            'theme' => $theme,
-            'form' => $form->createView(),
+            'theme'         => $theme,
+            'form'          => $form->createView(),
+            'errors'        => $errors,
+            'universList'   =>  $universList
 
         ));
 
     }   
 
     /**
-     * Creates a new univer entity.
-     *
+     * 
      * @Route("/edit/{theme}", name="theme_edit", requirements={"theme"="\d+"})
      * @Method({"GET", "POST"})
      */
@@ -104,6 +100,8 @@ class ThemeController extends Controller
 
         }
 
+        $errors = null;
+        $univers = $this->manager->getRepository(Univers::class)->findAll();
         $form = $this->createForm('BackendBundle\Form\ThemeType', $theme);
         $form->handleRequest($request);
 
@@ -115,31 +113,18 @@ class ThemeController extends Controller
                 $this->manager->flush();
                 $this->addFlash('success', 'Le thème a été modifié !');
 
-                return $this->render('Admin/Theme/edit.html.twig', array(
-
-                    'theme'  => $theme,
-                    'form'   => $form->createView(),
-        
-                ));
-
             }
 
             $errors = $this->get('validator')->validate($theme);
 
-            return $this->render('Admin/Theme/edit.html.twig', array(
-
-                'theme'  => $theme,
-                'form'   => $form->createView(),
-                'errors' => $errors
-
-            ));
-        
         }
 
         return $this->render('Admin/Theme/edit.html.twig', array(
 
             'theme'  => $theme,
             'form'   => $form->createView(),
+            'errors' => $errors,
+            'universList'   =>  $univers
 
         ));
 
@@ -151,21 +136,39 @@ class ThemeController extends Controller
      * @Route("/{theme}", name="theme_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, Theme $theme)
+    public function deleteTheme(Request $request, Theme $theme)
     {
 
         if ( !$this->isGranted('ROLE_ADMIN') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
             throw $this->createAccessDeniedException('Vous n\'avez pas les droits nécessaires pour accéder à cette section !');
         }
-       
+        
+        $message     = array();
+        $universList = $this->manager->getRepository(Univers::class)->findAll();
+
         if ( "GET" === $request->getMethod() ) {
 
-            $this->manager->remove($theme);
-            $this->manager->flush();
+            $sections = $this->manager->getRepository(Section::class)->findBy([
+                'theme' => $theme,
+            ]);
+
+            $sujets   = $this->manager->getRepository(Sujet::class)->findBy([
+                'theme' => $theme,
+            ]);
+
+            if ( count($sections) > 0 || count($sujets) > 0 ) {
+                $message[] = "Le thème est utilisé !";
+            } else {
+                $this->manager->remove($theme);
+                $this->manager->flush();
+            }
 
         } 
 
-        return $this->redirectToRoute('admin_show_entity');
+        return $this->render('Admin/controlForum.html.twig', [
+            "message"   =>   $message,
+            "universList" => $universList,
+        ]);
     }
 
 }

@@ -46,7 +46,7 @@ class SujetController extends Controller
      */
     public function listSujet(Theme $theme, Section $section = null)
     {
-        
+    
         $univerList = $this->manager->getRepository(Univers::class)->findAll();
 
         return $this->render('Sujet/list.html.twig', [
@@ -60,35 +60,75 @@ class SujetController extends Controller
     }
 
     /**
-     * @Route("/liste/filtre/theme/{theme}/{libelle}", name="sujet_list_search_theme", options = {"expose" = true}, requirements={"theme"="\d+"})
-     * @Route("/liste/filtre/theme/{theme}/section/{section}/{libelle}", name="sujet_list_search_section", options = {"expose" = true}, requirements={"theme"="\d+","section"="\d+"})
+     * @Route("/liste/filtre/theme/{theme}/{option}/{libelle}", name="sujet_list_search_theme", options = {"expose" = true}, requirements={"theme"="\d+"})
+     * @Route("/liste/filtre/theme/{theme}/section/{section}/{option}/{libelle}", name="sujet_list_search_section", options = {"expose" = true}, requirements={"theme"="\d+","section"="\d+"})
      * @Method({"GET"})
      */
-    public function searchSujet(Theme $theme, Section $section = null, $libelle = null)
+    public function searchSujet(Theme $theme, Section $section = null, $libelle = null, $option)
     {
         
+        /**
+         * Mise à l'arrêt du programme 
+         */
+        sleep(1);
+
         if ( null !== $libelle && "" !== $libelle ) {
 
             if ( null !== $section ) {
 
-                $result=$this->manager->getRepository(Sujet::class)->fetchSubjectByLibelle([
-                    'section'     => $section,
-                    'libelle'     => $libelle,
-                ]);
+                switch ( $option )
+                {
+
+                    case 0:
+
+                        $result = $this->manager->getRepository(Sujet::class)->fetchSubjectByLibelleBegin([
+                            'section'     => $section,
+                            'libelle'     => $libelle,
+                        ]);
+
+                    break;
+
+                    case 1:
+
+                        $result = $this->manager->getRepository(Sujet::class)->fetchSubjectByLibelleContains([
+                            'section'     => $section,
+                            'libelle'     => $libelle,
+                        ]);
+
+                    break;
+                }
 
             } else {
 
-                $result=$this->manager->getRepository(Sujet::class)->fetchSubjectByLibelle([
-                    'theme'     => $theme,
-                    'libelle'   => $libelle,
-                ]);
+                switch ( $option )
+                {
+
+                    case 0:
+
+                        $result = $this->manager->getRepository(Sujet::class)->fetchSubjectByLibelleBegin([
+                            'theme'     => $theme,
+                            'libelle'   => $libelle,
+                        ]);
+
+                    break;
+
+                    case 1:
+
+                        $result = $this->manager->getRepository(Sujet::class)->fetchSubjectByLibelleContains([
+                            'theme'     => $theme,
+                            'libelle'   => $libelle,
+                        ]);
+
+                    break;
+
+                }
 
             }
      
         } else {
 
             if ( null !== $section ) {
-
+                
                 $result = $this->manager->getRepository(Sujet::class)->fetchAllSubject([
                     'section' => $section,
                 ]);
@@ -105,6 +145,9 @@ class SujetController extends Controller
 
         $sujets = json_encode($result);
 
+        /**
+         * Envoie de la réponse en format JSON
+         */
         $response = new Response(
             $sujets,
         );
@@ -129,9 +172,11 @@ class SujetController extends Controller
 
         }
 
-        $errors = null;
-        $sujet  = new Sujet();
-        $form   = $this->createForm('CoreBundle\Form\SujetType', $sujet);
+        $user    = $this->get('security.token_storage')->getToken()->getUser();
+        $univers = $this->manager->getRepository(Univers::class)->findAll(); 
+        $errors  = null;
+        $sujet   = new Sujet();
+        $form    = $this->createForm('CoreBundle\Form\SujetType', $sujet);
         $form->handleRequest($request);
 
         if ( "POST" === $request->getMethod() ) {
@@ -146,11 +191,20 @@ class SujetController extends Controller
 
                 $sujet->setTheme($theme);
                 $sujet->setDate(new \DateTime);
+                $sujet->setUser($user);
                 $this->manager->persist($sujet);
                 $this->manager->flush();
                 $this->addFlash('success', 'Une nouveau sujet a été créé !');
                 
-                return $this->redirectToRoute('sujet_edit', ['sujet' => $sujet->getId()]);
+                if ( null !== $section ) {
+
+                    return $this->redirectToRoute('sujet_list_theme', ['theme' => $theme->getId(), 'section' => $section->getId()]);
+    
+                }  else {
+
+                    return $this->redirectToRoute('sujet_list_theme', ['theme' => $theme->getId()]);
+
+                }
 
             }
 
@@ -160,10 +214,12 @@ class SujetController extends Controller
 
         return $this->render('Sujet/edit.html.twig', array(
 
-            'form'      =>  $form->createView(),
-            'theme'     =>  $theme,
-            'section'   =>  $section,
-            'errors'    =>  $errors
+            'form'          =>  $form->createView(),
+            'theme'         =>  $theme,
+            'section'       =>  $section,
+            'universList'   =>  $univers,
+            'modeExe'       =>  "Création",
+            'errors'        =>  $errors
 
         ));
 
@@ -172,22 +228,23 @@ class SujetController extends Controller
     /**
      * Creates a new univer entity.
      *
-     * @Route("/edit/{sujet}", name="sujet_edit", requirements={"sujet"="\d+"})
+     * @Route("/edit/{sujet}", name="sujet_edit", options = {"expose" = true}, requirements={"sujet"="\d+"})
      * @Method({"GET", "POST"})
      */
     public function edit(Request $request, Sujet $sujet)
     {
         
-        if ( !$this->isGranted('ROLE_ADMIN') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
+        if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
 
             throw $this->createAccessDeniedException('Vous n\'avez pas les droits nécessaires pour accéder à cette section !');
 
         }
 
-        $errors   = null;
-        $section  = $sujet->getSection();
-        $theme    = $sujet->getTheme();
-        $form     = $this->createForm('CoreBundle\Form\SujetType', $sujet);
+        $errors    = null;
+        $univers   = $this->manager->getRepository(Univers::class)->findAll();
+        $section   = $sujet->getSection();
+        $theme     = $sujet->getTheme();
+        $form      = $this->createForm('CoreBundle\Form\SujetType', $sujet);
 
         $form->handleRequest($request);
 
@@ -199,12 +256,6 @@ class SujetController extends Controller
                 $this->manager->flush();
                 $this->addFlash('success', 'Le sujet a été modifié !');
 
-                return $this->render('Sujet/edit.html.twig', array(
-
-                    'form'   => $form->createView(),
-        
-                ));
-
             }
 
             $errors = $this->get('validator')->validate($sujet);
@@ -213,10 +264,12 @@ class SujetController extends Controller
 
         return $this->render('Sujet/edit.html.twig', array(
 
-            'form'      =>  $form->createView(),
-            'theme'     =>  $theme,
-            'section'   =>  $section,
-            'errors'    =>  $errors
+            'form'          =>  $form->createView(),
+            'theme'         =>  $theme,
+            'section'       =>  $section,
+            'universList'   =>  $univers,
+            'modeExe'       =>  "Modification",
+            'errors'        =>  $errors
 
         ));
 
@@ -225,13 +278,13 @@ class SujetController extends Controller
     /**
      * Deletes a univer entity.
      *
-     * @Route("/{sujet}", name="sujet_delete", requirements={"sujet"="\d+"})
+     * @Route("/{sujet}", name="sujet_delete", options = {"expose" = true}, requirements={"sujet"="\d+"})
      * @Method("GET")
      */
-    public function deleteAction(Request $request, Sujet $sujet)
+    public function delete(Request $request, Sujet $sujet)
     {
 
-        if ( !$this->isGranted('ROLE_ADMIN') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
+        if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
             throw $this->createAccessDeniedException('Vous n\'avez pas les droits nécessaires pour accéder à cette section !');
         }
        

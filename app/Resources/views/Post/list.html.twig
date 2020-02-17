@@ -1,198 +1,98 @@
 {% extends 'index.html.twig' %}
 
 {% block content %}
-
-    <div id="app"> 
+     
+    <div class="col-12" id="app"> 
+    
         <span name="sujet" id="{{sujet.id}}" style="display: none"></span> 
+        <div class="offset-2 col-8 title-Header text-center">{{sujet.libelle}}</div>
 
-        <div style="margin-top: 5%; margin-bottom: 5%;">
-            <div v-for="comment in comments" class="offset-1 col-10 offset-1" style="margin-bottom: 2%;">
-
-                <div class="userPostUsername">
-                    <span>[[comment.username]]</span>
-                    <span v-if="[[comment.id_user]] == {{app.user.id}}">
-                        <a style="float: right; margin-right:5%;" v-on:click="editComment([[comment.id_user]]+'_'+[[comment.id]])"><i class="fas fa-edit"></i></a>
+        <div style="margin-top: 5%;">
+      
+            <div v-for="obj in comments" class="col-12 offset-lg-1 col-lg-10" style="margin-bottom: 2%;">
+                
+                <div class="userPostUsername textSize col-12">
+                    <span>[[obj.comment.username]]</span>
+                    <span v-if="obj.comment.id_user === userID || userAuthorised === true">
+                        <a style="float: right; margin-right:5%;" v-on:click="editComment([[obj.comment.id_user]]+'_'+[[obj.comment.id]])"><i class="fas fa-edit imgCursor"></i></a>
+                        <a style="float: right; margin-right:2%;" v-on:click="deleteComment([[obj.comment.id]])"><i class="fas fa-trash imgCursor"></i></a>
                     </span>
-                    <span style="float: right">[[comment.date | dateFR ]]</span>
                 </div>
 
-                <div class="userPost">
-                    <span v-html="comment.commentaire"></span>
+                <div class="userPostContainer textSize textColor col-12">
+                    <span v-html="obj.comment.commentaire"></span>
+                </div>
+               
+                <div class="userPostPictures row">
+                    <div v-for="picture in obj.pictures" class="col-lg-4 col-12">
+                        <img class="col-lg-10 imgPost col-10 " v-bind:src="'/jimmy/FORUM/web/upload/images/'+[[picture.pictureName]]+'_'+[[picture.id]]+[[picture.pictureExtension]]" v-bind:alt="[[picture.pictureName]]+[[picture.pictureExtension]]"></img>
+                        <i v-if="obj.comment.id_user === userID || userAuthorised === true" class="fas fa-trash imgCursor col-lg-1 col-2 " v-on:click="removePicture([[picture.id]])"></i>
+                    </div>
+                </div>
+                
+                <div class="userPostDate textColor col-12">
+                    Posté le : [[obj.comment.date | dateFR]]
                 </div>
 
-                <div style="display: none">
-                    <textarea v-bind:id="[[comment.id_user]]+'_'+[[comment.id]]" v-html="comment.commentaire" class="col-12"></textarea>
-                    <a style="margin-right:5%;" v-on:click="postComment([[comment.id_user]]+'_'+[[comment.id]])"><i class="fas fa-edit"></i></a>
+                <div style="display: none" v-bind:id="[[obj.comment.id_user]]+'_'+[[obj.comment.id]]">
+                    <div v-html="obj.comment.commentaire" class="textEditor"></div>
+                    <a type="submit" style="margin-right:5%;" v-on:click="postComment([[obj.comment.id_user]]+'_'+[[obj.comment.id]])"><i class="fas fa-share-square imgCursor"></i></a>
+                    <div class="textColor">Ajouter une image<i style="margin-left: 2%;" name="addPictureButtonEdit" class="fas fa-plus-circle imgCursor iButton" onclick="addPicture('Edit')"></i></div>
+                </div>
+
+                <div class="col-12">
+                    <a><i class="fas fa-thumbs-up imgCursor iLike" v-on:click="like([[obj.comment.id]], 1)"></i></a>
+                    <a><i class="fas fa-thumbs-down imgCursor iDisLike" v-on:click="like([[obj.comment.id]], 2)"></i></a>
+                </div>
+                <div class="col-12">
+                    <div class="iLikeCount">[[obj.comment.nbLike]]</div>
+                    <div class="iDisLikeCount">[[obj.comment.nbDisLike]]</div>
                 </div>
 
             </div>
+
         </div>
-        
-        <div style="margin-top: 10%">
-            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
-                <tr>
-                    <td>
-                        <div class="form-group row">
-                            {{ form_label(form.commentaire, 'Nouveau commentaire :', {'label_attr': {'class': 'offset-1 col-11', 'style': 'font-weight: bold; font-size: 1.2em'}}) }}
-                            {{ form_widget(form.commentaire, {'attr': {'class': 'form-control offset-1 col-10 offset-1'} }) }}
-                        </div>
-                    </td>
-                </tr>
-            {{ form_end(form) }}
-            <div class="form-group row">
-                <div class="offset-1 col-2">
-                    <button class="btn btn-primary" type="button" v-on:click="postComment()">
-                        Valider
-                    </button>
-                </div>
-                <div class="col-2">
-                    <input type="" class="btn btn-dark" value="Retour" v-on:click="postComment({{sujet.id}})"/>
-                </div>
+
+        <div class="col-12">            
+            <span v-for="page in pages">
+                <a v-bind:id="'Selector_'+[[page]]" class="nbPagination" href="#" v-on:click="viewComment([[page]])">[[page]]</a>
+            </span>
+        </div>
+
+        <div class="col-12 ql-divSeparator textColor text-center">
+            Nouveau commentaire
+        </div>
+
+        <div class="ql-divContainer">
+            <div id="editor_new"></div>
+        </div>
+
+        <div class="col-12">
+            <div class="col-12 textColor" style="margin-bottom: 5%;" id="newPost">
+                Ajouter une image <i name="addPictureButtonNew" class="fas fa-plus-circle imgCursor iButton" onclick="addPicture('New')"></i>
             </div>
+            
+            <button class="btn btn-primary textSize" type="button" v-on:click="postComment()">
+                Valider
+            </button>
+
+            {% if sujet.section is defined and sujet.section is not null %}
+                <button class="btn btn-secondary textSize" type="button" onclick="window.location.href='{{path('sujet_list_theme', {'theme': sujet.theme.id, 'section': sujet.section.id})}}'">
+                    Retour
+                </button>
+            {% else %}
+                <button class="btn btn-secondary textSize" type="button" onclick="window.location.href='{{path('sujet_list_theme', {'theme': sujet.theme.id})}}'">
+                    Retour
+                </button>
+            {% endif %}
         </div>
+            
     </div>
     
-    <script>
- 
-        Vue.filter('dateFR', function (value) {
-                    
-            if ( !value ) {
-
-                return ''
-                        
-            }
-
-            var date = value.date.split(" ", 1).join();
-            return date.split("-").reverse().join('/');
-                 
-        })
-
-        vuePost = new Vue({
-                    
-            el: '#app',
-            delimiters: ['[[' , ']]'],
-            data: {
-
-                input:   null,
-                user:    null,
-                comments:  []
-
-            },
-            methods: {
-
-                refreshComment: function() {
-
-                    var $id = $("span[name='sujet']").attr("id");
-                    
-                    var $url = Routing.generate('post_list', {
-                        'sujet': $id,
-                    });
-                   
-                    axios ({
-
-                        method: "get",
-                        url:    $url,
-                        responseType: 'json'
-
-                    })            
-                    .then( (response) => {
-                        this.comments = response.data;
-                    })
-                    .catch ( function (error) {
-                                
-                        console.log(error);
-                                
-                    })
-                
-                },
-
-                postComment: function($post = null) {
-
-                    var $content = null;
-                    var $postId  = null;
-                    var $sujetId = $("span[name='sujet']").attr("id");
-
-                    /**
-                     *  Routage spécifique si il y a un commentaire
-                     *  alors édition sinon création
-                     */
-                    if ( null !== $post ) {
-
-                        $content = $("#"+$post).val();
-                        $postId  = $post.split('_', 2)[1];
-
-                        var $url     = Routing.generate('post_edit', {
-                            'sujet': $sujetId,
-                            'post':  $postId
-                        });
-  
-                    } else {
-
-                        var $content = $.trim($("#corebundle_post_commentaire").val());
-
-                        var $url = Routing.generate('post_new', {
-                            'sujet': $sujetId,
-                        });
-
-                    }
-
-                    /**
-                     * Nécessaire d'instancier un objet FormData pour l'envoi en Post
-                     */
-                    var $data = new FormData();
-                    $data.set('content', $content);
-                    
-                    axios ({
-                        
-                        method: 'post',
-                        url: $url,
-                        data: $data
-
-                    })            
-                    .then( (response) => {
-
-                        /**
-                         *  Passage des commentaires en édition à non visible
-                         */
-                        $(".PostShown").css('display', 'none');
-
-                        /**
-                         * Actualisation des commentaires
-                         */
-                        this.comments = response.data;
-
-                    })
-                    .catch ( function (error) {
-                                
-                        console.log(error);
-                                
-                    })
-                    
-                },
-
-                editComment: function ($post) {
-
-                    /**
-                     *  Ajout d'une classe pour déterminer le commentaire en édition
-                     *  et affichage de celui-ci
-                     */
-                    $('#'+$post).parent().addClass('PostShown');
-                    $('#'+$post).parent().css('display', 'block');
-
-                }
-
-            }, 
-            mounted() {
-
-                /**
-                 *  Affichage des commentaires au chargement de l'instance de vue et donc de la page
-                 */
-                this.refreshComment();
-            }
-
-        });
-
-    </script>
+<script>
+        {{ include("Javascript/postJS.js") }}
+</script>
+    
     
 
 {% endblock %}

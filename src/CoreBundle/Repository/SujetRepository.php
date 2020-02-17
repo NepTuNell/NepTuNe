@@ -2,8 +2,11 @@
 
 namespace CoreBundle\Repository;
 
+use CoreBundle\Entity\Post;
+use CoreBundle\Entity\User;
 use CoreBundle\Entity\Sujet;
 use BackendBundle\Entity\Theme;
+use Doctrine\ORM\Query\Expr\Join;
  
 
 /**
@@ -15,18 +18,35 @@ use BackendBundle\Entity\Theme;
 class SujetRepository extends \Doctrine\ORM\EntityRepository
 {
 
-     /**
-     * Recherche d'un sujet dans un thème ou une section spécifique
+    public function countPostQuery()
+    {
+
+        $countQuery = $this->getEntityManager()->createQueryBuilder();
+
+        $countPost = $countQuery->select('COUNT(p)')
+                                ->from(Post::class, 'p')
+                                ->where('p.sujet = u.id')
+                                ->getDQL();
+
+        return $countPost;
+
+    }
+
+    /**
+     * Recherche tous les sujets dans un thème ou une section spécifique
      */
     public function fetchAllSubject($options = array())
     {
-
+  
         $queryBuilder  = $this->getEntityManager()->createQueryBuilder();  
-        
+        $countPost     = $this->countPostQuery();
+
         if (array_key_exists('section', $options)) {
             
-            $result = $queryBuilder ->select('u')
+            $result = $queryBuilder ->select('u.id, u.libelle, u.date, s.id as id_user')
+                                    ->addSelect('('.$countPost.') as nbPost')
                                     ->from(Sujet::class, 'u')
+                                    ->innerJoin(User::class, 's', Join::WITH, 'u.user = s.id')
                                     ->where('u.section = :section')
                                     ->setParameters([
                                         'section'   => $options['section']
@@ -36,8 +56,10 @@ class SujetRepository extends \Doctrine\ORM\EntityRepository
 
         } else {
 
-            $result = $queryBuilder ->select('u')
+            $result = $queryBuilder ->select('u.id, u.libelle, u.date, s.id as id_user')
+                                    ->addSelect('('.$countPost.') as nbPost')                             
                                     ->from(Sujet::class, 'u')
+                                    ->innerJoin(User::class, 's', Join::WITH, 'u.user = s.id')
                                     ->where('u.theme = :theme')
                                     ->setParameters([
                                         'theme'   => $options['theme']
@@ -52,17 +74,20 @@ class SujetRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
-     * Recherche d'un sujet dans un thème ou une section spécifique
+     * Recherche d'un ou plusieurs sujet(s) dans un thème ou une section spécifique option contient
      */
-    public function fetchSubjectByLibelle($options = array())
+    public function fetchSubjectByLibelleContains($options = array())
     {
 
         $queryBuilder  = $this->getEntityManager()->createQueryBuilder();  
-        
+        $countPost     = $this->countPostQuery();
+
         if (array_key_exists('section', $options)) {
             
-            $result = $queryBuilder ->select('u')
+            $result = $queryBuilder ->select('u.id, u.libelle, u.date, s.id as id_user')
+                                    ->addSelect('('.$countPost.') as nbPost')
                                     ->from(Sujet::class, 'u')
+                                    ->innerJoin(User::class, 's', Join::WITH, 'u.user = s.id')
                                     ->where('u.libelle LIKE :libelle AND u.section = :section')
                                     ->setParameters([
                                         'libelle' => "%".$options['libelle']."%", 
@@ -73,8 +98,10 @@ class SujetRepository extends \Doctrine\ORM\EntityRepository
 
         } else {
 
-            $result = $queryBuilder ->select('u')
+            $result = $queryBuilder ->select('u.id, u.libelle, u.date, s.id as id_user')
+                                    ->addSelect('('.$countPost.') as nbPost')
                                     ->from(Sujet::class, 'u')
+                                    ->innerJoin(User::class, 's', Join::WITH, 'u.user = s.id')
                                     ->where('u.libelle LIKE :libelle AND u.theme = :theme')
                                     ->setParameters([
                                         'libelle' => "%".$options['libelle']."%", 
@@ -86,6 +113,70 @@ class SujetRepository extends \Doctrine\ORM\EntityRepository
         }
 
         return $result->getArrayResult();
+     
+    }
+
+    /**
+     * Recherche d'un ou plusieurs sujet(s) dans un thème ou une section spécifique option commence par
+     */
+    public function fetchSubjectByLibelleBegin($options = array())
+    {
+
+        $queryBuilder  = $this->getEntityManager()->createQueryBuilder(); 
+        $countPost     = $this->countPostQuery();
+        
+        if (array_key_exists('section', $options)) {
+            
+            $result = $queryBuilder ->select('u.id, u.libelle, u.date, s.id as id_user')
+                                    ->addSelect('('.$countPost.') as nbPost')
+                                    ->from(Sujet::class, 'u')
+                                    ->innerJoin(User::class, 's', Join::WITH, 'u.user = s.id')
+                                    ->where('u.libelle LIKE :libelle AND u.section = :section')
+                                    ->setParameters([
+                                        'libelle' => $options['libelle']."%", 
+                                        'section'   => $options['section']
+                                    ])
+                                    ->orderBy('u.date', 'DESC')
+                                    ->getQuery();
+
+        } else {
+
+            $result = $queryBuilder ->select('u.id, u.libelle, u.date, s.id as id_user')
+                                    ->addSelect('('.$countPost.') as nbPost')
+                                    ->from(Sujet::class, 'u')
+                                    ->innerJoin(User::class, 's', Join::WITH, 'u.user = s.id')
+                                    ->where('u.libelle LIKE :libelle AND u.theme = :theme')
+                                    ->setParameters([
+                                        'libelle' => $options['libelle']."%", 
+                                        'theme'   => $options['theme']
+                                    ])
+                                    ->orderBy('u.date', 'DESC')
+                                    ->getQuery();
+
+        }
+
+        return $result->getArrayResult();
+     
+    }
+
+    /**
+     * Recherche des sujets les plus récents
+     */
+    public function fetchMyLastSubjects()
+    {
+
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();  
+        
+        $result = $queryBuilder ->setMaxResults(3)
+                                ->select('s')
+                                ->from(Sujet::class, 's')
+                                ->innerJoin(User::class, 'u')
+                                ->where('s.user = u.id')
+                                ->orderBy('s.date', 'DESC')
+                                ->getQuery()
+                                ->getResult();
+                                
+        return $result;
      
     }
 

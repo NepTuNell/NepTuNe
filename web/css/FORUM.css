@@ -6,6 +6,7 @@ body {
     position: relative;
     min-height: 100vh;
     margin: 0;
+    padding: 0;
     font-size: 1vw;
     font-family: "Corbel";
 }
@@ -15,15 +16,116 @@ body {
     src: url("/TDB/web/fonts/corbel/CORBEL.TTF");
 }
 
-/*/////////////////////////////////////////////
-//            TRAITEMENT  HEADER             //
-/////////////////////////////////////////////*/    
+.imgCursor:hover {
+    cursor: pointer;
+}
 
 /**
-*   Barre de navigation principale
-*/
+ * Traitement du conteneur principal
+ */
+#backGround {
+    z-index: 1;
+    width: 100%;
+    min-height: 80vh;
+    background-image: linear-gradient(90deg, rgb(0, 0, 0), rgb(65, 65, 65)  60%, rgb(0, 0, 0));
+}
+
+#NepTuNe {
+  position: fixed;
+  top: 12vh;
+  left: 0%;
+  width: 100%;
+}
+
+/**
+ * Infobulle sur page de connexion
+ */
+.popup:hover > span {
+    display: block;
+    color: blue;
+    background-color: rgba(88, 80, 80, 0.5);
+    padding: 15px;
+    border-radius: 3px;
+    box-shadow:0 0 2px rgba(0,0,0,.5);
+    font-size: 0.8em;
+}
+
+.popup {
+   position: relative;
+}
+
+.popup > span {
+    display: none;
+}
+
+/*
+ * Généralités (liste, image...)
+ */
+ul {
+    list-style: none;
+}
+
+i  {
+    margin-right: 3%;
+}
+
+/**
+ * Carousel
+ */
+.image_carousel {
+    max-width: 100%;
+    max-height: 650px;
+}
+
+.carousel-control-prev-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
+}
+
+.carousel-control-next-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
+}
+
+/**
+ * Couleur de la police par défaut
+ */
+.textColor {
+    color: #668da3;
+}
+
+/**
+ * Traitement des tables
+ */
+.table thead th {
+    background-color: rgba(0, 47, 70, 1);
+    color: white;
+    padding: 0.5rem;
+    vertical-align: top;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+}
+
+.table td {
+    padding: 0.5rem;
+    vertical-align: top;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: rgba(0, 22, 32, 0.3);
+}
+
+.tableContent {
+    max-height: 60vh;
+    overflow-y: scroll;
+    margin-bottom: 2%;
+}
+
+/*//////////////////////////////////////////////////
+//         TRAITEMENT  NAVBAR  PRINCIPALE         //
+//////////////////////////////////////////////////*/    
 #my1stNavBar {
-    height: 8vh;
+    background-color: #004365;
+    min-height: 8vh;
+    padding: 0;
+    z-index: 2;
 }
 
 #my1stNavBar a {
@@ -39,53 +141,17 @@ body {
     color: rgba(255,255,255,1);
 }
 
-/**
-*   Traitement de la popup sur la page principale
-*/
-.imgCursor:hover {
-    cursor: pointer;
-}
-
-.modal {
-    display: none;
-    background-color: rgba(55, 55, 55, 0.8);
-    color: white;
-    border-radius:3px;
-    box-shadow:0 0 2px rgba(0,0,0,.5);
-    font-size: 0.8vw;
-    height: 35vh;
-    width: 15vw;
-    position: absolute;
-    top: 6vh;
-}
-
-#modalUsername {
-    font-weight: bold;
-    font-size: 1.5em;
-}
-
-/*///////////////////////////////////////////
-//         NAVIGATION ENTRE UNIVERS        //
-///////////////////////////////////////////*/
-
+/*//////////////////////////////////////////////
+//       TRAITEMENT  NAVBAR  UNIVERS          //
+//////////////////////////////////////////////*/    
 #mainNav {
-    background-color: rgba(135, 130, 130, 0.5);
-}
-
-/**
- * Liens principals dans la barre de navigation
- */
-.mainNavLi {
-    white-space: nowrap;
-    font-weight: bold;
-    font-size: 1vw;
-    color: black;
-    height: auto;
+    background-color: #002f46;
+    z-index: 2;
 }
 
 .mainNavLi:hover {
-    background-color: rgba(135, 130, 130, 0.7);
     cursor: pointer;
+    text-decoration: underline;
 }
 
 /**
@@ -111,15 +177,11 @@ body {
  *  Menu caché
  */
 .dropdown-menu {
-    background-color: rgba(135, 130, 130, 0.5);
+    background-color: #002f46;
 }
 
-/**
- *  Liens contenus dans les listes du menu caché
- */
-.dropdown-item {
-    font-size: 0.8vw;
-    color: black;
+.dropdown-item:hover {
+    font-weight: bold;
 }
 
 .dropdown-submenu {
@@ -138,153 +200,604 @@ body {
     border-width: 1px;
 }
 
-/*///////////////////////////////////////////////////////////////////////////////
-//         NAVIGATION PRINCIPALE ENTRE LES SUJETS ET LES COMMENTAIRES          //
-///////////////////////////////////////////////////////////////////////////////*/
-
-#mainContainer {
-    background-color: rgba(192, 192, 192, 0.5);
-    min-height: 80vh;
-}
-
-/*///////////////////////////////////////////////
-//          TRAITEMENT DU CORPS DE PAGE        //
-///////////////////////////////////////////////*/
-
-#backGround {
-    background-color: rgba(90, 90, 90, 0.2);
-    min-height: 80vh;
-    border-right: 1px solid grey;
-    border-left: 1px solid grey;
-}
-
-/**
-*   Infobulle sur page de connexion
-*/
-.popup:hover > span {
-    display: block;
-    color: blue;
-    background-color: rgba(88, 80, 80, 0.5);
-    padding:15px;
-    border-radius:3px;
-    box-shadow:0 0 2px rgba(0,0,0,.5);
-    font-size: 0.8em;
-}
-
-.popup {
-   position: relative;
-}
-
-.popup > span {
+.mainNavDropDown {
+    background-color: red;
+    position: relative;
+    min-width: 30vw;
+    min-height: 20vh;
     display: none;
 }
 
-/*
- * Généralités (liste, image...)
- */
-ul {
-    list-style: none;
+/*/////////////////////////////////////////////////
+//              CONTAINER PRINCIPAL              //
+/////////////////////////////////////////////////*/
+#mainContainer {
+    background-color: rgba(0,67,101, 0.2);
+    min-height: 80vh;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
 }
-
-i  {
-    margin-right: 3%;
-}
-
-
-/**
- * Carousel
- */
-.image_carousel {
-    max-width: 100%;
-    max-height: 650px;
-}
-
-.carousel-control-prev-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E");
-}
-
-.carousel-control-next-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E");
-}
-
-/*////////////////////////////////////////////////
-//            TRAITEMENT FORMULAIRE             //
-////////////////////////////////////////////////*/
-
-.table td {
-    padding: .30rem;
-    vertical-align: top;
-}
-
-/**
- * Ligne d'entête du profil utilisateur
- */
-.profileHeaderTr {
-    width: 100%;
-    font-size: 1.5em;
-    background-color: rgba(70, 65, 65, 0.8);
-    color: white;
-}
-
-/**
- * Header des formulaires
- */
-.title-Header {
-    font-weight: bold;
-    font-size: 1.5em;
-    /*background-image: linear-gradient(to right, #3e3f48, #ffffff);*/
-    margin-top:    5vh;
-    margin-bottom: 2vh;
-}
-
-.label {
-    font-weight: bold;
-}
-
-/*///////////////////////////////////////////////
-//           TRAITEMENT COMMENTAIRE            //
-///////////////////////////////////////////////*/
-
-.userPostUsername {
-    width: 100%;
-    background-color: rgba(85, 80, 80, 0.5);
-    font-weight: bold;      
-}
-
-.userPost { 
-    width: 100%;
-    min-height: 5vh;
-    background-color: rgba(192, 192, 192, 0.5);
-}
-
-.userPost:hover { 
-    background-color: rgba(168, 168, 168, 0.8);
-}
-
-/*////////////////////////////////////////////////////////
-//          TRAITEMENT DES LIMITES DES TABLES           //
-////////////////////////////////////////////////////////*/
-.tableContent {
-    max-height: 50vh;
-    overflow-y: scroll;
-}
-
 
 /*////////////////////////////////////////
 //          TRAITEMENT DU FOOTER        //
 ////////////////////////////////////////*/
-
-#main_footer{  
-    min-height: 7vh;
+#main_footer { 
+    position: relative;
+    z-index: 2;
+    min-height: 12vh;
+    background-color: #004365;
     color: white;
     width: 100%;
 }
 
+/*///////////////////////////////////////
+//          PROFIL UTILISATEUR         //
+///////////////////////////////////////*/
+#imgProfil {
+    border-radius: 20%;
+    max-height: 120px;
+}
+
+/*///////////////////////////////////////////////////////
+//            NAVIGATION PROFIL UTILISATEUR            //
+///////////////////////////////////////////////////////*/
+#profileNav {
+    margin-top: 10vh;
+    margin-left: 1%;
+    height: 60vh;
+    background-color: rgba(0, 47, 70, 1);  
+    border-radius: 10px 10px 10px 10px;
+    box-shadow: 5px 10px 1px 1px black;  
+    overflow: hidden;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+#profileLib {
+    font-weight: bold;
+    text-decoration: underline;
+    color: white;
+}
+
+.profileLi {
+    color: #4da0cd;
+    font-style: 0.8em;
+}
+
+.profileLi:hover {
+    font-weight: bold;
+}
+
+/*///////////////////////////////////////
+//           ADMIN DASHBOARD           //
+///////////////////////////////////////*/
+#table_admin td, #table_admin th {
+    background-color: rgba(0, 47, 70, 0.2);
+    color: white;
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+    vertical-align: top;
+    border-top: 1px solid rgba(0, 47, 70, 1);
+}
+
+/*/////////////////////////////////////////////////
+//           ADMIN PROFIL UTILISATEUR            //
+/////////////////////////////////////////////////*/
+.libAdminUserAccount {
+    font-weight: bold;
+    width: 60%;
+}
+
+.tableHeaderUserAccount {
+    font-size: 1.2em;
+}
+
+/*/////////////////////////////////////////////
+//           ADMIN CONTROLE FORUM            //
+/////////////////////////////////////////////*/
+#adminPageContent{
+    margin-top:2%; 
+    margin-bottom:2%; 
+    padding-right: 1%;
+}
+
+/*/////////////////////////////////////////
+//         TRAITEMENT FORMULAIRE         //
+/////////////////////////////////////////*/
+.label {
+    font-weight: bold;
+}
+
+/*//////////////////////////////////////////////////////////////
+//           TRAITEMENT COMMENTAIRE PAGE DES SUJETS           //
+//////////////////////////////////////////////////////////////*/
+.userPostUsername {
+    width: 100%;
+    background-color: rgba(0, 47, 70, 1);
+    font-weight: bold;      
+    color: white;       
+    border-radius: 10px 10px 0px 0px;
+}
+
+.userPostContainer { 
+    width: 100%;
+    min-height: 20vh;
+    padding-top: 1vh;
+    background-color: rgba(20, 25, 25, 0.4);
+    border-radius: 0px 0px 10px 10px;
+}
+
+.userPostContainer:hover { 
+    background-color: rgba(20, 25, 25, 0.8);
+}
+
+.iButton {
+    color: blue; 
+    margin-bottom: 5%
+}
+
+.iLike:hover {
+    position: relative;
+    top: -5px;
+}
+
+.iDisLike:hover {
+    position: relative;
+    top: 5px;
+}
+
+.nbPagination {
+    color: black;
+    margin-right:5%; 
+    padding-left: 10px; 
+    padding-right: 10px; 
+    padding-top: 2px; 
+    padding-bottom: 3px; 
+    border-radius: 30%;
+}
+
+.imgPost {
+    max-height: 200px;
+    margin-top: 3%; 
+    margin-bottom: 2%;
+}
+
+/*////////////////////////////////////////
+//          TRAITEMENT DE QUILL         //
+////////////////////////////////////////*/
+.ql-divSeparator {
+    border-top-style: solid;
+    border-top-width: 1px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.ql-divContainer {
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.ql-editor {
+    min-height: 15vh;
+    background-color: rgba(20, 25, 25, 0.4);
+    color: #668da3;
+}
+
+.ql-toolbar {
+    font-weight: bold;
+    background-color: rgba(85, 80, 80, 0.5);
+}
+
+/*////////////////////////////////////////
+//               DATATABLE              //
+////////////////////////////////////////*/
+.dataTables_empty {
+    color: #668da3;
+}
 
 
+/*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//            MOBILE             
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+@media (max-width: 768px) {
 
+    /*//////////////////////////////////////////////
+    //       BARRE DE NAVIGATION PRINCIPALE       //
+    //////////////////////////////////////////////*/
+    
+    /*
+     *  Texte de la barre de navigation principale
+     */
+    .mainNavSizeText {
+        font-size: 5em;
+    }
 
+    /*
+     *  Image de l'utilisateur
+     */
+    .mainNavPictureUser {
+        max-width: 12vw; 
+        height: 8vh;
+        border-radius: 30%;
+        border-style: groove;
+        border-color: white;
+        border-width: 1px;
+    }
 
- 
+    /**
+     * Image si pas d'image définit par l'utilisateur
+     */
+    .mainNavPictureUserNone {
+        font-size: 8vh; 
+        color: white;
+    }
 
+    /*/////////////////////////////////////////////////////////
+    //       POPUP PRINCIPALE DE LA BARRE DE NAVIGATION      //
+    /////////////////////////////////////////////////////////*/
+     
+    /**
+     * Taille et design
+     */
+     .modal {
+        display: none;
+        background-color: #004365;
+        color: white;
+        border-radius:3px;
+        box-shadow:0 0 2px rgba(0,0,0,.5);
+        height: 30vh;
+        width: 50vw;
+        position: absolute;
+        top: 12vh;
+    }
+
+    /**
+     * Pseudo
+     */
+    #modalUsername {
+        font-weight: bold;
+        font-size: 3em;
+    }
+
+    /**
+     * Lien (compte...)
+     */
+    .modalElem {
+        font-size: 2.5em;
+    }
+
+    /**
+     * Lien (compte...) : hover
+     */
+    .modalElem:hover {
+        font-weight: bold;
+    }
+
+    /**
+     * Lien de déconnection
+     */
+    #modalDisconnect {
+        font-weight: bold;
+        font-size: 3em;
+        position: absolute;
+        bottom: 0;
+        left: 30%;
+        margin-bottom: 2%;
+    }
+
+    /*//////////////////////////////////////////////
+    //       TRAITEMENT  NAVBAR  UNIVERS          //
+    //////////////////////////////////////////////*/    
+
+    /**
+     * Liens principals dans la barre de navigation
+     */
+    .mainNavLi {
+        white-space: nowrap;
+        font-weight: bold;
+        font-size: 3em;
+        color: #4da0cd;
+        height: auto;
+    }
+
+   
+    /**
+     *  Liens contenus dans les listes du menu caché
+     */
+    .dropdown-item {
+        font-size: 0.6em;
+        color: #4da0cd;
+    }
+
+    /*////////////////////////////////////////
+    //       TRAITEMENT  DES TITRES         //
+    ////////////////////////////////////////*/    
+
+    .title-Header {
+        width: 100%;
+        margin-top: 5vh;
+        margin-bottom: 5vh;
+        background-color: rgba(0, 47, 70, 0.9);
+        border-width: 1px;
+        border-radius: 50px 20px 50px 20px;
+        box-shadow: 3px 3px 1px 1px black;  
+        color: whitesmoke;
+        font-size: 4em;
+        font-weight: bold;
+    }
+
+    /*////////////////////////////////////////
+    //        TRAITEMENT  DU TEXTE          //
+    ////////////////////////////////////////*/   
+    
+    .textSize {
+        font-size: 2em;
+    }
+
+    /*/////////////////////////////////////
+    //        ICONE DE RECHERCHE         //
+    /////////////////////////////////////*/   
+
+    .searchIco {
+        font-size: 3em;
+    }
+
+    /*////////////////////////////////////////
+    //         LIBELLE FORMULAIRE           //
+    ////////////////////////////////////////*/   
+    
+    .formLib {
+        font-size: 4em;
+    }
+
+    /*//////////////////////////////////////////////////////////////
+    //           TRAITEMENT COMMENTAIRE PAGE DES SUJETS           //
+    //////////////////////////////////////////////////////////////*/
+
+    .userPostDate {
+        font-size: 1.8em;
+        font-style: italic;
+        margin-bottom: 2vh;
+    }
+
+    .iLike {
+        font-size: 2em;
+        float: left;
+        margin-right: 5%;
+        color: #004365;
+    }
+
+    .iLikeCount {
+        font-size: 2em;
+        float: left;
+        margin-right: 6%;
+        color: #004365;
+    }
+
+    .iDisLike{
+        font-size: 2em;
+        color: rgb(150, 21, 21);
+    }
+
+    .iDisLikeCount { 
+        font-size: 2em;
+        color: rgb(150, 21, 21);
+    }
+
+    .imgPost {
+        height: 60px;
+        width: 120px;
+        margin-top: 3%; 
+        margin-bottom: 2%;
+    }
+
+    .userPostPictures {
+        color: white;
+        font-size: 2em;
+    }
+
+}
+
+/*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//           DESKTOP        
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+@media (min-width: 769px) {
+
+    /*//////////////////////////////////////////////
+    //       BARRE DE NAVIGATION PRINCIPALE       //
+    //////////////////////////////////////////////*/
+    
+    /*
+     *  Texte de la barre de navigation principale
+     */
+    .mainNavSizeText {
+        font-size: 1em;
+    }
+
+    /*
+     *  Image de l'utilisateur
+     */
+     .mainNavPictureUser {
+        max-width: 8vw; 
+        height: 6vh;
+        border-radius: 30%;
+        border-style: groove;
+        border-color: white;
+        border-width: 1px;
+    }
+
+    /**
+     * Image si pas d'image définit par l'utilisateur
+     */
+    .mainNavPictureUserNone {
+        font-size: 4vh; 
+        color: white;
+    }
+
+    /*/////////////////////////////////////////////////////////
+    //       POPUP PRINCIPALE DE LA BARRE DE NAVIGATION      //
+    /////////////////////////////////////////////////////////*/
+     
+    /**
+     * Taille et design
+     */
+    .modal {
+        display: none;
+        background-color: #004365;
+        color: white;
+        border-radius:3px;
+        box-shadow:0 0 2px rgba(0,0,0,.5);
+        font-size: 0.8vw;
+        height: 35vh;
+        width: 17vw;
+        position: absolute;
+        top: 15vh;
+    }
+
+    /**
+     * Pseudo
+     */
+    #modalUsername {
+        font-weight: bold;
+        font-size: 1.4em;
+    }
+
+    /**
+     * Lien (compte...)
+     */
+    .modalElem {
+        font-size: 1.2em;
+    }
+
+    /**
+     * Lien (compte...) : hover
+     */
+    .modalElem:hover {
+        font-weight: bold;
+    }
+
+    /**
+     * Lien de déconnection
+     */
+    #modalDisconnect {
+        font-weight: bold;
+        font-size: 1.4em;
+        position: absolute;
+        bottom: 0;
+        left: 30%;
+        margin-bottom: 2%;
+    }
+
+    /*//////////////////////////////////////////////
+    //       TRAITEMENT  NAVBAR  UNIVERS          //
+    //////////////////////////////////////////////*/    
+    
+    /**
+    * Liens principals dans la barre de navigation
+    */
+    .mainNavLi {
+        white-space: nowrap;
+        font-weight: bold;
+        font-size: 1vw;
+        color: #4da0cd;
+        height: auto;
+    }
+
+    /**
+    *  Liens contenus dans les listes du menu caché
+    */
+    .dropdown-item {
+        font-size: 0.8vw;
+        color: #4da0cd;
+    }
+
+    /*////////////////////////////////////////
+    //       TRAITEMENT  DES TITRES         //
+    ////////////////////////////////////////*/    
+
+    .title-Header {
+        width: 100%;
+        margin-top: 5vh;
+        margin-bottom: 5vh;
+        background-color: rgba(0, 47, 70, 0.9);
+        border-width: 1px;
+        border-radius: 50px 20px 50px 20px;
+        box-shadow: 3px 3px 1px 1px black;  
+        color: whitesmoke;
+        font-size: 1.6em;
+        font-weight: bold;
+    }
+
+    /*////////////////////////////////////////
+    //        TRAITEMENT  DU TEXTE          //
+    ////////////////////////////////////////*/   
+
+    .textSize {
+        font-size: 1em;
+    }
+
+    /*/////////////////////////////////////
+    //        ICONE DE RECHERCHE         //
+    /////////////////////////////////////*/   
+
+    .searchIco {
+        font-size: 1em;
+    }
+
+    /*////////////////////////////////////////
+    //         LIBELLE FORMULAIRE           //
+    ////////////////////////////////////////*/   
+    
+    .formLib {
+        font-size: 1em;
+    }
+
+     /*//////////////////////////////////////////////////////////////
+    //           TRAITEMENT COMMENTAIRE PAGE DES SUJETS           //
+    //////////////////////////////////////////////////////////////*/
+
+    .userPostDate {
+        font-size: 0.8em;
+        font-style: italic;
+        margin-bottom: 2vh;
+    }
+
+    .iLike {
+        font-size: 1em;
+        float: left;
+        margin-right: 5%;
+        color: #004365;
+    }
+
+    .iLikeCount {
+        font-size: 1em;
+        float: left;
+        margin-right: 6%;
+        color: #004365;
+    }
+
+    .iDisLike{
+        font-size: 1em;
+        color: rgb(150, 21, 21);
+    }
+
+    .iDisLikeCount { 
+        font-size: 1em;
+        color: rgb(150, 21, 21);
+    }
+
+    .imgPost {
+        max-height: 200px;
+        margin-top: 3%; 
+        margin-bottom: 2%;
+    }
+
+    .userPostPictures {
+        color: white;
+        font-size: 1em;
+    }
+
+}
 

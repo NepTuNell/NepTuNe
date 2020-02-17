@@ -7,6 +7,8 @@ use BackendBundle\Entity\Theme;
 use Doctrine\ORM\Mapping as ORM;
 use BackendBundle\Entity\Section;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Sujet
@@ -31,7 +33,7 @@ class Sujet
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity=Post::class, mappedBy="sujet")
+     * @ORM\OneToMany(targetEntity=Post::class, mappedBy="sujet", cascade={"persist", "remove"})
      */
     private $posts;
 
@@ -49,6 +51,14 @@ class Sujet
      * @var string
      *
      * @ORM\Column(name="libelle", type="string", length=255)
+     * @Assert\Length(
+     *      min=2,
+     *      max=20,
+     *      minMessage = "Le libelle est trop court !",
+     *      maxMessage = "Le libelle est trop long !"
+     * )
+     * @Assert\NotBlank(message="Veuillez saisir le libellé !")
+     * 
      */
     private $libelle;
 
@@ -159,6 +169,26 @@ class Sujet
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * Set User
+     */
+    public function setUser( User $user )
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     * 
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
 }

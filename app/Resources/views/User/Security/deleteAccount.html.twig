@@ -1,16 +1,18 @@
-{% extends "base.html.twig" %}
+{% extends "index.html.twig" %}
 
-{% block body %}
+{% block content %}
     
     <div class="row">
         
-        {{ include('Templates/Navigation/userNavProfile.html.twig') }}
-            
-        <div class="offset-2 col-8 offset-2 page_content"> 
-            <h2 class="col-8 text-center" >Supprimer le compte</h2>
+        {{ include('Templates/Navigation/profileNav.html.twig') }}
+        
+        <div class="col-8 offset-1"> 
+
+            <div class="text-center title-Header">Supprimer le compte</div>
+
             <form action="{{ path('user_delete') }}" method="post" novalidate>
                 <div class="form-group row">    
-                    <label class="col-2" for="password">Mot de passe</label>
+                    <label class="col-4 textColor" for="password">Mot de passe</label>
                     <input type="password" class="form-control col-6" id="password" required name="password" placeholder="Renseignez votre mot de passe actuel..."/>
                 </div>
                 <div class="form-group row">
@@ -20,6 +22,7 @@
                 </div>    
             </form>
 
+            {{ include('Templates/Error/error.html.twig') }}
             {{ include('Templates/Error/message.html.twig') }}
             
         </div>

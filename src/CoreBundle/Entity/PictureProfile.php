@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class PictureProfile implements \Serializable
 {
+    
     /**
      * @var int
      *
@@ -26,7 +27,7 @@ class PictureProfile implements \Serializable
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="User", mappedBy="pictureProfile", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="User", inversedBy="pictureProfile")
      * One profile's picture has one user
      */
     private $user;
@@ -34,14 +35,14 @@ class PictureProfile implements \Serializable
     /**
      * @var string
      *
-     * @ORM\Column(name="pictureName", type="string", length=255)
+     * @ORM\Column(name="pictureName", type="string", length=255, nullable=true)
      */
     private $pictureName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="pictureExtension", type="string", length=255)
+     * @ORM\Column(name="pictureExtension", type="string", length=255, nullable=true)
      */
     private $pictureExtension;
 
@@ -57,6 +58,7 @@ class PictureProfile implements \Serializable
      *   mimeTypesMessage = "Format de l'image non supportée, assurez vous d'utiliser ces formats : png, jpg, jpeg, gif.",
      *   maxSizeMessage = "Fichier trop volumineux, l'image ne doit pas excéder 25 mo."
      * )
+     * @Assert\Valid()
      * 
      * @var UploadedFile
      */
@@ -146,6 +148,18 @@ class PictureProfile implements \Serializable
         return $this->TempFile;
     }
 
+    public function setUser(User $user) 
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getUser() 
+    {
+        return $this->user;
+    }
+
     /**
      * Get PictureFullName
      * 
@@ -155,15 +169,16 @@ class PictureProfile implements \Serializable
     {
         return $this->getPictureName()."_".$this->getId().".".$this->getPictureExtension();
     }
- 
+    
+
     /**
-     * GetPath
+     * GetFullPath
      * 
      * @return string
      */
     public function getPath()
     {
-        return '/jimmy/FORUM/web/upload/imgProfil';
+        return '/home/jimmy/html/FORUM/web/upload/imgProfil';
     }
 
     public function getUpload()
@@ -180,7 +195,7 @@ class PictureProfile implements \Serializable
     {
 
         $this->upload = $upload;
-       
+        
         /**
          * Si un fichier existe déjà
          */
@@ -215,7 +230,9 @@ class PictureProfile implements \Serializable
          * Si pas de fichier on arrête
          */
         if( null === $this->upload ) {
+
             return;
+ 
         }
 
         /**
@@ -233,13 +250,13 @@ class PictureProfile implements \Serializable
         if(null === $this->upload->guessExtension()) {
 
             $this->setPictureExtension('.bin');
- 
+    
         } else {
 
             $this->setPictureExtension($this->upload->guessExtension());
 
         }
-    
+
     }
 
     /**
@@ -254,7 +271,7 @@ class PictureProfile implements \Serializable
         /**
          * Si un fichier existe alors suppression
          */
-        if( null !== $this->getTempFile() ) {
+        if( null !== $this->getTempFile() && file_exists( $this->getPath()."/".$this->getTempFile() ) ) {
 
             unlink($this->getPath()."/".$this->getTempFile());
 
@@ -285,7 +302,7 @@ class PictureProfile implements \Serializable
      */
     public function remove()
     {
-        if( file_exists( $this->getTempFile() ) ) {
+        if( file_exists( $this->getPath()."/".$this->getTempFile() ) ) {
 
             unlink( $this->getPath()."/".$this->getTempFile() );
 

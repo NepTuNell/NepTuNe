@@ -2,16 +2,14 @@
 
 {% block body %}
 
-    <div class="row">
+    {{include('Templates/Navigation/mainNav.html.twig')}}
+    
+    <div class="container" id="mainContainer">
+ 
+        {% block content %}
 
-        {{include('Templates/Navigation/mainNav.html.twig')}}
-
-        <div class="offset-2 col-8 offset-2" id="mainContainer">
-            {% block content %}
-
-            {% endblock %}
-        </div>
-
+        {% endblock %}
+        
     </div>
 
 {% endblock %}

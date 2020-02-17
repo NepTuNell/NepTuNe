@@ -1,0 +1,83 @@
+{% extends 'index.html.twig' %}
+
+{% block content %}
+    <div class="row">
+        <div class="text-center offset-1 col-10 title-Header">Liste des Univers</div>
+    </div>
+
+        {% if universList is defined and universList is not null %}
+            {% for univers in universList %}
+
+            <div class="row" id="adminPageContent">        
+                <div class="col-3 textColor">
+                    {{univers.libelle}}
+                </div>
+                <form class="col-1" action="{{path('univers_edit', {'id':univers.id})}}", method="POST">
+                    <input type="submit" class="btn btn-dark" value="Modifier"/>
+                </form>
+                <form class="col-1" action="{{path('univers_delete', {'id':univers.id})}}", method="POST">
+                    <input type="submit" class="btn btn-danger" value="Supprimer"/>
+                </form>
+                             
+                <table class="table table-hover offset-1 col-6 textColor">
+                    <tr style="background-color:rgba(0, 47, 70, 1); font-weight: bold;">
+                        <td colspan="2">
+                            Nouveau thème
+                        </td>
+                        <td>
+                            <a style="float: right; margin-right: 5%;" href="{{path('theme_new', {'univers': univers.id})}}"><i class="fas fa-plus-circle"></i></a>
+                        </td>
+                    </tr>
+                    {% if univers.themes is defined and univers.themes is not null %}
+                        {% for theme in univers.themes %}
+                            <tr style="background-color: rgba(0, 47, 70, 0.3); font-weight: bold;">
+                                <td colspan="2" scope="row">{{theme.libelle}}</td>
+                                <td>
+                                    {% if theme.subdivise == 1 %}
+                                        <a style="float: right; margin-right:5%;" href="{{path('section_new', {'theme': theme.id})}}"><i class="fas fa-plus-circle"></i></a>
+                                    {% endif %}
+                                    <a style="float: right; margin-right:5%;" href="{{path('theme_delete', {'theme': theme.id})}}"><i class="far fa-trash-alt"></i></a>
+                                    <a style="float: right; margin-right:5%;" href="{{path('theme_edit', {'theme': theme.id})}}"><i class="fas fa-edit"></i></a>
+                                </td>
+                            </tr>
+
+                            {% if theme.subdivise == 1 %}
+                                {% for section in theme.sections %}
+                                <tr>
+                                    <td colspan="2" scope="row" style="font-size: 0.8em">{{section.libelle}}</td>
+                                    <td>
+                                        <a style="float: right; margin-right:5%;" href="{{path('section_delete', {'section': section.id})}}"><i class="far fa-trash-alt"></i></a>
+                                        <a style="float: right; margin-right:5%;" href="{{path('section_edit', {'section': section.id})}}"><i class="fas fa-edit"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            {% endif %}
+
+                        {% endfor %}
+                    {% endif %}
+
+                </table>
+            </div>
+
+            {% endfor %}
+        {% endif %}
+
+    <div class="row">
+        <div class="col-4">
+            <button style="margin-bottom:10%" type="button" class="btn btn-primary" onclick="window.location.href='{{path('univers_new')}}'">
+                Nouveau
+            </button>
+            <button style="margin-bottom:10%;" type="button" class="btn btn-secondary" onclick="window.location.href='{{path('admin_dashboard')}}'">
+                Retour
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        {{ include('Templates/Error/error.html.twig') }}
+        {{ include('Templates/Error/message.html.twig') }}
+        {{ include('Templates/Error/flash.html.twig') }}
+    </div>
+
+{% endblock %}
+

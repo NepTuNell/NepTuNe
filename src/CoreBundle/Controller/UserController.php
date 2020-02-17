@@ -3,22 +3,29 @@
 namespace CoreBundle\Controller;
 
 use CoreBundle\Entity\User;
+use CoreBundle\Entity\Sujet;
 use BackendBundle\Entity\Theme;
 use CoreBundle\Services\Mailer;
 use BackendBundle\Entity\Univers;
+use BackendBundle\Entity\Activity;
+use CoreBundle\Services\GoogleGraph;
 use CoreBundle\Entity\PictureProfile;
 use CoreBundle\Form\PictureProfileType;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * @Route("home")
@@ -32,9 +39,19 @@ class UserController extends Controller
     private $manager;
 
     /**
+     * @var
+     */
+    private $token;
+
+    /**
      * @var Mailer
      */
     private $mailer;
+    
+    /**
+     * @var GoogleGraph
+     */
+    private $googleGraph;
 
     /**
      * Undocumented variable
@@ -42,11 +59,13 @@ class UserController extends Controller
      * @var ObjectManager
      * @var Mailer
      */
-    public function __construct(ObjectManager $em, Mailer $mailer)
+    public function __construct(ObjectManager $em, TokenStorageInterface $token, Mailer $mailer, GoogleGraph $googleGraph)
     {
 
-        $this->manager = $em;
-        $this->mailer  = $mailer;
+        $this->manager      = $em;
+        $this->mailer       = $mailer;
+        $this->googleGraph  = $googleGraph;
+        $this->token        = $token;
 
     }
     
@@ -56,12 +75,38 @@ class UserController extends Controller
     public function index()
     {
 
-        $universList = $this->manager->getRepository(Univers::class)->findAll();
+        $columnChartUniv        = null;
+        $columnChartTheme       = null;
+        $pieChartLike           = null;
+        $data                   = array();
+        $user                   = $this->token->getToken()->getUser();
+        $universList            = $this->manager->getRepository(Univers::class)->findAll();
+        $sujets                 = $this->manager->getRepository(Sujet::class)->fetchMyLastSubjects();
+      
+        if ( $this->isGranted('IS_AUTHENTICATED_FULLY') && $this->isGranted('ROLE_USER') ) {
 
-        return $this->render('index.html.twig', [
+            if ( $user->getActivityUnivers() ) {
+                $columnChartUniv = $this->googleGraph->getActivityUnivers($user, $universList);
+            }
 
-            'universList' => $universList,
-           
+            if ( $user->getActivityTheme() ) {
+                $columnChartTheme = $this->googleGraph->getActivityTheme($user, $universList);
+            }
+
+            if ( $user->getActivityLike() ) {
+                $pieChartLike = $this->googleGraph->getPieChartLike($user);
+            }
+
+        }
+
+        return $this->render('User/home.html.twig', [
+
+            'universList'           => $universList,
+            'sujets'                => $sujets,
+            'columnChartUniv'       => $columnChartUniv,
+            'columnChartTheme'      => $columnChartTheme,
+            'pieChartLike'          => $pieChartLike,
+
         ]);
 
     }
@@ -78,6 +123,9 @@ class UserController extends Controller
         
         $user    = new User;
         $form    = $this->createForm('CoreBundle\Form\UserType', $user);
+        $univers = $this->manager->getRepository(Univers::class)->findAll();
+        $errors  = null;
+        $message = null;
         
         /**
          * Vérifiaction type de requête
@@ -91,7 +139,7 @@ class UserController extends Controller
                 /**
                  * Mots de passe saisies
                  */
-                if (  $form["password"]->getData() === $form["confirm_password"]->getData() ) {
+                if ( $form["password"]->getData() === $form["confirm_password"]->getData() ) {
                     
                     /**
                      *  Création de la clé de confirmation
@@ -114,40 +162,33 @@ class UserController extends Controller
                      * Envoi email confirmation de compte et vérification
                      */
                     $this->mailer->accountCreated($user);
-
                     $this->addFlash('success', 'Votre compte à bien été enregistré. Un email de confirmation vous a été envoyé !');
-                    return $this->render('User/Registration/register.html.twig', 
-                        array('form' => $form->createview())
-                    );
+
+                } else { 
+                
+                    $message[] = "Les mots de passe saisies ne sont pas identiques !";
 
                 }
-                
-                $message[] = "Les mots de passe saisies ne sont pas identiques !";
-                return $this->render('User/Registration/register.html.twig', [
-                    'form'    => $form->createview(),
-                    'message' => $message
-                ]);
                 
             } else  {
                 
                 $errors = $this->get('validator')->validate($user);
-                
-                return $this->render('User/Registration/register.html.twig', [
-                    'form' => $form->createview(),
-                    'errors' => $errors
-                ]);
             
             }
                 
-        } else {
-                
-            return $this->render('User/Registration/register.html.twig', 
-                array('form' => $form->createview())
-            );
-                
-        } 
+        }          
+
+        return $this->render('User/Registration/register.html.twig', 
+            array(
+                    'form'          => $form->createview(),
+                    'errors'         => $errors,
+                    'message'       => $message,
+                    'universList'   => $univers
+                )
+        );
         
     }
+
 
     /**
      * Undocumented function
@@ -163,13 +204,19 @@ class UserController extends Controller
             throw $this->createAccessDeniedException('Veuillez vous connecter !');
         }
         
-        $user   = $this->get('security.token_storage')->getToken()->getUser();
-        $form   = $this->createFormBuilder($user)
+        $picture = null;
+        $errors  = null;
+        $message = null;
+        $univers = $this->manager->getRepository(Univers::class)->findAll();
+        $user    = $this->token->getToken()->getUser();
+        $form    = $this->createFormBuilder($user)
                          ->add('firstname', TextType::class)
                          ->add('lastname', TextType::class)
                          ->add('username', TextType::class)
                          ->add('email', EmailType::class)
-                         ->add('pictureProfile', PictureProfileType::class)
+                         ->add('pictureProfile', PictureProfileType::class, [
+                             'required' => false
+                         ])
                          ->add('password', PasswordType::class, [
                             'mapped' => false
                         ])
@@ -179,44 +226,203 @@ class UserController extends Controller
         
         if ( "POST" === $request->getMethod()) {
             
+            $picture = $user->getPictureProfile();
+
             if ($form->isSubmitted() && $form->isValid()) {
                             
                 if ( password_verify($form["password"]->getData(), $user->getPassword()) ) {
 
+                    if ( null !== $picture ) {
+                        $picture->setUser($user);
+                    }
+   
                     $this->manager->persist($user);
                     $this->manager->flush();
+                    $this->addFlash('success', 'Votre profil a été modifié !');
 
-                    return $this->redirectToRoute('user_index');
-                } 
-                    
-                $this->manager->refresh($user);  
+                } else {
                 
-                $message[] = 'Mot de passe incorrect !';
-                return $this->render('User/Profile/edit.html.twig', [
-                    'form' => $form->createview(),
-                    'message' =>  $message
-                ]);
+                    $message[] = 'Mot de passe incorrect !';
+
+                }
                 
             } else {
                 
                 $errors = $this->get('validator')->validate($user);
-
-                return $this->render('User/Profile/edit.html.twig', [
-                    'form' => $form->createview(),
-                    'errors' => $errors
-                ]);
+                $this->manager->refresh($user);
                 
             }      
             
-        } else {
+        }
+
+        return $this->render('User/Profile/edit.html.twig', [
+            'form'          =>  $form->createview(),
+            'universList'   =>  $univers,
+            'user'          =>  $user,
+            'message'       =>  $message,
+            'errors'        =>  $errors,
+        ]);
+        
+    }
+
+    /**
+     * Undocumented function
+     * 
+     * @Route("/myaccount/accueil", name="user_edit_accueil", methods={"GET", "POST"})
+     * @param Request $request
+     * @return void
+     */
+    public function editUserAccueil (Request $request) 
+    {
+        
+        if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
+            throw $this->createAccessDeniedException('Veuillez vous connecter !');
+        }
+        
+        $errors  = null;
+        $message = null;
+        $univers = $this->manager->getRepository(Univers::class)->findAll();
+        $user    = $this->token->getToken()->getUser();
+        $form    = $this->createFormBuilder($user)
+                         ->add('activityUnivers', CheckboxType::class)
+                         ->add('activityTheme', CheckboxType::class)
+                         ->add('activityLike', CheckboxType::class)
+                         ->getForm();
+        
+        $form->handleRequest($request);
+        
+        if ( "POST" === $request->getMethod()) {
             
-            return $this->render('User/Profile/edit.html.twig', [
-                'form' => $form->createview(),
-                'user' => $user,
-            ]);
+            if ($form->isSubmitted() && $form->isValid()) {
+                
+                $this->addFlash('success', 'Votre profil a été modifié !');
+                $this->manager->persist($user);
+                $this->manager->flush();
+ 
+            } else {
+                
+                $errors = $this->get('validator')->validate($user);
+                
+            }      
+            
+        }
+
+        return $this->render('User/Profile/editAccueil.html.twig', [
+            'form'          =>  $form->createview(),
+            'universList'   =>  $univers,
+            'message'       =>  $message,
+            'errors'        =>  $errors,
+        ]);
+        
+    }
+
+    /**
+     * Undocumented function
+     * 
+     * @Route("/myaccount/profile/delete", name="user_delete", methods={"GET", "POST"})
+     * @param Request $request
+     * @return void
+     */
+    public function deleteUser (Request $request) 
+    {
+        
+        if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
+            throw $this->createAccessDeniedException('Veuillez vous connecter !');
+        }
+        
+        $univers =  $this->manager->getRepository(Univers::class)->findAll();
+        $user    =  $this->token->getToken()->getUser();
+        $message =  null;
+       
+        if ( 'POST' === $request->getMethod() ) {
+            
+            if ( null !== $request->request->get('password') && "" !== $request->request->get('password') ) {
+
+                if ( password_verify($request->request->get('password'), $user->getPassword()) ) {
+                        
+                    $user->setIsActive(false);
+                    $this->manager->persist($user);
+                    $this->manager->flush();
+                    
+                    return $this->redirectToRoute('logout');
+                    
+                } 
+
+                $message[] = 'Mot de passe incorrect !';
+
+            } else {
+
+                $message[] = 'Veuillez saisir votre mot de passe !';
+
+            }
             
         }
         
+        return $this->render('User/Security/deleteAccount.html.twig', [
+            'universList' => $univers,
+            'message'     => $message,
+        ]);
+
+    }
+
+    /**
+     * Undocumented function
+     * 
+     * @Route("/myaccount/profile/delete/Picture/{picture}", name="user_delete_picture", methods={"GET", "POST"})
+     * @param Request $request
+     * @return void
+     */
+    public function removePictureProfile(PictureProfile $picture)
+    {
+
+        $user = $this->token->getToken()->getUser();
+
+        if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
+            throw $this->createAccessDeniedException('Veuillez vous connecter !');
+        }
+
+        if ( $picture->getUser() === $user ) {
+
+            $this->manager->remove($picture);
+            $this->manager->flush();
+            $this->manager->refresh($user);
+
+        }
+
+        return $this->redirectToRoute('user_edit');
+
+    }
+
+    /**
+     * @Route("/activity/{user}/{sujet}", name="register_activity", options = {"expose" = true}, methods={"GET"})
+     */
+    public function registerActivity(User $user, Sujet $sujet)
+    {
+
+        if ( $this->isGranted('ROLE_USER') && $this->isGranted('IS_AUTHENTICATED_FULLY') ) {
+
+            //if ( $sujet->getUser !== $user ) {
+
+                $theme    = $sujet->getTheme();
+                $univers  = $sujet->getTheme()->getUnivers();
+                $activity = new Activity();
+                $activity->setDate(new \DateTime);
+                $activity->setUser($user);
+                $activity->setTheme($theme);
+                $activity->setUnivers($univers);
+                $this->manager->persist($activity);
+                $this->manager->flush();
+
+            //}
+
+        }
+
+        $response = new Response(
+            Response::HTTP_OK,
+        );
+
+        return $response;
+
     }
 
 }

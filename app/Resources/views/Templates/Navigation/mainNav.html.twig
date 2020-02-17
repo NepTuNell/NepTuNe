@@ -1,6 +1,6 @@
 <!-- Liste des situations d'un utilisateur -->
-
-{% if universList is defined and universList is not null %}
+<div class="row">
+    {% if universList is defined and universList is not null %}
 	<ul class="nav nav-tabs col-12" id="mainNav">
         {% for univers in universList %}
 		    <li class="nav-item">
@@ -16,7 +16,7 @@
                                        <span class="one">{{theme.libelle}}</span>
                                        <i class="fa fa-caret-right mainNavI"></i>
                                     </a> 
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu mainNavDropDown">
                                         {% for section in theme.sections %}
                                             <li><a class="dropdown-item" href="{{path('sujet_list_section',{'theme': theme.id, 'section': section.id})}}">{{section.libelle}}</a></li>
                                         {% endfor %}
@@ -32,4 +32,16 @@
 		    </li>
         {% endfor %}
 	</ul>
-{% endif %}
+    {% endif %}
+</div>
+
+<script>
+    function t (name) {
+
+        var elem = document.getElementsByName(name);
+        var DropDown = elem[0];
+        $(DropDown).css('display', 'block');
+       
+        
+    }
+</script>

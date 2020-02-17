@@ -4,6 +4,7 @@ namespace CoreBundle\Repository;
 
 use CoreBundle\Entity\Post;
 use CoreBundle\Entity\User;
+use CoreBundle\Entity\PostLike;
 
 /**
  * PostRepository
@@ -14,26 +15,68 @@ use CoreBundle\Entity\User;
 class PostRepository extends \Doctrine\ORM\EntityRepository
 {
 
+    /**
+     * Return all posts for one subject
+     */
     public function fetchAll( $options = array() )
     {
 
         $queryBuilder  = $this->getEntityManager()->createQueryBuilder();  
-        
+        $countLike     = $this->countLike();
+        $countDisLike   = $this->countDisLike();
+
         if (array_key_exists('sujet', $options)) {
             
             $result = $queryBuilder ->select('p.id, p.commentaire, p.date, u.username, u.id as id_user')
+                                    ->addSelect('('.$countLike.') as nbLike')
+                                    ->addSelect('('.$countDisLike.') as nbDisLike')
                                     ->from(Post::class, 'p')
-                                    ->innerJoin(User::class, 'u')
                                     ->where('p.sujet = :sujet')
+                                    ->innerJoin(User::class, 'u')
+                                    ->andWhere('p.user = u.id')
                                     ->setParameters([
-                                        'sujet'   => $options['sujet']
+                                        'sujet' => $options['sujet']
                                     ])
-                                    ->orderBy('p.date', 'DESC')
+                                    ->orderBy('p.date', 'ASC')
                                     ->getQuery();
 
         }
 
-        return $result->getArrayResult();
+        return $result->getResult();
+
+    }
+
+    /**
+     * Return all likes for one post
+     */
+    public function countLike()
+    {
+
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+
+        $result = $queryBuilder ->select('COUNT(pl1)')
+                                ->from(PostLike::class, 'pl1')
+                                ->where('pl1.post = p.id AND pl1.like = true')
+                                ->getDQL();
+
+        return $result;
+
+    }
+
+    /**
+     * Return all unlikes for one post
+     */
+    public function countDisLike()
+    {
+
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();  
+
+        $result = $queryBuilder ->select('COUNT(pl2)')
+                                ->from(PostLike::class, 'pl2')
+                                ->where('pl2.post = p.id AND pl2.like = false')
+                                ->getDQL();
+
+        return $result;
 
     }
 

@@ -1,0 +1,59 @@
+{% extends "index.html.twig" %}
+
+{% block content %}
+
+	<div class="row">
+
+        {{ include('Templates/Navigation/profileNav.html.twig') }}
+
+		<div class="col-8 offset-1">
+
+            <div class="text-center title-Header">Accueil</div>
+
+			<div class="form-group">
+				
+                <table class="table">
+
+					{{ form_start(form, {'action': path('user_edit_accueil'), 'method': 'post', 'attr': {'novalidate': 'novalidate'}}) }}
+                    
+                        <tr>
+						    <td>
+                                <div class="form-group row">
+                                    {{ form_label(form.activityUnivers, 'Voir mon nombre de consultations par univers', {'label_attr': {'class': 'col-11 textColor'} }) }}
+                                    {{ form_widget(form.activityUnivers, {'attr': {'class': 'form-control col-1'} }) }}
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.activityTheme, 'Voir mon nombre de consultations par thème', {'label_attr': {'class': 'col-11 textColor'} }) }}
+                                    {{ form_widget(form.activityTheme, {'attr': {'class': 'form-control col-1'} }) }}
+                                </div>
+                                <div class="form-group row">
+                                    {{ form_label(form.activityLike, 'Voir mon nombre de commentaires aimés', {'label_attr': {'class': 'col-11 textColor'} }) }}
+                                    {{ form_widget(form.activityLike, {'attr': {'class': 'form-control col-1'} }) }}
+                                </div>
+						    </td>
+					    </tr>
+					    <tr>
+						    <td>
+                                <div class="form-group row">
+                                    <div class="col-lg-1 col-3">
+                                        <input class="btn btn-dark" type="submit" value="Modifier"/>
+                                    </div>
+                                </div>
+                            </td>
+			            </tr>
+                        
+			        {{ form_end(form) }}
+
+                </table>
+        
+            </div>
+
+            {{ include('Templates/Error/flash.html.twig') }}
+            {{ include('Templates/Error/error.html.twig') }}
+            {{ include('Templates/Error/message.html.twig') }}
+            
+        </div>
+
+    </div>
+
+{% endblock %}

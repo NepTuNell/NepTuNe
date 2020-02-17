@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new BackendBundle\BackendBundle(),
             new CoreBundle\CoreBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new CMEN\GoogleChartsBundle\CMENGoogleChartsBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

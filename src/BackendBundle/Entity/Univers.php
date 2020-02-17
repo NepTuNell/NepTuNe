@@ -4,6 +4,7 @@ namespace BackendBundle\Entity;
 
 use BackendBundle\Entity\Theme;
 use Doctrine\ORM\Mapping as ORM;
+use BackendBundle\Entity\Activity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -29,7 +30,7 @@ class Univers
     /**
      * @var Theme
      * 
-     * @ORM\OneToMany(targetEntity=Theme::class, mappedBy="univers", cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity=Theme::class, mappedBy="univers", cascade={"persist", "remove"})
      */
     private $themes;
 
@@ -46,13 +47,22 @@ class Univers
      * @Assert\NotBlank(message="Veuillez saisir le libellé !")
      */
     private $libelle;
+    
+    /**
+     * @var ArrayCollection
+     * 
+     * @ORM\OneToMany(targetEntity=Activity::class, mappedBy="univers", cascade={"persist", "remove"})
+     */
+    private $activities;
 
     /**
      * Magic's methods
      */
     public function __construct()
     {
-        $this->themes = new ArrayCollection();
+        $this->themes               = new ArrayCollection();
+        $this->activitiesUnivers    = new ArrayCollection();
+        $this->activitiesThemes     = new ArrayCollection();
     }
 
     public function __toString()
@@ -127,4 +137,15 @@ class Univers
     {
         return $this->themes;
     }
+
+    /**
+     * Get Activities
+     * 
+     * @return ArrayCollection
+     */
+    public function getActivities()
+    {
+        return $this->activities;
+    }
+
 }

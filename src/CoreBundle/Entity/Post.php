@@ -4,7 +4,9 @@ namespace CoreBundle\Entity;
 
 use CoreBundle\Entity\User;
 use CoreBundle\Entity\Sujet;
+use CoreBundle\Entity\Picture;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Post
@@ -47,6 +49,25 @@ class Post
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="post", cascade={"persist", "remove"})
+     */
+    private $pictures;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PostLike::class, mappedBy="post", cascade={"persist", "remove"})
+     */
+    private $postLikes;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->pictures  = new ArrayCollection();
+        $this->postLikes = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -141,6 +162,32 @@ class Post
     public function getDate()
     {
         return $this->date;
+    }
+
+    /**
+     * add picture
+     */
+    public function addPicture(Picture $picture)
+    {
+        $this->pictures[] = $picture;
+    }
+
+    /**
+     * remove picture
+     */
+    public function removePicture(Picture $picture)
+    {
+        $this->pictures->removeElement($picture);
+    }
+
+    /**
+     * get postLikes
+     * 
+     * @return ArrayCollection
+     */
+    public function getPostLikes()
+    {
+        return $this->postLikes;
     }
 
 }

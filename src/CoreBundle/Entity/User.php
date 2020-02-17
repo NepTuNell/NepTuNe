@@ -5,7 +5,9 @@ namespace CoreBundle\Entity;
 use Serializable;
 use CoreBundle\Entity\Post;
 use CoreBundle\Entity\Sujet;
+use CoreBundle\Entity\PostLike;
 use Doctrine\ORM\Mapping as ORM;
+use BackendBundle\Entity\Activity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -42,7 +44,7 @@ class User implements UserInterface
     private $id;
 
    /**
-     * @ORM\OneToOne(targetEntity="PictureProfile", cascade={"persist", "remove"}, inversedBy="user")
+     * @ORM\OneToOne(targetEntity="PictureProfile", cascade={"persist", "remove"}, mappedBy="user")
      * One profile's picture has one user
      */
     private $pictureProfile;
@@ -51,6 +53,11 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="firstname", type="string", length=255)
+     * @Assert\Length(
+     *      min=2,
+     *      minMessage = "Votre nom est trop court!",
+     * )
+     * @Assert\NotBlank(message="Veuillez saisir votre nom !")
      */
     private $firstname;
 
@@ -58,6 +65,11 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="lastname", type="string", length=255)
+     * @Assert\Length(
+     *      min=2,
+     *      minMessage = "Votre prénom est trop court!",
+     * )
+     * @Assert\NotBlank(message="Veuillez saisir votre prénom !")
      */
     private $lastname;
 
@@ -65,6 +77,11 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="username", type="string", length=255, nullable=true, unique=true)
+     * @Assert\Length(
+     *      min=2,
+     *      minMessage = "Votre pseudo est trop court!",
+     * )
+     * @Assert\NotBlank(message="Veuillez saisir votre pseudo !")
      */
     private $username;
 
@@ -72,6 +89,11 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @Assert\Length(
+     *      min=2,
+     *      minMessage = "Votre adresse email est invalide!",
+     * )
+     * @Assert\NotBlank(message="Veuillez saisir votre adresse email !")
      */
     private $email;
 
@@ -79,6 +101,11 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="password", type="string", length=255)
+     * @Assert\Length(
+     *      min=2,
+     *      minMessage = "Votre mot de passe est trop court!",
+     * )
+     * @Assert\NotBlank(message="Veuillez saisir votre mot de passe !")
      */
     private $password;
 
@@ -125,6 +152,31 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="user")
      */
     private $posts;
+    
+    /**
+     * @ORM\OneToMany(targetEntity=PostLike::class, mappedBy="userWhoLiked")
+     */
+    private $postLiked;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Activity::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $activities;
+
+    /**
+     * @ORM\Column(name="activityUnivers", type="boolean")
+     */
+    private $activityUnivers;
+
+    /**
+     * @ORM\Column(name="activityTheme", type="boolean")
+     */
+    private $activityTheme;
+
+    /**
+     * @ORM\Column(name="activityLike", type="boolean")
+     */
+    private $activityLike;
 
     /**
      * Compte non actif à la génération
@@ -133,6 +185,7 @@ class User implements UserInterface
     {
         $this->setIsActive(false);
         $this->sujets = new ArrayCollection();
+        $this->activities = new ArrayCollection();
     }
 
     /**
@@ -329,6 +382,50 @@ class User implements UserInterface
     public function getRegisterKey()
     {
         return $this->registerKey;
+    }
+
+    /**
+     * Retourne les activités de l'utilisateur
+     */
+    public function getActivities()
+    {
+        return $this->activities;
+    }
+
+    public function setActivityUnivers($activityUnivers)
+    {
+        $this->activityUnivers = $activityUnivers;
+
+        return $this;
+    }
+
+    public function getActivityUnivers()
+    {
+        return $this->activityUnivers;
+    }
+
+    public function setActivityTheme($activityTheme)
+    {
+        $this->activityTheme = $activityTheme;
+
+        return $this;
+    }
+    
+    public function getActivityTheme()
+    {
+        return $this->activityTheme;
+    }
+
+    public function setActivityLike($activityLike)
+    {
+        $this->activityLike = $activityLike;
+
+        return $this;
+    }
+    
+    public function getActivityLike()
+    {
+        return $this->activityLike;
     }
 
     /*****************************************

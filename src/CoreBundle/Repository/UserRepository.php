@@ -2,6 +2,8 @@
 
 namespace CoreBundle\Repository;
 
+use CoreBundle\Entity\User;
+
 /**
  * UserRepository
  *
@@ -10,4 +12,23 @@ namespace CoreBundle\Repository;
  */
 class UserRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    /**
+     * Trouve tous les utilisateurs sauf l'utilisateur actif
+     */
+    public function getUsersWithoutMe( $id )
+    {
+
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();  
+
+        $users = $queryBuilder->select('u')
+                                    ->from(User::class, 'u')
+                                    ->where('u.id <> :id')
+                                    ->setParameter('id', $id)
+                                    ->getQuery();
+
+        return $users->getResult();
+
+    }
+
 }

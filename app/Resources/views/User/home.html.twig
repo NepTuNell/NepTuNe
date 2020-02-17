@@ -1,0 +1,48 @@
+{% extends 'index.html.twig' %}
+
+{% block content %}
+
+    {% if sujets is defined and sujets is not null %}
+        
+        <div class="row">
+            <div id="NepTuNe"></div>
+            <div class="offset-2 col-8 text-center title-Header">Accueil</div>
+            <div class="col-6 textColor textSize">
+                <p><b>Derniers sujets ajoutés :</b></p>
+                <ul>
+                    {% for sujet in sujets %}
+                        <br>
+                            <li>
+                                <p><b>Intitulé :</b> {{sujet.libelle}} <br></p>
+                                <p><b>Par : {{sujet.user.username}}</b> <br></p>
+                                <p><b>Le :</b> <i>{{sujet.date|date("d/m/Y")}}</i> <br></p>
+                                <p>Voir le sujet <a href="{{path('post_view', {'sujet': sujet.id})}}"><i class="fas fa-eye"></i></a></p>
+                            </li>
+                        <br>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            {% if columnChartUniv is defined and columnChartUniv is not null
+                or columnChartTheme is defined and columnChartTheme is not null
+                or pieChartLike is defined and pieChartLike is not null %}
+
+                <div class="offset-2 col-8 text-center title-Header">Mon activité</div>
+
+            {% endif %}
+
+            {% if columnChartUniv is defined and columnChartUniv is not null %}
+                <div id="statsUnivers" class="col-12"></div>
+            {% endif %}
+            {% if columnChartTheme is defined and columnChartTheme is not null %}
+                <div id="statsTheme" class="col-12"></div>
+            {% endif %}
+            {% if pieChartLike is defined and pieChartLike is not null %}
+                <div id="statLike" class="col-12"></div>
+            {% endif %}
+            
+        </div>
+        
+    {% endif %}
+
+{% endblock %}

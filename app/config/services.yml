@@ -50,3 +50,6 @@ services:
 
     core.mailer:
         class: CoreBundle\Service\Mailer
+
+    core.googleChart:
+        class: CoreBundle\Service\Mailer

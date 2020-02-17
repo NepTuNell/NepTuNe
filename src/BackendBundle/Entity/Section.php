@@ -5,6 +5,7 @@ namespace BackendBundle\Entity;
 use CoreBundle\Entity\Sujet;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Section
@@ -24,7 +25,7 @@ class Section
     private $id;
     
     /**
-     * @ORM\OneToMany(targetEntity=Sujet::class, mappedBy="section")
+     * @ORM\OneToMany(targetEntity=Sujet::class, mappedBy="section", cascade={"persist", "remove"})
      */
     private $sujets;
 
@@ -36,7 +37,14 @@ class Section
     /**
      * @var string
      *
-     * @ORM\Column(name="libelle", type="string", length=255, unique=true)
+     * @ORM\Column(name="libelle", type="string", length=255, unique=false)
+     * @Assert\Length(
+     *      min=1,
+     *      max=25,
+     *      minMessage = "Le libelle est trop court !",
+     *      maxMessage = "Le libelle est trop long !"
+     * )
+     * @Assert\NotBlank(message="Veuillez saisir le libellé !")
      */
     private $libelle;
 

@@ -3,6 +3,7 @@
 namespace BackendBundle\Controller;
 
 use CoreBundle\Entity\User;
+use CoreBundle\Entity\Sujet;
 use BackendBundle\Entity\Theme;
 use BackendBundle\Entity\Section;
 use BackendBundle\Entity\Univers;
@@ -51,8 +52,10 @@ class SectionController extends Controller
 
         }
 
-        $section = new Section();
-        $form  = $this->createForm('BackendBundle\Form\SectionType', $section);
+        $errors         = null;
+        $universList    = $this->manager->getRepository(Univers::class)->findAll();
+        $section        = new Section();
+        $form           = $this->createForm('BackendBundle\Form\SectionType', $section);
         $form->handleRequest($request);
 
         if ( "POST" === $request->getMethod() ) {
@@ -71,18 +74,13 @@ class SectionController extends Controller
 
             $errors = $this->get('validator')->validate($theme);
 
-            return $this->render('Admin/Section/edit.html.twig', array(
-
-                'form' => $form->createView(),
-                'errors' => $errors
-
-            ));
-
         }
 
         return $this->render('Admin/Section/edit.html.twig', array(
 
             'form' => $form->createView(),
+            'universList' => $universList,
+            'errors' => $errors
 
         ));
 
@@ -103,6 +101,8 @@ class SectionController extends Controller
 
         }
 
+        $errors = null;
+        $universList = $this->manager->getRepository(Univers::class)->findAll();
         $form = $this->createForm('BackendBundle\Form\SectionType', $section);
         $form->handleRequest($request);
 
@@ -114,28 +114,17 @@ class SectionController extends Controller
                 $this->manager->flush();
                 $this->addFlash('success', 'La section a été modifiée !');
 
-                return $this->render('Admin/Section/edit.html.twig', array(
-
-                    'form'   => $form->createView(),
-        
-                ));
-
             }
 
             $errors = $this->get('validator')->validate($section);
 
-            return $this->render('Admin/Section/edit.html.twig', array(
-
-                'form'      => $form->createView(),
-                'errors'    => $errors
-
-            ));
-        
         }
 
         return $this->render('Admin/Section/edit.html.twig', array(
 
-            'form'   => $form->createView(),
+            'form'          => $form->createView(),
+            'errors'        => $errors,
+            'universList'   => $universList,
 
         ));
 
@@ -147,21 +136,36 @@ class SectionController extends Controller
      * @Route("/delete/{section}", name="section_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, Section $section)
+    public function deleteSection(Request $request, Section $section)
     {
 
         if ( !$this->isGranted('ROLE_ADMIN') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
             throw $this->createAccessDeniedException('Vous n\'avez pas les droits nécessaires pour accéder à cette section !');
         }
-       
+        
+        $message     = array();
+        $universList = $this->manager->getRepository(Univers::class)->findAll();
+        
         if ( "GET" === $request->getMethod() ) {
 
-            $this->manager->remove($section);
-            $this->manager->flush();
+            $sujets   = $this->manager->getRepository(Sujet::class)->findBy([
+                'section' => $section,
+            ]);
+
+            if ( count($sujets) > 0 ) {
+                $message[] = "La section est utilisée !";
+            } else {
+                $this->manager->remove($section);
+                $this->manager->flush();
+            }
 
         } 
 
-        return $this->redirectToRoute('admin_show_entity');
+        return $this->render('Admin/controlForum.html.twig', [
+            "message"   =>   $message,
+            "universList" => $universList,
+        ]);
+
     }
 
     /**

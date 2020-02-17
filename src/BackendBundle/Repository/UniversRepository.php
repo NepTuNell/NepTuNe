@@ -2,6 +2,8 @@
 
 namespace BackendBundle\Repository;
 
+use BackendBundle\Entity\Univers;
+
 /**
  * UniversRepository
  *
@@ -10,4 +12,19 @@ namespace BackendBundle\Repository;
  */
 class UniversRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Nombre d'univers
+     */
+    public function getNbUnivers()
+    {
+
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();  
+        
+        $result = $queryBuilder ->select('COUNT(u)')
+                                ->from(Univers::class, 'u')
+                                ->getQuery();
+
+        return $result->getSingleScalarResult();
+
+    }
 }
