@@ -45,8 +45,8 @@ $(document).ready(function () {
             winMod.style.top  = navPosition['bottom']+nav2Position['height']+1+"px";
 
             // Test des positions du curseur pour affichage ou fermeture de la popup 
-            if (event.clientY < imgModPosition['bottom'] && event.clientY > imgModPosition['top'] &&
-                event.clientX > imgModPosition['left'] && event.clientX < imgModPosition['right']) {
+            if ( event.clientY < imgModPosition['bottom'] && event.clientY > imgModPosition['top'] &&
+                 event.clientX > imgModPosition['left'] && event.clientX < imgModPosition['right']) {
 
                 winMod.style.display = "flex";
 
@@ -68,21 +68,21 @@ $(document).ready(function () {
         }
         
         /******************************************************
-         *        Traitement de la barre de navigation      
+         *        Traitement du clic hors navigation    
          *****************************************************/
 
-        var containerPos   = $('.dropdown-submenu ul.dropdown-menu')[0].getBoundingClientRect();
+        var containerPos = $('.dropdown-menu')[0].getBoundingClientRect();
 
         // Test de la position du curseur Fermeture des listes  
-        if ( event.clientY > containerPos['bottom'] && event.clientY < containerPos['top'] &&
-             event.clientX > containerPos['left'] && event.clientX < containerPos['right'] ) {
+        if ( event.clientY < containerPos['bottom'] || event.clientY > containerPos['top'] ||
+             event.clientX < containerPos['left'] || event.clientX > containerPos['right'] ) {
             
-            return;
-
-        } else {
-
             // Fermeture de toutes les fenêtres ouvertes
-            $('.dropdown-submenu > a').next('ul').css("display", "none");
+            $('.dropdown-submenu > a').next('ul').each( function() {
+
+                $(this).hide();
+
+            })
 
         }
 
@@ -91,13 +91,31 @@ $(document).ready(function () {
          ****************************************************************/
 
         $('.dropdown-submenu > a').on("click", function (event) {
-            
-            // Fermeture de toutes les fenêtres ouvertes
-            $('.dropdown-submenu > a').next('ul').css("display", "none");
+          
+            // Fermeture de toutes les fenêtres ouverte
+            console.log(this)
+            if ( $(this).next('ul').css("display") === "none" ) {
 
-            // Ouverture de celle sur laquelle l'utilisateur a cliqué
-            $(this).next('ul').toggle();
-            event.stopPropagation();
+                $('.dropdown-submenu > a').next('ul').each( function() {
+
+                    $(this).hide();
+
+                })
+
+                $(this).next('ul').show(500, "swing");
+
+            } else {
+
+                
+                $(this).next('ul').hide(500, "swing");
+
+            }
+                
+            console.log('test')
+
+            // Attention utiliser stopImmediatePropagation pour éviter d'effectuer la fonction autant de fois qu'il y a de .dropdown-submenu > a !
+            //event.stopPropagation();
+            event.stopImmediatePropagation();
             event.preventDefault();
 
         });

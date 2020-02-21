@@ -126,7 +126,6 @@ $('document').ready( function ( ) {
                 collision = false;
  
             }
-                   
             
             // Sauvegarde dans array de l'objet
             asteroidArray[i] = meshAsteroid;
@@ -197,7 +196,7 @@ $('document').ready( function ( ) {
 
     }
 
-    function followCamera(event) {
+    /*function followCamera(event) {
 
         var mouseX = event.clientX - window.innerWidth/2;
         var mouseY = event.clientY - window.innerHeight/2;
@@ -208,7 +207,7 @@ $('document').ready( function ( ) {
         camera.lookAt( scene.position )
         renderer.render( scene, camera );
 
-    }
+    }*/
 
     window.addEventListener('resize', () => {
         let width = window.innerWidth
@@ -217,7 +216,21 @@ $('document').ready( function ( ) {
         camera.aspect = width / height
         camera.updateProjectionMatrix()
     })
+    /*
+    window.addEventListener('mousemove', t) ;
 
+    function t(event) {
+
+        // création de l'étoile
+        var geometry = new THREE.CircleGeometry( 10, 32 );
+        var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+        var circle   = new THREE.Mesh( geometry, material );
+        circle.position.x = event.clientX;
+        circle.position.y = -event.clientY;         
+        scene.add( circle );
+
+    }
+    */
 });
     
  

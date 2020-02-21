@@ -201,11 +201,17 @@ i  {
 }
 
 .mainNavDropDown {
-    background-color: red;
+    background-color: transparent;
     position: relative;
-    min-width: 30vw;
-    min-height: 20vh;
     display: none;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 35px;
+}
+
+.libNavDropDown:hover {
+    font-weight: bold;
+    text-decoration: none;
 }
 
 /*/////////////////////////////////////////////////
@@ -598,6 +604,20 @@ i  {
         font-size: 2em;
     }
 
+    .imgPictureProfilePost {
+        width: 60px;
+        height: 50px;
+        padding: 5px;
+        border-radius: 10px 10px 10px 10px;
+    }
+    
+    /*///////////////////////////////////////////////////////////
+    //              TEXTES DES DROPDOWNS CACHEES               //
+    ///////////////////////////////////////////////////////////*/
+    .libNavDropDown {
+        font-size: 0.6em;
+    }
+
 }
 
 /*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -798,6 +818,21 @@ i  {
         color: white;
         font-size: 1em;
     }
+
+    .imgPictureProfilePost {
+        width: 60px;
+        height: 50px;
+        padding: 5px;
+        border-radius: 10px 10px 10px 10px;
+    }
+
+    /*///////////////////////////////////////////////////////////
+    //              TEXTES DES DROPDOWNS CACHEES               //
+    ///////////////////////////////////////////////////////////*/
+    .libNavDropDown {
+        font-size: 0.9em;
+    }
+
 
 }
 

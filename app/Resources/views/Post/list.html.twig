@@ -10,8 +10,9 @@
         <div style="margin-top: 5%;">
       
             <div v-for="obj in comments" class="col-12 offset-lg-1 col-lg-10" style="margin-bottom: 2%;">
-                
+  
                 <div class="userPostUsername textSize col-12">
+                    <img v-if="obj.comment.pictureName !== null && obj.comment.pictureExtension !== null && obj.comment.pictureID !== null" class="col-lg-1 col-1 imgPictureProfilePost" v-bind:src="'/jimmy/FORUM/web/upload/imgProfil/'+[[obj.comment.pictureName]]+'_'+[[obj.comment.pictureID]]+'.'+[[obj.comment.pictureExtension]]"></img>
                     <span>[[obj.comment.username]]</span>
                     <span v-if="obj.comment.id_user === userID || userAuthorised === true">
                         <a style="float: right; margin-right:5%;" v-on:click="editComment([[obj.comment.id_user]]+'_'+[[obj.comment.id]])"><i class="fas fa-edit imgCursor"></i></a>

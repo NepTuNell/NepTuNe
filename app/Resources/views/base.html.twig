@@ -11,7 +11,6 @@
         <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
-        <script src="{{ asset('js/jquery-ui-1.12.1.custom/jquery-ui.js') }}"></script>
 
         <!-- Bibliothèques Boostrap-->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -20,7 +19,6 @@
 
         <!-- Lien icone font awesome et CSS -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-        <link rel="stylesheet" href="{{ asset('js/jquery-ui-1.12.1.custom/jquery-ui.css') }}"/>
         <link rel="stylesheet" href="{{ asset('css/FORUM.css') }}"/>
 
         <!-- Threes 3D -->
@@ -106,11 +104,13 @@
                                     <i class="fas fa-user-edit"></i>Mon compte
                                 </a>
                             </div>
-                            <div class=" text-center col-12">
-                                <a href="{{path('admin_dashboard')}}" class="modalElem">
-                                    <i class="fas fa-user-edit"></i>Administration
-                                </a>
-                            </div>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class=" text-center col-12">
+                                    <a href="{{path('admin_dashboard')}}" class="modalElem">
+                                        <i class="fas fa-user-edit"></i>Administration
+                                    </a>
+                                </div>
+                            {% endif %}
                             <div class="text-center col-12">
                                 <a id="modalDisconnect" href="{{path('logout')}}">Déconnexion</a>
                             </div>

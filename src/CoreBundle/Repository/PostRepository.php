@@ -5,6 +5,7 @@ namespace CoreBundle\Repository;
 use CoreBundle\Entity\Post;
 use CoreBundle\Entity\User;
 use CoreBundle\Entity\PostLike;
+use CoreBundle\Entity\PictureProfile;
 
 /**
  * PostRepository
@@ -21,17 +22,23 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
     public function fetchAll( $options = array() )
     {
 
-        $queryBuilder  = $this->getEntityManager()->createQueryBuilder();  
-        $countLike     = $this->countLike();
+        $queryBuilder   = $this->getEntityManager()->createQueryBuilder();  
+        $countLike      = $this->countLike();
         $countDisLike   = $this->countDisLike();
 
         if (array_key_exists('sujet', $options)) {
             
-            $result = $queryBuilder ->select('p.id, p.commentaire, p.date, u.username, u.id as id_user')
+            $result = $queryBuilder ->select('p.id, p.commentaire, p.date, u.username, u.id as id_user, pp.pictureName, pp.id as pictureID, pp.pictureExtension')
                                     ->addSelect('('.$countLike.') as nbLike')
                                     ->addSelect('('.$countDisLike.') as nbDisLike')
-                                    ->from(Post::class, 'p')
+                                    ->from(Post::class, 'p') 
                                     ->where('p.sujet = :sujet')
+                                    ->leftJoin(
+                                        PictureProfile::class, 
+                                        'pp',
+                                        \Doctrine\ORM\Query\Expr\Join::WITH,
+                                        'pp.user = p.user'        
+                                    )
                                     ->innerJoin(User::class, 'u')
                                     ->andWhere('p.user = u.id')
                                     ->setParameters([
@@ -79,5 +86,6 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
         return $result;
 
     }
+    
 
 }
