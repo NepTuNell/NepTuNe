@@ -408,6 +408,24 @@ i  {
     /*
      *  Texte de la barre de navigation principale
      */
+     #NepTuNeTitle {
+        font-size: 1.2em;
+        margin-right: 2%;
+        color: #4da0cd;
+        background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.5), rgba(65, 65, 65, 0.5)  60%, rgba(0, 0, 0, 0.5));
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 2%;
+        padding-right: 2%;
+        border-radius: 30px 30px 30px 30px;
+        border-style: groove;
+        border-width: 1px;
+        box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);  
+    }
+    
+    /*
+     *  Texte de la barre de navigation principale
+     */
     .mainNavSizeText {
         font-size: 5em;
     }
@@ -621,6 +639,24 @@ i  {
     //       BARRE DE NAVIGATION PRINCIPALE       //
     //////////////////////////////////////////////*/
     
+    /*
+     *  Texte de la barre de navigation principale
+     */
+     #NepTuNeTitle {
+        font-size: 1.2em;
+        margin-right: 2%;
+        color: #4da0cd;
+        background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.5), rgba(65, 65, 65, 0.5)  60%, rgba(0, 0, 0, 0.5));
+        padding-top: 5px;
+        padding-bottom: 5px;
+        padding-left: 2%;
+        padding-right: 2%;
+        border-radius: 30px 30px 30px 30px;
+        border-style: groove;
+        border-width: 1px;
+        box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.5);  
+    }
+
     /*
      *  Texte de la barre de navigation principale
      */
