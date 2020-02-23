@@ -128,41 +128,43 @@ class Mailer extends Controller
 
     }
 
-
     /**
      * Undocumented function
      *
      * @param User $user
      * @return void
      */
-    public function situationDetailsActivated(User $user)
+    public function resetPasswordCheckAccount(User $user)
     {
 
         $message =  \Swift_Message::newInstance()
-                    ->setSubject('Hello Email')
-                    ->setFrom('sauronlemaudit@gmail.com')
-                    ->setTo(''.$user->getEmail())
-                    ->setBody('Votre situation a bien été mise à jour !');
-                         
+                        ->setSubject('Hello Email')
+                        ->setFrom('sauronlemaudit@gmail.com')
+                        ->setTo(''.$user->getEmail())
+                        ->setBody($this->templating->render('Templates\Email\reset.html.twig', [
+                            'user'  => $user
+                        ]), 
+                        'text/html'
+                    );     
+
         $this->mailer->send($message); 
 
     }
 
-    
     /**
      * Undocumented function
      *
      * @param User $user
      * @return void
      */
-    public function situationDetailsDeactivated(User $user)
+    public function resetPassword(User $user, $password)
     {
 
         $message =  \Swift_Message::newInstance()
                     ->setSubject('Hello Email')
                     ->setFrom('sauronlemaudit@gmail.com')
                     ->setTo(''.$user->getEmail())
-                    ->setBody('Votre situation a bien été désactivé.');
+                    ->setBody('Votre mot de passe a été réinitialisé ! Votre nouveau mot de passe est : '.$password.' . Veuillez le modifier dès que possible.');
                          
         $this->mailer->send($message); 
 

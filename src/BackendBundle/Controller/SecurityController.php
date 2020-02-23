@@ -3,6 +3,7 @@
 namespace BackendBundle\Controller;
 
 use CoreBundle\Entity\User;
+use CoreBundle\Services\Mailer;
 use BackendBundle\Entity\Univers;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -18,22 +19,27 @@ class SecurityController extends Controller
      ******************************/
 
     /**
-     * Undocumented variable
-     *
      * @var ObjectManager
      */
     private $manager;
+
+    /**
+     * @var Mailer
+     */
+    private $mailer;
     
     /**
-     * Undocumented function
+     * Undocumented variable
      *
-     * @param ObjectManager $manager
+     * @var ObjectManager
+     * @var Mailer
      */
-    public function __construct(ObjectManager $manager) 
+    public function __construct(ObjectManager $em, Mailer $mailer)
     {
-        
-        $this->manager = $manager;
-    
+
+        $this->manager      = $em;
+        $this->mailer       = $mailer;
+
     }
 
     /**
@@ -165,6 +171,99 @@ class SecurityController extends Controller
         $this->manager->flush();
 
         $this->addFlash('success', 'Votre compte est activé, vous pouvez maintenant vous connecter!');
+        return $this->render('User/Security/login.html.twig');
+
+    }
+
+    /**
+     * Undocumented function
+     * 
+     * @Route("/home/check/account", name="user_check_account", methods={"POST","GET"})
+     * @param User $user
+     * @param [type] $key
+     * @return void
+     */
+    public function checkAccount(Request $request)
+    {
+
+        $universList = $this->manager->getRepository(Univers::class)->findAll();
+        $errors      = null;
+        $messages    = null;
+
+        if ( "POST" === $request->getMethod() ) {
+
+            $user = $this->manager->getRepository(User::class)->findOneBy([
+                'email' => $request->request->get('email')
+            ]);
+
+            if ( null !== $user ) {
+
+                $this->mailer->resetPasswordCheckAccount($user);
+                $this->addFlash('success', 'Un mail vous a été envoyé pour réinitialiser votre mot de passe !');
+
+            } else {
+
+                $messages[] = "Identifiants invalides !";
+
+            }
+
+        }
+        
+        return $this->render('User/Security/check.html.twig', [
+            'universList'   =>  $universList,
+            'message'       =>  $messages,
+            'errors'        =>  $errors,
+        ]);
+
+    }
+
+    /**
+     * Undocumented function
+     * 
+     * @Route("/home/account/reset/password/{id}", name="user_check_account_reset_password", methods={"GET"})
+     * @param User $user
+     * @param [type] $key
+     * @return void
+     */
+    public function checkAccountResetPassword(User $user)
+    {
+
+        $universList = $this->manager->getRepository(Univers::class)->findAll();
+        $errors      = null;
+        $messages    = null;
+        $password    = null; 
+
+        /**
+         *  Création d'un mot de passe aléatoire
+         */
+        for ( $i = 0; $i < 14; $i++ ) {
+
+            $lowerCase = mt_rand(0, 1);
+
+            if ( $lowerCase === 0 ) {
+                $rand = mt_rand(97, 122);
+            } else {
+                $rand = mt_rand(65, 90);
+            }
+
+            $password = $password.chr($rand);
+
+        }
+                    
+        /**
+         * Cryptage du mot de passe et envoie mail avec mot de pass décrypté 
+         */
+        $hash = $this->get('security.password_encoder')->encodePassword($user, $password);
+        $this->mailer->resetPassword($user, $password);
+
+        /**
+         * Changement mot de passe
+         */
+        $user->setPassword($hash);
+        $this->manager->persist($user);
+        $this->manager->flush();
+        $this->addFlash('success', 'Votre nouveau mot de passe vous a été envoyé par email !');
+        
         return $this->render('User/Security/login.html.twig');
 
     }

@@ -40,22 +40,14 @@ body {
 /**
  * Infobulle sur page de connexion
  */
-.popup:hover > span {
-    display: block;
-    color: blue;
-    background-color: rgba(88, 80, 80, 0.5);
+.popup {
+    display: none;
+    color: #4da0cd;
+    background-color: rgba(0, 47, 70, 1);
     padding: 15px;
     border-radius: 3px;
     box-shadow:0 0 2px rgba(0,0,0,.5);
     font-size: 0.8em;
-}
-
-.popup {
-   position: relative;
-}
-
-.popup > span {
-    display: none;
 }
 
 /*

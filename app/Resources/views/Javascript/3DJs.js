@@ -8,8 +8,10 @@ $('document').ready( function ( ) {
     }
 
     //document.addEventListener('mousemove', followCamera, false);
-    init();
-    animate();
+    if (window.matchMedia("(min-width: 769px)").matches) {
+        init();
+        animate();
+    }
 
     function init() {
 

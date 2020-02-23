@@ -120,6 +120,39 @@ $(document).ready(function () {
 
         });
 
+        /****************************************************************
+         *                Traitement Popup page de login
+         ****************************************************************/
+        var popupHelp      = $('#popupHelp');
+        var popupToDisplay = $('.popup');
+        
+        if ( popupHelp.length ) {
+
+            var popupHelpPos      = popupHelp[0].getBoundingClientRect();
+            var popupToDisplayPos = popupToDisplay[0].getBoundingClientRect();
+
+            if ( event.clientY < popupHelpPos['bottom'] && event.clientY > popupHelpPos['top'] &&
+                 event.clientX > popupHelpPos['left']   && event.clientX < popupHelpPos['right']) {
+                
+                popupToDisplay.css('display', 'block');
+
+            } else {
+
+                if ( event.clientY < popupToDisplayPos['bottom'] && event.clientY > popupToDisplayPos['top'] &&
+                     event.clientX > popupToDisplayPos['left']   && event.clientX < popupToDisplayPos['right']) {
+                
+                    popupToDisplay.css('display', 'block');
+
+                } else {
+
+                    popupToDisplay.css('display', 'none');
+
+                }
+
+            }
+        
+        }
+
     });
 
     /******************************************* 

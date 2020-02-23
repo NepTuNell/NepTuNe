@@ -22,17 +22,18 @@
                     <input type="submit" class="btn btn-primary button-size" value="S'identifier"/>
                 </div>
                 <div class="col-8">
-                    <a class="popup">
-                        <i class="fas fa-question-circle"></i>
-                        <span>Pas encore enregistré ?<br>Cliquez sur le lien s'enregistrer en haut à droite !</span>
-                    </a>
+                    <i class="fas fa-question-circle imgCursor" id="popupHelp" style="color: blue;"></i>
+                    <div class="popup">
+                        <p>Pas encore enregistré ?<br>Cliquez sur le lien s'enregistrer en haut à droite !</p>
+                        <p>Mot de passe oublié ?<br>Cliquez ici : <a href="{{path('user_check_account')}}">Réinitialiser le mot de passe</a></p>
+                    </div>
                 </div>
             </div>
         </form>
         
         <!-- Erreur spécifique -->
 
-        {% if error is defined and error is not null%}
+        {% if error is defined and error is not null %}
             <div class="col-12">
                 <div class="row alert alert-danger">
                     <div class="col-12 form-error text-center">
@@ -45,15 +46,15 @@
         <!-- Message flash spécifique -->
 
         {% for flash in app.flashes('success') %}
-        <div class="col-12">
-            <div class="alert alert-primary" style="margin-top: 5%">
-                <div class="row">
-                    <div class="col-12 text-center"> 
-                        {{ flash }} 
+            <div class="col-12">
+                <div class="alert alert-primary" style="margin-top: 5%">
+                    <div class="row">
+                        <div class="col-12 text-center"> 
+                            {{ flash }} 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         {% endfor %}
 
     </div>     

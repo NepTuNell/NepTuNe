@@ -159,10 +159,14 @@ class SujetRepository extends \Doctrine\ORM\EntityRepository
      
     }
 
+    /********************************
+     *        PAGE D'ACCUEIL
+     *******************************/
+    
     /**
      * Recherche des sujets les plus récents
      */
-    public function fetchMyLastSubjects()
+    public function fetchLastSubjects()
     {
 
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();  
@@ -178,6 +182,43 @@ class SujetRepository extends \Doctrine\ORM\EntityRepository
                                 
         return $result;
      
+    }
+
+    /**
+     * Recherche des sujets les plus récents
+     */
+    public function fetchMostViewSubjects()
+    {
+
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();  
+        $countPost    = $this->countPostQuery2();
+
+        $result = $queryBuilder ->setMaxResults(3)
+                                ->select('s.id, s.libelle, s.date, u.username')
+                                ->addSelect('('.$countPost.') as nbPost')
+                                ->from(Sujet::class, 's')
+                                ->innerJoin(User::class, 'u')
+                                ->where('s.user = u.id')
+                                ->orderBy('nbPost', 'DESC')
+                                ->getQuery()
+                                ->getResult();
+                                
+        return $result;
+     
+    }
+
+    public function countPostQuery2()
+    {
+
+        $countQuery = $this->getEntityManager()->createQueryBuilder();
+
+        $countPost = $countQuery->select('COUNT(p)')
+                                ->from(Post::class, 'p')
+                                ->where('p.sujet = s.id')
+                                ->getDQL();
+
+        return $countPost;
+
     }
 
 }

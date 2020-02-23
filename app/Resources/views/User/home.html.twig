@@ -1,27 +1,48 @@
 {% extends 'index.html.twig' %}
 
 {% block content %}
-
-    {% if sujets is defined and sujets is not null %}
         
         <div class="row">
             <div id="NepTuNe"></div>
             <div class="offset-2 col-8 text-center title-Header">Accueil</div>
-            <div class="col-6 textColor textSize">
-                <p><b>Derniers sujets ajoutés :</b></p>
-                <ul>
-                    {% for sujet in sujets %}
-                        <br>
-                            <li>
-                                <p><b>Intitulé :</b> {{sujet.libelle}} <br></p>
-                                <p><b>Par : {{sujet.user.username}}</b> <br></p>
-                                <p><b>Le :</b> <i>{{sujet.date|date("d/m/Y")}}</i> <br></p>
-                                <p>Voir le sujet <a href="{{path('post_view', {'sujet': sujet.id})}}"><i class="fas fa-eye"></i></a></p>
-                            </li>
-                        <br>
-                    {% endfor %}
-                </ul>
-            </div>
+            <table class="col-12 text-center">
+                <tr>
+                    <td>
+                        <div class="textColor textSize">
+                            <p><b>Derniers sujets ajoutés :</b></p>
+                            <ul>
+                                {% for subject in subjectsLast %}
+                                    <br>
+                                        <li>
+                                            <p><b>Intitulé :</b> {{subject.libelle}} <br></p>
+                                            <p><b>Par : {{subject.user.username}}</b> <br></p>
+                                            <p><b>Le :</b> <i>{{subject.date|date("d/m/Y")}}</i> <br></p>
+                                            <p>Voir le sujet <a href="{{path('post_view', {'sujet': subject.id})}}"><i class="fas fa-eye"></i></a></p>
+                                        </li>
+                                    <br>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="textColor textSize">
+                            <p><b>Sujets les plus commentés :</b></p>
+                            <ul>
+                                {% for subject in subjectsView %}
+                                    <br>
+                                        <li>
+                                            <p><b>Intitulé :</b> {{subject.libelle}} <br></p>
+                                            <p><b>Par : {{subject.username}}</b> <br></p>
+                                            <p><b>Le :</b> <i>{{subject.date|date("d/m/Y")}}</i> <br></p>
+                                            <p>Voir le sujet <a href="{{path('post_view', {'sujet': subject.id})}}"><i class="fas fa-eye"></i></a></p>
+                                        </li>
+                                    <br>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </td>
+                </tr>    
+            </table>
 
             {% if columnChartUniv is defined and columnChartUniv is not null
                 or columnChartTheme is defined and columnChartTheme is not null
@@ -42,7 +63,5 @@
             {% endif %}
             
         </div>
-        
-    {% endif %}
 
 {% endblock %}

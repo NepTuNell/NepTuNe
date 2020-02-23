@@ -81,8 +81,9 @@ class UserController extends Controller
         $data                   = array();
         $user                   = $this->token->getToken()->getUser();
         $universList            = $this->manager->getRepository(Univers::class)->findAll();
-        $sujets                 = $this->manager->getRepository(Sujet::class)->fetchMyLastSubjects();
-      
+        $subjectsLast           = $this->manager->getRepository(Sujet::class)->fetchLastSubjects();
+        $subjectsView           = $this->manager->getRepository(Sujet::class)->fetchMostViewSubjects();
+
         if ( $this->isGranted('IS_AUTHENTICATED_FULLY') && $this->isGranted('ROLE_USER') ) {
 
             if ( $user->getActivityUnivers() ) {
@@ -102,7 +103,8 @@ class UserController extends Controller
         return $this->render('User/home.html.twig', [
 
             'universList'           => $universList,
-            'sujets'                => $sujets,
+            'subjectsLast'          => $subjectsLast,
+            'subjectsView'          => $subjectsView,
             'columnChartUniv'       => $columnChartUniv,
             'columnChartTheme'      => $columnChartTheme,
             'pieChartLike'          => $pieChartLike,
