@@ -68,7 +68,8 @@ class UserController extends Controller
         $this->token        = $token;
 
     }
-    
+
+
     /**
      * @Route("/", name="user_index", methods={"GET"})
      */
@@ -83,7 +84,7 @@ class UserController extends Controller
         $universList            = $this->manager->getRepository(Univers::class)->findAll();
         $subjectsLast           = $this->manager->getRepository(Sujet::class)->fetchLastSubjects();
         $subjectsView           = $this->manager->getRepository(Sujet::class)->fetchMostViewSubjects();
-
+        
         if ( $this->isGranted('IS_AUTHENTICATED_FULLY') && $this->isGranted('ROLE_USER') ) {
 
             if ( $user->getActivityUnivers() ) {
@@ -99,7 +100,9 @@ class UserController extends Controller
             }
 
         }
-
+ 
+        
+        
         return $this->render('User/home.html.twig', [
 
             'universList'           => $universList,
@@ -108,7 +111,7 @@ class UserController extends Controller
             'columnChartUniv'       => $columnChartUniv,
             'columnChartTheme'      => $columnChartTheme,
             'pieChartLike'          => $pieChartLike,
-
+            
         ]);
 
     }

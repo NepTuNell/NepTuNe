@@ -5,6 +5,8 @@ namespace CoreBundle\Repository;
 use CoreBundle\Entity\Post;
 use CoreBundle\Entity\User;
 use CoreBundle\Entity\PostLike;
+use Doctrine\ORM\Query\Expr\Join;
+use BackendBundle\Entity\PostControl;
 use CoreBundle\Entity\PictureProfile;
 
 /**
@@ -26,8 +28,43 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
         $countLike      = $this->countLike();
         $countDisLike   = $this->countDisLike();
 
-        if (array_key_exists('sujet', $options)) {
-            
+        if ( array_key_exists('user', $options) && 'anon.' !== $options['user'] ) {
+                
+
+            /***********************************************************************************
+             *              Requête utilisée par les utilisateurs connectés
+             **********************************************************************************/
+            $result = $queryBuilder ->select('p.id, p.commentaire, p.date, u.username, u.id as id_user, pp.pictureName, pp.id as pictureID, pp.pictureExtension, pc.id as reclamationID')
+                                    ->addSelect('('.$countLike.') as nbLike')
+                                    ->addSelect('('.$countDisLike.') as nbDisLike')
+                                    ->from(Post::class, 'p') 
+                                    ->where('p.sujet = :sujet')
+                                    ->leftJoin(
+                                        PictureProfile::class, 
+                                        'pp',
+                                        \Doctrine\ORM\Query\Expr\Join::WITH,
+                                        'pp.user = p.user'  
+                                    )
+                                    ->leftJoin(
+                                        PostControl::class, 
+                                        'pc',
+                                        \Doctrine\ORM\Query\Expr\Join::WITH,
+                                        'pc.user = :user AND pc.post = p.id',
+                                    )
+                                    ->innerJoin(User::class, 'u')
+                                    ->andWhere('p.user = u.id')
+                                    ->setParameters([
+                                        'sujet' => $options['sujet'],
+                                        'user'  => $options['user']
+                                    ])
+                                    ->orderBy('p.date', 'ASC')
+                                    ->getQuery();  
+                                    
+        } else {
+
+            /***********************************************************************************
+             *              Requête utilisée par les utilisateurs non connectés
+             **********************************************************************************/
             $result = $queryBuilder ->select('p.id, p.commentaire, p.date, u.username, u.id as id_user, pp.pictureName, pp.id as pictureID, pp.pictureExtension')
                                     ->addSelect('('.$countLike.') as nbLike')
                                     ->addSelect('('.$countDisLike.') as nbDisLike')
@@ -46,6 +83,73 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
                                     ])
                                     ->orderBy('p.date', 'ASC')
                                     ->getQuery();
+                                     
+        }   
+      
+        return $result->getResult();
+
+    }
+    
+    /**
+     * Fetch subject which was reported by users
+     */
+    public function fetchAllAdmin( $options = array() )
+    {
+
+        $queryBuilder   = $this->getEntityManager()->createQueryBuilder();  
+        $countLike      = $this->countLike();
+        $countDisLike   = $this->countDisLike();
+        
+        if (array_key_exists('sujet', $options)) {
+
+            /***********************************************************************************
+             *      Requête utilisée par les admins pour voir les commentaires signalés
+             **********************************************************************************/
+            $result = $queryBuilder ->select('p.id, p.commentaire, p.date, u.username, u.id as id_user, pp.pictureName, pp.id as pictureID, pp.pictureExtension, pc.id as reclamationID')
+                                    ->addSelect('('.$countLike.') as nbLike')
+                                    ->addSelect('('.$countDisLike.') as nbDisLike')
+                                    ->from(Post::class, 'p') 
+                                    ->where('p.sujet = :sujet')
+                                    ->leftJoin(
+                                        PictureProfile::class, 
+                                        'pp',
+                                        \Doctrine\ORM\Query\Expr\Join::WITH,
+                                        'pp.user = p.user'  
+                                    )
+                                    ->innerJoin(
+                                        PostControl::class, 
+                                        'pc',
+                                        \Doctrine\ORM\Query\Expr\Join::WITH,
+                                        'pc.post = p.id',
+                                    )
+                                    ->innerJoin(User::class, 'u')
+                                    ->andWhere('p.user = u.id')
+                                    ->setParameters([
+                                        'sujet' => $options['sujet']
+                                    ])
+                                    ->orderBy('p.date', 'ASC')
+                                    ->getQuery();  
+
+        } else {
+
+
+            /***********************************************************************************
+             *      Requête utilisée par les admins pour voir les commentaires signalés
+             **********************************************************************************/
+            $result = $queryBuilder ->select('p.id, p.commentaire, p.date, u.username, u.id as id_user, pp.pictureName, pp.id as pictureID, pp.pictureExtension')
+                                    ->addSelect('('.$countLike.') as nbLike')
+                                    ->addSelect('('.$countDisLike.') as nbDisLike')
+                                    ->from(Post::class, 'p') 
+                                    ->leftJoin(
+                                        PictureProfile::class, 
+                                        'pp',
+                                        \Doctrine\ORM\Query\Expr\Join::WITH,
+                                        'pp.user = p.user'  
+                                    )
+                                    ->innerJoin(PostControl::class, 'pc', Join::WITH, 'p.id = pc.post')
+                                    ->innerJoin(User::class, 'u' , Join::WITH, 'p.user = u.id')
+                                    ->orderBy('p.date', 'ASC')
+                                    ->getQuery();  
 
         }
 

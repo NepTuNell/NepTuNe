@@ -68,11 +68,15 @@ class PostController extends Controller
      */
     public function list(Request $request, Sujet $sujet)
     {
+
         $data = array();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
         $result = $this->manager->getRepository(Post::class)->fetchAll([
             'sujet' => $sujet,
+            'user'  => $user
         ]);
-    
+        
         foreach ( $result as $post ) {
 
             $pictures = $this->manager->getRepository(Picture::class)->fetchByPost($post['id']);
@@ -87,7 +91,7 @@ class PostController extends Controller
             array_push($data, $elem);
 
         }
-        
+     
         $commentaires = json_encode($data);
 
         $response = new Response(

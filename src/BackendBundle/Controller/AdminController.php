@@ -2,10 +2,14 @@
 
 namespace BackendBundle\Controller;
 
+use CoreBundle\Entity\Post;
 use CoreBundle\Entity\User;
+use CoreBundle\Entity\Sujet;
+use CoreBundle\Entity\Picture;
 use BackendBundle\Entity\Theme;
 use CoreBundle\Services\Mailer;
 use BackendBundle\Entity\Univers;
+use BackendBundle\Entity\PostControl;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
@@ -69,9 +73,12 @@ class AdminController extends Controller
         $this->mailer   = $mailer;
     }
 
+
+    /*************************************************
+     *               TABLEAU DE BORD
+     *************************************************/
+
     /**
-     * Lists all entities of BackendBundle.
-     *
      * @Route("/dashboard", name="admin_dashboard")
      * @Method("GET")
      */
@@ -276,6 +283,116 @@ class AdminController extends Controller
 
         return $response;
 
+    }
+
+    /*************************************************
+     *          SIGNALEMENT DES COMMENTAIRES
+     *************************************************/
+
+    /**
+     * @Route("signalement/{post}/{user}", options = {"expose" = true}, name="post_user_reclamation", methods={"GET"})
+     */
+    public function reclamation(User $user, Post $post)
+    {
+
+        if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
+            throw $this->createAccessDeniedException('Veuillez vous connecter !');
+        }
+
+        $postControlExist = $this->manager->getRepository(PostControl::class)->findOneBy([
+            'post' =>  $post,
+            'user'  =>  $user
+        ]);
+
+        if ( !$postControlExist ) {
+            
+            $postControl = new PostControl;
+            $postControl->setUser($user);
+            $postControl->setPost($post);
+            $this->manager->persist($postControl);
+            $this->manager->flush();
+
+        } else {
+
+            $this->manager->remove($postControlExist);
+            $this->manager->flush();
+        
+        }
+
+        $response = new Response(
+            RESPONSE::HTTP_OK 
+        );
+
+        return $response;
+
+    }
+
+    /**************************************************************
+     *      AFFICHAGE ET GESTION DES COMMENTAIRES SIGNALES
+     *************************************************************/
+
+    /**
+     * @Route("/view/post", name="admin_post_view", options = {"expose" = true})
+     * @Method({"GET", "POST"})
+     */
+    public function view(Request $request)
+    {
+
+        $universList = $this->manager->getRepository(Univers::class)->findAll();
+
+        return $this->render('Admin/Post/list.html.twig', [
+            'universList'   => $universList,
+        ]);
+
+    }
+
+    /**
+     * @Route("/signalement/list/{sujet}", name="admin_post_list", options = {"expose" = true}, requirements={"sujet"="\d+"})
+     * @Method({"GET", "POST"})
+     */
+    public function listPostFetchComment(Request $request, Sujet $sujet = null)
+    {
+
+        $data = array();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if ( null === $sujet ) {
+
+            $result = $this->manager->getRepository(Post::class)->fetchAllAdmin();
+
+        } else {
+
+            $result = $this->manager->getRepository(Post::class)->fetchAllAdmin([
+                'sujet' => $sujet,
+            ]);
+
+        }
+ 
+        //var_dump($result);
+        
+        foreach ( $result as $post ) {
+
+            $pictures = $this->manager->getRepository(Picture::class)->fetchByPost($post['id']);
+            
+            $elem = [
+                
+                'comment'  =>  $post,
+                'pictures' =>  $pictures,
+                 
+            ]; 
+            
+            array_push($data, $elem);
+
+        }
+
+        $commentaires = json_encode($data);
+
+        $response = new Response(
+            $commentaires,
+        );
+
+        return $response;
+    
     }
 
 }

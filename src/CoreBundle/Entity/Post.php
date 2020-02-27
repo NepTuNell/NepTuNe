@@ -6,6 +6,7 @@ use CoreBundle\Entity\User;
 use CoreBundle\Entity\Sujet;
 use CoreBundle\Entity\Picture;
 use Doctrine\ORM\Mapping as ORM;
+use BackendBundle\Entity\PostControl;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -59,14 +60,20 @@ class Post
      * @ORM\OneToMany(targetEntity=PostLike::class, mappedBy="post", cascade={"persist", "remove"})
      */
     private $postLikes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PostControl::class, mappedBy="post", cascade={"persist", "remove"})
+     */
+    private $postsControl;
     
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->pictures  = new ArrayCollection();
-        $this->postLikes = new ArrayCollection();
+        $this->pictures     = new ArrayCollection();
+        $this->postLikes    = new ArrayCollection();
+        $this->postsControl = new ArrayCollection();
     }
 
     /**
@@ -188,6 +195,16 @@ class Post
     public function getPostLikes()
     {
         return $this->postLikes;
+    }
+
+    /**
+     * Get postsControl
+     *
+     * @return ArrayCollection
+     */
+    public function getPostsControl()
+    {
+        return $this->postsControl;
     }
 
 }

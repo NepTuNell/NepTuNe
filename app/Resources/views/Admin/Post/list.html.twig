@@ -1,0 +1,53 @@
+{% extends 'index.html.twig' %}
+
+{% block content %}
+     
+    <div class="col-12" id="app"> 
+
+        <div style="margin-top: 5%;">
+      
+            <div v-for="obj in comments" class="col-12 offset-lg-1 col-lg-10" style="margin-bottom: 2%;">
+  
+                <div class="userPostUsername textSize col-12">
+                    <img v-if="obj.comment.pictureName !== null && obj.comment.pictureExtension !== null && obj.comment.pictureID !== null" class="col-lg-1 col-1 imgPictureProfilePost" v-bind:src="'/jimmy/FORUM/web/upload/imgProfil/'+[[obj.comment.pictureName]]+'_'+[[obj.comment.pictureID]]+'.'+[[obj.comment.pictureExtension]]"></img>
+                    <span>[[obj.comment.username]]</span>
+                    <span class="imgEdit">
+                        <a v-on:click="deleteComment([[obj.comment.id]])"><i class="fas fa-trash imgCursor"></i></a>
+                    </span>
+                </div>
+
+                <div class="userPostContainer textSize textColor col-12">
+                    <span v-html="obj.comment.commentaire"></span>
+                </div>
+               
+                <div class="userPostPictures row">
+                    <div v-for="picture in obj.pictures" class="col-lg-4 col-12">
+                        <img class="col-lg-10 imgPost col-10 " v-bind:src="'/jimmy/FORUM/web/upload/images/'+[[picture.pictureName]]+'_'+[[picture.id]]+[[picture.pictureExtension]]" v-bind:alt="[[picture.pictureName]]+[[picture.pictureExtension]]"></img>
+                        <i v-if="obj.comment.id_user === userID || userAuthorised === true" class="fas fa-trash imgCursor col-lg-1 col-2 " v-on:click="removePicture([[picture.id]])"></i>
+                    </div>
+                </div>
+                
+                <div class="userPostDate textColor col-12">
+                    Posté le : [[obj.comment.date | dateFR]]
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-12">            
+            <span v-for="page in pages">
+                <a v-bind:id="'Selector_'+[[page]]" class="nbPagination" href="#" v-on:click="viewComment([[page]])">[[page]]</a>
+            </span>
+        </div>
+
+    </div>
+    
+<script>
+        {{ include("Javascript/adminControlPostJS.js") }}
+</script>
+    
+    
+
+{% endblock %}
+

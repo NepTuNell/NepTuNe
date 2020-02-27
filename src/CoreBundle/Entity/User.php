@@ -8,6 +8,7 @@ use CoreBundle\Entity\Sujet;
 use CoreBundle\Entity\PostLike;
 use Doctrine\ORM\Mapping as ORM;
 use BackendBundle\Entity\Activity;
+use BackendBundle\Entity\PostControl;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -179,13 +180,19 @@ class User implements UserInterface
     private $activityLike;
 
     /**
+     * @ORM\OneToMany(targetEntity=PostControl::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $postsControl;
+
+    /**
      * Compte non actif à la génération
      */
     public function __construct()
     {
         $this->setIsActive(false);
-        $this->sujets = new ArrayCollection();
-        $this->activities = new ArrayCollection();
+        $this->sujets       = new ArrayCollection();
+        $this->activities   = new ArrayCollection();
+        $this->postsControl = new ArrayCollection();
     }
 
     /**
@@ -428,6 +435,16 @@ class User implements UserInterface
         return $this->activityLike;
     }
 
+    /**
+     * Get postsControl
+     *
+     * @return ArrayCollection
+     */
+    public function getPostsControl()
+    {
+        return $this->postsControl;
+    }
+    
     /*****************************************
      *      USER INTERFACE'S METHODS
      ****************************************/

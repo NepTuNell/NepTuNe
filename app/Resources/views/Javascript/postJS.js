@@ -340,7 +340,7 @@ vuePost = new Vue({
 
             })            
             .then( (response) => {
-                 
+                
                 // Initialisation variables globales à Vue
                 this.data  = [];
                 this.nbPages = 0;
@@ -627,6 +627,9 @@ vuePost = new Vue({
 
         },
 
+        /*******************************************************************
+         *                    Like ou Dislike d'un Post
+         ******************************************************************/
         like: function ($post, $param) {
 
             if ( this.userID === 0 ) {
@@ -660,8 +663,79 @@ vuePost = new Vue({
 
             })
     
-        }
+        },
 
+        /*******************************************************************
+         *               Affichage de la fenêtre de signalement
+         ******************************************************************/
+        printReclamation: function($id) {
+           
+            if ( this.userID === 0 ) {
+                alert("Veuillez vous connecter pour effectuer cette action !");
+                return;
+            }
+
+            $elem = $('#'+$id);
+            $elems = $('.reclamationShow');
+
+            // Suppression du block de signalement en édition des commentaires sauf celui cliqué
+            if ( $elems.length ) {
+                
+                $elems.each( function() {
+
+                    if ( $(this).attr('id') !== $elem.attr('id') ) {
+                        
+                        $(this).removeClass('reclamationShow');
+                    
+                    }
+
+                });
+                    
+            }
+            
+            if( $elem.css('display') === 'block' ) {
+
+                $('#'+$id).removeClass('reclamationShow');
+
+            } else {
+
+                $('#'+$id).addClass('reclamationShow');
+
+            }
+
+        },
+
+        /*******************************************************************
+         *                  Signalement du commentaire
+         ******************************************************************/
+        reclamation: function ($post) {
+
+            $url = Routing.generate("post_user_reclamation", {
+                'user' : this.userID,
+                'post' : $post
+            })
+
+            axios({
+
+                method: 'get',
+                url: $url,
+                responseType: 'json',
+
+            }).then((response) => {
+
+                if ( response.status === 200 || response.status === 0 ) {
+
+                    this.refreshComment();
+
+                } 
+
+            }).catch( function(error) {
+
+                console.log(error)
+
+            })
+
+        }
         
     }, 
 

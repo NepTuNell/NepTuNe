@@ -310,11 +310,24 @@ i  {
 //           TRAITEMENT COMMENTAIRE PAGE DES SUJETS           //
 //////////////////////////////////////////////////////////////*/
 .userPostUsername {
+    display: flex; 
+    align-items: center;
     width: 100%;
     background-color: rgba(0, 47, 70, 1);
     font-weight: bold;      
     color: white;       
     border-radius: 10px 10px 0px 0px;
+}
+
+.userPostUsername > .imgEdit {
+    display: flex; 
+    align-items: center;
+    margin-left: auto;
+}
+
+.userPostUsername > .imgEdit > a {
+    float: right;
+    margin-right: 5px;
 }
 
 .userPostContainer { 
@@ -602,6 +615,23 @@ i  {
         color: rgb(150, 21, 21);
     }
 
+    .iReclamation {
+        font-size: 2em;
+        color: rgb(100, 70, 0);
+    }
+
+    .reclamationWindow {
+        display: none;
+        border-style: solid;
+        border-color: rgba(20, 25, 25, 1);
+        border-width: 1px;
+        background-color: rgba(20, 25, 25, 0.4);
+        font-size: 0.8em;
+        padding-top: 2%;
+        padding-bottom: 2%;
+        margin-top: 2%;
+    }
+    
     .imgPost {
         height: 60px;
         width: 120px;
@@ -836,6 +866,27 @@ i  {
         color: rgb(150, 21, 21);
     }
 
+    .iReclamation {
+        font-size: 1em;
+        color: rgb(100, 70, 0);
+    }
+
+    .reclamationWindow {
+        display: none;
+        border-style: solid;
+        border-color: rgba(20, 25, 25, 1);
+        border-width: 1px;
+        background-color: rgba(20, 25, 25, 0.4);
+        font-size: 0.8em;
+        padding-top: 2%;
+        padding-bottom: 2%;
+        margin-top: 2%;
+    }
+
+    .reclamationShow {
+        display: block;
+    }
+
     .imgPost {
         max-height: 200px;
         margin-top: 3%; 
@@ -860,7 +911,6 @@ i  {
     .libNavDropDown {
         font-size: 0.9em;
     }
-
-
+    
 }
 
