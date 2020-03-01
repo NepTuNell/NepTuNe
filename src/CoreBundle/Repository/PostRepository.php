@@ -4,6 +4,7 @@ namespace CoreBundle\Repository;
 
 use CoreBundle\Entity\Post;
 use CoreBundle\Entity\User;
+use CoreBundle\Entity\Sujet;
 use CoreBundle\Entity\PostLike;
 use Doctrine\ORM\Query\Expr\Join;
 use BackendBundle\Entity\PostControl;
@@ -96,64 +97,71 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
     public function fetchAllAdmin( $options = array() )
     {
 
-        $queryBuilder   = $this->getEntityManager()->createQueryBuilder();  
-        $countLike      = $this->countLike();
-        $countDisLike   = $this->countDisLike();
-        
-        if (array_key_exists('sujet', $options)) {
+        $queryBuilder     = $this->getEntityManager()->createQueryBuilder();  
+        $countLike        = $this->countLike();
+        $countDisLike     = $this->countDisLike();
+        $countSignalement = $this->countSignalement();
+
+        if ( $options['sujet'] != 0 ) {
 
             /***********************************************************************************
              *      Requête utilisée par les admins pour voir les commentaires signalés
              **********************************************************************************/
-            $result = $queryBuilder ->select('p.id, p.commentaire, p.date, u.username, u.id as id_user, pp.pictureName, pp.id as pictureID, pp.pictureExtension, pc.id as reclamationID')
+            $result = $queryBuilder ->select('p.id, p.commentaire, p.date, u.username, u.id as id_user, pp.pictureName, pp.id as pictureID, pp.pictureExtension, pc.id as reclamationID, s.id as sujetID, s.libelle as sujetLibelle')
                                     ->addSelect('('.$countLike.') as nbLike')
                                     ->addSelect('('.$countDisLike.') as nbDisLike')
+                                    ->addSelect('('.$countSignalement.') as nbSignalement')
                                     ->from(Post::class, 'p') 
                                     ->where('p.sujet = :sujet')
-                                    ->leftJoin(
-                                        PictureProfile::class, 
-                                        'pp',
-                                        \Doctrine\ORM\Query\Expr\Join::WITH,
-                                        'pp.user = p.user'  
-                                    )
-                                    ->innerJoin(
-                                        PostControl::class, 
-                                        'pc',
-                                        \Doctrine\ORM\Query\Expr\Join::WITH,
-                                        'pc.post = p.id',
-                                    )
-                                    ->innerJoin(User::class, 'u')
-                                    ->andWhere('p.user = u.id')
+                                    ->leftJoin(PictureProfile::class, 'pp', Join::WITH, 'pp.user = p.user')
+                                    ->innerJoin(PostControl::class, 'pc', Join::WITH, 'pc.post = p.id')
+                                    ->innerJoin(User::class, 'u' , Join::WITH, 'p.user = u.id')
+                                    ->innerJoin(Sujet::class, 's', Join::WITH, 's.id = p.sujet')
                                     ->setParameters([
                                         'sujet' => $options['sujet']
-                                    ])
-                                    ->orderBy('p.date', 'ASC')
-                                    ->getQuery();  
+                                    ]); 
 
         } else {
 
-
             /***********************************************************************************
              *      Requête utilisée par les admins pour voir les commentaires signalés
              **********************************************************************************/
-            $result = $queryBuilder ->select('p.id, p.commentaire, p.date, u.username, u.id as id_user, pp.pictureName, pp.id as pictureID, pp.pictureExtension')
+            $result = $queryBuilder ->select('p.id, p.commentaire, p.date, u.username, u.id as id_user, pp.pictureName, pp.id as pictureID, pp.pictureExtension, s.id as sujetID, s.libelle as sujetLibelle')
                                     ->addSelect('('.$countLike.') as nbLike')
                                     ->addSelect('('.$countDisLike.') as nbDisLike')
+                                    ->addSelect('('.$countSignalement.') as nbSignalement')
                                     ->from(Post::class, 'p') 
-                                    ->leftJoin(
-                                        PictureProfile::class, 
-                                        'pp',
-                                        \Doctrine\ORM\Query\Expr\Join::WITH,
-                                        'pp.user = p.user'  
-                                    )
+                                    ->leftJoin(PictureProfile::class, 'pp', Join::WITH, 'pp.user = p.user')
                                     ->innerJoin(PostControl::class, 'pc', Join::WITH, 'p.id = pc.post')
                                     ->innerJoin(User::class, 'u' , Join::WITH, 'p.user = u.id')
-                                    ->orderBy('p.date', 'ASC')
-                                    ->getQuery();  
+                                    ->innerJoin(Sujet::class, 's', Join::WITH, 's.id = p.sujet');
 
         }
 
-        return $result->getResult();
+   
+        /********************************************************* 
+         *          Construction de la clause OrderBy
+         ********************************************************/
+        if ( $options['orderByDate'] == 1 || $options['orderBySignalement'] == 1 ) {
+
+            if ( $options['orderByDate'] == 1 ) {
+                $result->addOrderBy('p.date', 'ASC');
+            } else {
+                $result->addOrderBy('p.date', 'DESC');
+            }
+
+            if ( $options['orderBySignalement'] == 1 ) {
+                $result->addOrderBy('nbSignalement', 'ASC');
+            } else {
+                $result->addOrderBy('nbSignalement', 'DESC');
+            }
+
+        }  else {
+            $result->orderBy('p.date', 'DESC');
+            $result->addOrderBy('nbSignalement', 'DESC');
+        }
+
+        return $result->getQuery()->getResult();
 
     }
 
@@ -185,6 +193,23 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
         $result = $queryBuilder ->select('COUNT(pl2)')
                                 ->from(PostLike::class, 'pl2')
                                 ->where('pl2.post = p.id AND pl2.like = false')
+                                ->getDQL();
+
+        return $result;
+
+    }
+
+    /**
+     * Return all unlikes for one post
+     */
+    public function countSignalement()
+    {
+
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();  
+
+        $result = $queryBuilder ->select('COUNT(cs)')
+                                ->from(PostControl::class, 'cs')
+                                ->where('cs.post = p.id')
                                 ->getDQL();
 
         return $result;

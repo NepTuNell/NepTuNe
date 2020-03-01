@@ -9,14 +9,14 @@ vuePost = new Vue({
     data: {
 
         sujet:                 0,
+        sujets:               [],
         data:                 [],
         comments:             [],
-        editors:              [],
-        editor:             null,
         pages:                [],
+        orderByDate:           0,
+        orderByReclamation:    0,
         selector:              1,
         nbPages:               0,
-        interval:              0,
         stop:               false
 
     },
@@ -26,8 +26,12 @@ vuePost = new Vue({
         *   Raffraichissement de tous les commentaires
         *****************************************************/
         refreshComment: function() {
-  
-            var $url = Routing.generate('admin_post_list');
+
+            var $url = Routing.generate('admin_post_list', {
+                'sujet': this.sujet,
+                'date':  this.orderByDate,
+                'reclamation': this.orderByReclamation
+            });
                    
             axios ({
 
@@ -38,18 +42,57 @@ vuePost = new Vue({
             })            
             .then( (response) => {
                 
-                console.log(response.data);
                 // Initialisation variables globales à Vue
-                this.data  = [];
+                this.data    = [];
                 this.nbPages = 0;
 
                 // Initialisation variables locales
                 var $index = 0;
                 var $array = [];
-                 
-                // Création et placement des commentaires dans un tableau pour la pagination
+
+                // Création et placement des commentaires dans un tableau pour la pagination + sujets pour filtre
                 for ( $i = 1; $i <= response.data.length; $i++ ) {
 
+                    $firstElem = false;
+                    $elem      = false;
+
+                    // Vérification si sujet du commentaire présent dans l'array
+                    for ( $j = 0; $j < this.sujets.length; $j++) {
+
+                        if ( this.sujets[$j].id === 0 ) {
+
+                            $firstElem = true;
+
+                        }
+                        
+                        if ( this.sujets[$j].id === response.data[$i-1].comment.sujetID ) {
+
+                            $elem = true;
+
+                        }
+
+                    }
+
+                    // Ajout de "<tous>" dans la liste
+                    if ( !$firstElem ) {
+
+                        this.sujets.push({
+                            'id': 0,
+                            'libelle': '<tous>'
+                        });
+
+                    }
+
+                    // Ajout de chaque sujet une seule fois dans le filtre 
+                    if ( !$elem ) {
+
+                        this.sujets.push({
+                            'id': response.data[$i-1].comment.sujetID,
+                            'libelle': response.data[$i-1].comment.sujetLibelle
+                        });
+
+                    }
+                    
                     if ( ($i % 10) === 0 ) {
 
                         this.nbPages++;
@@ -71,7 +114,7 @@ vuePost = new Vue({
                     }
 
                 };
-       
+                 
                 // Traitement des derniers commentaires que le modulo n'a pas traité
                 if ( $index < response.data.length ) {
 
@@ -218,9 +261,6 @@ vuePost = new Vue({
     },
 
     mounted() {
-        
-        // Set le sujet dès le onload
-        this.sujet = $("span[name='sujet']").attr("id");
          
         // Affichage des commentaires au chargement de l'instance de vue et donc de la page
         this.refreshComment();

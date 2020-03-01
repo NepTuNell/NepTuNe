@@ -159,7 +159,7 @@ class UserController extends Controller
                     $hash = $this->get('security.password_encoder')->encodePassword($user, $user->getPassword());
                     $user->setPassword($hash);
                     $user->setRegisterKey($registerKey);
-                    $user->setRoles(['ROLE_ADMIN']);
+                    $user->setRoles(['ROLE_USER']);
                     $this->manager->persist($user);
                     $this->manager->flush();
 

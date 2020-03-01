@@ -299,6 +299,42 @@ i  {
     padding-right: 1%;
 }
 
+/*/////////////////////////////////////////////
+//           ADMIN CONTROLE POST             //
+/////////////////////////////////////////////*/
+#filterLibContainer {
+    background-color: rgba(0, 47, 70, 1);
+    font-size: 1.5em; 
+    padding-top: 2px; 
+    padding-bottom: 2px; 
+    padding-left: 20px; 
+    padding-right: 2px; 
+    border-radius: 15px 15px 0px 0px;
+}
+
+#filterContainer {
+    background-color: rgba(20, 25, 25, 0.8);
+    border-radius: 0px 0px 15px 15px;
+    height: 10vh;
+    display: flex;      
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5%;
+    padding: 1%;
+}
+
+#filterContainer > div {
+    align-self: baseline;
+}
+
+.labelAdmin {
+    margin-right: 2%; 
+}
+
+.filterAdmin {
+    margin-right: 5%; 
+}
+
 /*/////////////////////////////////////////
 //         TRAITEMENT FORMULAIRE         //
 /////////////////////////////////////////*/
@@ -358,7 +394,7 @@ i  {
 }
 
 .nbPagination {
-    color: black;
+    color: #4da0cd;
     margin-right:5%; 
     padding-left: 10px; 
     padding-right: 10px; 

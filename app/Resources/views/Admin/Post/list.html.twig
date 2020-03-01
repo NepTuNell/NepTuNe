@@ -3,9 +3,29 @@
 {% block content %}
      
     <div class="col-12" id="app"> 
-
         <div style="margin-top: 5%;">
-      
+            <div class="12 textColor" id="filterLibContainer">
+                Filtre
+            </div>
+            <div class="col-12" id="filterContainer">            
+                <label class="textSize textColor labelAdmin" for="sujetFilter">Sujet</label>
+                <select name="sujetFilter" class="textSize textColor filterAdmin" v-model="sujet" v-on:change="refreshComment()">
+                    <option v-for="sujet in sujets" v-bind:value="sujet.id">[[sujet.libelle]]</option>
+                </select>
+
+                <label class="textSize textColor labelAdmin" for="dateFilter">Date</label>
+                <select name="dateFilter" class="textSize textColor filterAdmin" v-model="orderByDate" v-on:change="refreshComment()">
+                    <option v-bind:value="0">Plus récent</option>
+                    <option v-bind:value="1">Plus ancien</option>
+                </select>
+
+                <label class="textSize textColor labelAdmin" for="reclamationFilter">Signalement</label>
+                <select name="reclamationFilter" class="textSize textColor filterAdmin" v-model="orderByReclamation" v-on:change="refreshComment()">
+                    <option v-bind:value="0">Plus signalé</option>
+                    <option v-bind:value="1">Moins signalé</option>
+                </select>
+            </div>
+
             <div v-for="obj in comments" class="col-12 offset-lg-1 col-lg-10" style="margin-bottom: 2%;">
   
                 <div class="userPostUsername textSize col-12">
@@ -23,12 +43,13 @@
                 <div class="userPostPictures row">
                     <div v-for="picture in obj.pictures" class="col-lg-4 col-12">
                         <img class="col-lg-10 imgPost col-10 " v-bind:src="'/jimmy/FORUM/web/upload/images/'+[[picture.pictureName]]+'_'+[[picture.id]]+[[picture.pictureExtension]]" v-bind:alt="[[picture.pictureName]]+[[picture.pictureExtension]]"></img>
-                        <i v-if="obj.comment.id_user === userID || userAuthorised === true" class="fas fa-trash imgCursor col-lg-1 col-2 " v-on:click="removePicture([[picture.id]])"></i>
+                        <i class="fas fa-trash imgCursor col-lg-1 col-2 " v-on:click="removePicture([[picture.id]])"></i>
                     </div>
                 </div>
                 
                 <div class="userPostDate textColor col-12">
-                    Posté le : [[obj.comment.date | dateFR]]
+                    <span>Posté le : [[obj.comment.date | dateFR]]</span>
+                    <span style="float: right;">Nombre de signalement : [[obj.comment.nbSignalement]]</span>
                 </div>
 
             </div>

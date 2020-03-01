@@ -165,17 +165,17 @@ class User implements UserInterface
     private $activities;
 
     /**
-     * @ORM\Column(name="activityUnivers", type="boolean")
+     * @ORM\Column(name="activityUnivers", type="boolean", nullable=true)
      */
     private $activityUnivers;
 
     /**
-     * @ORM\Column(name="activityTheme", type="boolean")
+     * @ORM\Column(name="activityTheme", type="boolean", nullable=true)
      */
     private $activityTheme;
 
     /**
-     * @ORM\Column(name="activityLike", type="boolean")
+     * @ORM\Column(name="activityLike", type="boolean", nullable=true)
      */
     private $activityLike;
 

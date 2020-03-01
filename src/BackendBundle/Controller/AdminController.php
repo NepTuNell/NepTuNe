@@ -347,29 +347,25 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/signalement/list/{sujet}", name="admin_post_list", options = {"expose" = true}, requirements={"sujet"="\d+"})
+     * @Route("/signalement/list/{sujet}/{date}/{reclamation}", name="admin_post_list", options = {"expose" = true}, requirements={"sujet"="\d+"})
      * @Method({"GET", "POST"})
      */
-    public function listPostFetchComment(Request $request, Sujet $sujet = null)
+    public function listPostReclamation(Request $request, $sujet = null, $date = null, $reclamation = null)
     {
+
+        if ( !$this->isGranted('ROLE_ADMIN') ) {
+            throw $this->createAccessDeniedException('Vous essayer d\'accéder à des ressources protégées !');
+        }
 
         $data = array();
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        if ( null === $sujet ) {
+        $result = $this->manager->getRepository(Post::class)->fetchAllAdmin([
+            'sujet' => $sujet,
+            'orderByDate' => $date,
+            'orderBySignalement' => $reclamation
+        ]);
 
-            $result = $this->manager->getRepository(Post::class)->fetchAllAdmin();
-
-        } else {
-
-            $result = $this->manager->getRepository(Post::class)->fetchAllAdmin([
-                'sujet' => $sujet,
-            ]);
-
-        }
- 
-        //var_dump($result);
-        
         foreach ( $result as $post ) {
 
             $pictures = $this->manager->getRepository(Picture::class)->fetchByPost($post['id']);
