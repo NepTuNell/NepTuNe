@@ -58,7 +58,7 @@
 
         <div class="col-12">            
             <span v-for="page in pages">
-                <a v-bind:id="'Selector_'+[[page]]" class="nbPagination" href="#" v-on:click="viewComment([[page]])">[[page]]</a>
+                <a v-bind:id="'Selector_'+[[page]]" class="nbPagination" href="#" v-on:click="viewComment(page)">[[page]]</a>
             </span>
         </div>
 

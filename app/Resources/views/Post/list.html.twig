@@ -37,8 +37,8 @@
                 
                 <div style="display: none" v-bind:id="[[obj.comment.id_user]]+'_'+[[obj.comment.id]]">
                     <div v-html="obj.comment.commentaire" class="textEditor"></div>
-                    <a type="submit" style="margin-right:5%;" v-on:click="postComment([[obj.comment.id_user]]+'_'+[[obj.comment.id]])"><i class="fas fa-share-square imgCursor"></i></a>
-                    <div class="textColor">Ajouter une image<i style="margin-left: 2%;" name="addPictureButtonEdit" class="fas fa-plus-circle imgCursor iButton" onclick="addPicture('Edit')"></i></div>
+                    <a type="submit" style="margin-right:5%;" v-on:click="postComment([[obj.comment.id_user]]+'_'+[[obj.comment.id]])"><i class="fas fa-share-square imgCursor buttonEdit"></i></a>
+                    <div class="textColor">Ajouter une image<i style="margin-left: 2%;" name="addPictureButtonEdit" class="fas fa-plus-circle imgCursor iButton" v-on:click="addPicture('Edit')"></i></div>
                 </div>
 
                 <div class="col-12">
@@ -70,7 +70,7 @@
 
         <div class="col-12">            
             <span v-for="page in pages">
-                <a v-bind:id="'Selector_'+[[page]]" class="nbPagination" href="#" v-on:click="viewComment([[page]])">[[page]]</a>
+                <a v-bind:id="'Selector_'+[[page]]" class="nbPagination" href="#" v-on:click="viewComment(page)">[[page]]</a>
             </span>
         </div>
 

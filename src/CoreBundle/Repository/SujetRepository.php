@@ -221,4 +221,22 @@ class SujetRepository extends \Doctrine\ORM\EntityRepository
 
     }
 
+    public function countPostQuery3(Sujet $sujet)
+    {
+
+        $countQuery = $this->getEntityManager()->createQueryBuilder();
+
+        $countPost = $countQuery->select('COUNT(p)')
+                                ->from(Post::class, 'p')
+                                ->innerJoin(Sujet::class, 's', JOIN::WITH, 's.id = :sujet')
+                                ->where('p.sujet = s.id')
+                                ->setParameters([
+                                    'sujet' => $sujet
+                                ])
+                                ->getQuery();
+
+        return $countPost->getScalarResult();
+
+    }
+
 }

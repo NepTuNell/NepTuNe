@@ -409,6 +409,13 @@ i  {
     margin-bottom: 2%;
 }
 
+.buttonEdit {
+    color: white; 
+    margin-left: 2px;
+    margin-top: 15px; 
+    margin-bottom: 30px;
+}
+
 /*////////////////////////////////////////
 //          TRAITEMENT DE QUILL         //
 ////////////////////////////////////////*/

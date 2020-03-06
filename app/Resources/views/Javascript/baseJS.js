@@ -93,7 +93,6 @@ $(document).ready(function () {
         $('.dropdown-submenu > a').on("click", function (event) {
           
             // Fermeture de toutes les fenêtres ouverte
-            console.log(this)
             if ( $(this).next('ul').css("display") === "none" ) {
 
                 $('.dropdown-submenu > a').next('ul').each( function() {

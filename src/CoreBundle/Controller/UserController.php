@@ -406,7 +406,7 @@ class UserController extends Controller
 
         if ( $this->isGranted('ROLE_USER') && $this->isGranted('IS_AUTHENTICATED_FULLY') ) {
 
-            //if ( $sujet->getUser !== $user ) {
+            if ( $sujet->getUser() !== $user ) {
 
                 $theme    = $sujet->getTheme();
                 $univers  = $sujet->getTheme()->getUnivers();
@@ -418,7 +418,7 @@ class UserController extends Controller
                 $this->manager->persist($activity);
                 $this->manager->flush();
 
-            //}
+            }
 
         }
 

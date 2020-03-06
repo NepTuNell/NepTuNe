@@ -75,7 +75,7 @@ $('document').ready( function ( ) {
         // Positionnement de NepTuNe
         meshNeptune.position.x = 0 - ((window.innerWidth*8) / 100);
         meshNeptune.position.y = 0 + ((window.innerHeight*4) / 100);
-        meshNeptune.position.z = -50;
+        meshNeptune.position.z = -100;
 
         // Bounding box pour collision
         var neptBox = new THREE.Box3().setFromObject(meshNeptune);

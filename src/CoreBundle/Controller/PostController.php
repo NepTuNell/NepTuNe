@@ -393,4 +393,18 @@ class PostController extends Controller
 
     }
 
+    /**
+     * @Route("/count/{sujet}", name="post_count", options = {"expose" = true}, methods={"GET", "POST"})
+     */
+    public function countPost(Sujet $sujet)
+    {
+        $result = $this->manager->getRepository(Sujet::class)->countPostQuery3($sujet);
+
+        $response = new Response(
+            json_encode($result)
+        );
+
+        return $response;
+    }
+
 }

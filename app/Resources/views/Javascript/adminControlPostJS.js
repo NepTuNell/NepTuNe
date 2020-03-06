@@ -161,7 +161,7 @@ vuePost = new Vue({
 
             } else {
 
-                $index = $page[0]-1;
+                $index = $page-1;
 
             }
  
