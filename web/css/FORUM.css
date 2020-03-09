@@ -404,12 +404,6 @@ i  {
     border-radius: 30%;
 }
 
-.imgPost {
-    max-height: 200px;
-    margin-top: 3%; 
-    margin-bottom: 2%;
-}
-
 .buttonEdit {
     color: white; 
     margin-left: 2px;
@@ -705,6 +699,10 @@ div.ql-editor.ql-blank::before {
         margin-bottom: 2%;
     }
 
+    .imgPost:hover {
+        cursor: pointer;
+    }
+    
     .userPostPictures {
         color: white;
         font-size: 2em;
@@ -959,6 +957,10 @@ div.ql-editor.ql-blank::before {
         margin-bottom: 2%;
     }
 
+    .imgPost:hover {
+        cursor: pointer;
+    }
+    
     .userPostPictures {
         color: white;
         font-size: 1em;
