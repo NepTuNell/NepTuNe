@@ -51,12 +51,14 @@ class PostController extends Controller
 
         $universList = $this->manager->getRepository(Univers::class)->findAll();
 
-        $post   = new Post();
-        $form   = $this->createForm('CoreBundle\Form\PostType', $post);
+        $post       = new Post();
+        $form       = $this->createForm('CoreBundle\Form\PostType', $post);
+        $nbPostInit = $this->manager->getRepository(Sujet::class)->countPostQuery3($sujet);
 
         return $this->render('Post/list.html.twig', [
             'universList'   => $universList,
             'sujet'         => $sujet,
+            'nbPostInit'    => $nbPostInit,
             'form'          => $form->createView()
         ]);
 

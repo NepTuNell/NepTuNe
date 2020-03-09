@@ -84,7 +84,7 @@
 
         <div class="col-12">
             <div class="col-12 textColor" style="margin-bottom: 5%;" id="newPost">
-                Ajouter une image <i name="addPictureButtonNew" class="fas fa-plus-circle imgCursor iButton" onclick="addPicture('New')"></i>
+                Ajouter une image <i name="addPictureButtonNew" class="fas fa-plus-circle imgCursor iButton" v-on:click="addPicture('New')"></i>
             </div>
             
             <button class="btn btn-primary textSize" type="button" v-on:click="postComment()">

@@ -43,7 +43,8 @@ vuePost = new Vue({
         nbPages:               0,
         interval:              0,
         nbComment:             0,
-        stop:               false
+        stop:               false,
+        loaded:             false
 
     },
     methods: {
@@ -90,7 +91,7 @@ vuePost = new Vue({
         /*******************************************
          *  Création ou édition du commentaire
          *******************************************/
-        postComment: function($post = null) {
+        postComment: function($post = null) { 
 
             // Si l'utilisateur n'est pas connecté alors retour
             if ( this.userID === 0 ) {
@@ -171,11 +172,19 @@ vuePost = new Vue({
 
                 $($pictures).each( function() {
 
+                    console.log(this)
                     if ( 0 !== this.files.length ) { 
 
                         if ( 2000000 < this.files[0].size ) {
 
                             alert("Le poids d'une image ne peut excéder 2 mo.");
+                            return;
+
+                        }
+
+                        if ( this.files[0].type !== "image/jpeg" && this.files[0].type !== "image/jpg" && this.files[0].type !== "image/png" ) {
+
+                            alert("Le format de l'image n'est pas valide. Format accepté png et jpeg.");
                             return;
 
                         }
@@ -188,7 +197,7 @@ vuePost = new Vue({
                 })
 
             }
-
+         
             // Curseur de chargement
             $("body").css('cursor', 'wait'); 
     
@@ -402,7 +411,6 @@ vuePost = new Vue({
 
             }
             
-            console.log($index);
             // Création du premier élément (statique)
             $array.push(1);
 
@@ -510,10 +518,10 @@ vuePost = new Vue({
                 $(this).css('border', '1px solid rgba(0, 47, 70, 1)');
             });
 
-            $('.ql-stroke').css('stroke', 'rgba(0, 47, 70, 1)')   
-            $('.ql-picker').css('color', 'rgba(0, 47, 70, 1)')
-            $('.ql-fill').css('fill', 'rgba(0, 47, 70, 1)')
-
+            $('.ql-stroke').css('stroke', '#668da3')   
+            $('.ql-picker').css('color', '#668da3')
+            $('.ql-fill').css('fill', '#668da3')
+             
             // Changement de style pour les formulaires : Editeur (bordures... style que je n'ai pas pu changer via CSS)
             $('.ql-container').css('border', '1px solid rgba(0, 47, 70, 1)');
 
@@ -947,13 +955,13 @@ vuePost = new Vue({
         refreshAuto: function () {
 
             setInterval( () => {   
-
-                if ( $(".PostShown").length || $(".reclamationShow").length || this.stop === true ) {
-
+                
+                if ( $(".PostShown").length || $(".reclamationShow").length || this.stop === true || this.sujet === 0 ) {
+                
                     return;
     
                 }
-
+                
                 $url = Routing.generate("post_count", {
                     'sujet' : this.sujet,
                 })
@@ -968,14 +976,19 @@ vuePost = new Vue({
                 .then((response) => {
 
                     if ( response.status === 200 || response.status === 0 ) {
-
+               
                         if ( this.nbComment !== response.data[0][1] ) {
 
+                            if ( this.loaded === true ) {
+                                this.refreshComment("current");
+                            }
+
                             this.nbComment = response.data[0][1];
-                            this.refreshComment("current");
                         
-                        }
+                        } 
                         
+                        this.loaded = true;
+
                     } 
 
                 })
@@ -993,17 +1006,28 @@ vuePost = new Vue({
 
     mounted() {
         
+        // Blocage de l'application
+        this.stop = true;
+
         // Set le sujet dès le onload
         this.sujet = $("span[name='sujet']").attr("id");
         
         // Acquisition des autorisations utilisateurs
         this.getAuthorised();
-         
-        // Affichage des commentaires au chargement de l'instance de vue et donc de la page
-        this.refreshComment();
+        
+        // Nexttick utilisé car chargement asynchrone
+        this.$nextTick( () => {
+            
+            // Affichage des commentaires au chargement de l'instance de vue et donc de la page
+            this.refreshComment();
 
-        // Actualisation des commentaires 
-        this.refreshAuto();
+            // Actualisation des commentaires 
+            this.refreshAuto();
+
+            // Page chargée
+            this.stop = false;
+        
+        });
          
     }, 
 

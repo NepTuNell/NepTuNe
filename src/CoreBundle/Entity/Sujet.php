@@ -53,9 +53,9 @@ class Sujet
      * @ORM\Column(name="libelle", type="string", length=255)
      * @Assert\Length(
      *      min=2,
-     *      max=20,
+     *      max=35,
      *      minMessage = "Le libelle est trop court !",
-     *      maxMessage = "Le libelle est trop long !"
+     *      maxMessage = "Le libelle est trop long, veuillez saisir 35 caratères maximum !"
      * )
      * @Assert\NotBlank(message="Veuillez saisir le libellé !")
      * 

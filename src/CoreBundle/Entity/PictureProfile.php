@@ -50,13 +50,9 @@ class PictureProfile implements \Serializable
      * 
      * @Assert\File(
      *   maxSize = "25M",
-     *   mimeTypes = {
-     *       "image/png",
-     *       "image/jpeg",
-     *       "image/jpg"
-     *   },
-     *   mimeTypesMessage = "Format de l'image non supportée, assurez vous d'utiliser ces formats : png, jpg, jpeg, gif.",
-     *   maxSizeMessage = "Fichier trop volumineux, l'image ne doit pas excéder 25 mo."
+     *   maxSizeMessage = "Fichier trop volumineux, l'image ne doit pas excéder 25 mo.",
+     *   mimeTypes = {"image/png", "image/jpeg", "image/jpg"},
+     *   mimeTypesMessage = "Format de l'image non supportée, assurez vous d'utiliser ces formats : png, jpg/jpeg."
      * )
      * @Assert\Valid()
      * 

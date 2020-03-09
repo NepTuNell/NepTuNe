@@ -42,7 +42,7 @@ $('document').ready( function ( ) {
         //////////////////////////////////////////////////////
 
         var light = new THREE.SpotLight(  0xffffff );
-        light.position.x = 0 - ((window.innerWidth*8) / 100) - 64;
+        light.position.x = 0 - ((window.innerWidth*10) / 100) - 64;
         light.position.y = 0 + ((window.innerHeight*4) / 100);
         light.position.z = 32;
         light.castShadow = true;
@@ -73,7 +73,7 @@ $('document').ready( function ( ) {
         meshNeptune.receiveShadow = true;
 
         // Positionnement de NepTuNe
-        meshNeptune.position.x = 0 - ((window.innerWidth*8) / 100);
+        meshNeptune.position.x = 0 - ((window.innerWidth*10) / 100);
         meshNeptune.position.y = 0 + ((window.innerHeight*4) / 100);
         meshNeptune.position.z = -100;
 

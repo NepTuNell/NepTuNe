@@ -16,7 +16,7 @@ class PictureProfileType extends AbstractType
     {
         $builder->add('upload', FileType::class, [
                 'label' => false,
-                'required' => false
+                'error_bubbling' => true,
             ]
         );
     }

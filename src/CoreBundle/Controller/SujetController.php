@@ -159,8 +159,8 @@ class SujetController extends Controller
     /**
      * Creates a new theme entity.
      *
-     * @Route("/new/{theme}", name="sujet_new_theme", requirements={"theme"="\d+"})
-     * @Route("/new/{theme}/{section}", name="sujet_new_section", requirements={"theme"="\d+"})
+     * @Route("/new/{theme}", name="sujet_new_theme", options = {"expose" = true}, requirements={"theme"="\d+"})
+     * @Route("/new/{theme}/{section}", name="sujet_new_section", options = {"expose" = true}, requirements={"theme"="\d+"})
      * @Method({"GET", "POST"})
      */
     public function new(Request $request, Theme $theme, Section $section = null)
@@ -175,51 +175,37 @@ class SujetController extends Controller
         $user    = $this->get('security.token_storage')->getToken()->getUser();
         $univers = $this->manager->getRepository(Univers::class)->findAll(); 
         $errors  = null;
-        $sujet   = new Sujet();
-        $form    = $this->createForm('CoreBundle\Form\SujetType', $sujet);
-        $form->handleRequest($request);
+        $sujet   = new Sujet();  
 
         if ( "POST" === $request->getMethod() ) {
-
-            if ( $form->isSubmitted() && $form->isValid() ) {
-
-                if ( null !== $section ) {
-
-                    $sujet->setSection($section);
+             
+            if ( null !== $section ) {
+             
+                $sujet->setSection($section);
     
-                } 
+            } 
 
-                $sujet->setTheme($theme);
-                $sujet->setDate(new \DateTime);
-                $sujet->setUser($user);
-                $this->manager->persist($sujet);
-                $this->manager->flush();
-                $this->addFlash('success', 'Une nouveau sujet a été créé !');
-                
-                if ( null !== $section ) {
+            $sujet->setLibelle($request->request->get('content'));
+            $sujet->setTheme($theme);
+            $sujet->setDate(new \DateTime);
+            $sujet->setUser($user);
+            $this->manager->persist($sujet);
+            $this->manager->flush();
+            
+            $response = new Response(
+                json_encode($sujet->getId())
+            );
 
-                    return $this->redirectToRoute('sujet_list_theme', ['theme' => $theme->getId(), 'section' => $section->getId()]);
-    
-                }  else {
-
-                    return $this->redirectToRoute('sujet_list_theme', ['theme' => $theme->getId()]);
-
-                }
-
-            }
-
-            $errors = $this->get('validator')->validate($sujet);
+            return $response;
 
         }
 
         return $this->render('Sujet/edit.html.twig', array(
 
-            'form'          =>  $form->createView(),
+            'modeExe'       => 'Création',
             'theme'         =>  $theme,
             'section'       =>  $section,
             'universList'   =>  $univers,
-            'modeExe'       =>  "Création",
-            'errors'        =>  $errors
 
         ));
 
@@ -236,40 +222,33 @@ class SujetController extends Controller
         
         if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
 
-            throw $this->createAccessDeniedException('Vous n\'avez pas les droits nécessaires pour accéder à cette section !');
+            throw $this->createAccessDeniedException('Veuillez vous connecter !');
 
         }
 
-        $errors    = null;
-        $univers   = $this->manager->getRepository(Univers::class)->findAll();
-        $section   = $sujet->getSection();
-        $theme     = $sujet->getTheme();
-        $form      = $this->createForm('CoreBundle\Form\SujetType', $sujet);
-
-        $form->handleRequest($request);
+        $user    = $this->get('security.token_storage')->getToken()->getUser();
+        $univers = $this->manager->getRepository(Univers::class)->findAll(); 
 
         if ( "POST" === $request->getMethod() ) {
 
-            if ( $form->isSubmitted() && $form->isValid() ) {
-                
-                $this->manager->persist($sujet);
-                $this->manager->flush();
-                $this->addFlash('success', 'Le sujet a été modifié !');
+            $sujet->setLibelle($request->request->get('content'));
+            $this->manager->persist($sujet);
+            $this->manager->flush();
+            
+            $response = new Response(
+                json_encode($sujet->getId())
+            );
 
-            }
-
-            $errors = $this->get('validator')->validate($sujet);
+            return $response;
 
         }
 
         return $this->render('Sujet/edit.html.twig', array(
 
-            'form'          =>  $form->createView(),
-            'theme'         =>  $theme,
-            'section'       =>  $section,
+            'modeExe'       => 'Modification',
+            'sujet'         =>  $sujet,
+            'theme'         =>  $sujet->getTheme(),
             'universList'   =>  $univers,
-            'modeExe'       =>  "Modification",
-            'errors'        =>  $errors
 
         ));
 
@@ -312,5 +291,28 @@ class SujetController extends Controller
         return $this->redirectToRoute('sujet_list_theme', ['theme'=> $theme->getId()]);
 
     }
+
+    /**
+     * Creates a new univer entity.
+     *
+     * @Route("/fetch/{sujet}", name="sujet_fetch", options = {"expose" = true}, requirements={"sujet"="\d+"})
+     * @Method({"GET", "POST"})
+     */
+    public function fetchSujet(Request $request, Sujet $sujet)
+    {
+        
+        if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
+
+            throw $this->createAccessDeniedException('Veuillez vous connecter !');
+
+        }
+            
+        $response = new Response(
+            json_encode($sujet->getLibelle())
+        );
+
+        return $response;
+
+    }   
 
 }

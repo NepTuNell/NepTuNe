@@ -27,7 +27,8 @@ body {
     z-index: 1;
     width: 100%;
     min-height: 80vh;
-    background-image: linear-gradient(90deg, rgb(0, 0, 0), rgb(65, 65, 65)  60%, rgb(0, 0, 0));
+    /*background-image: linear-gradient(90deg, rgb(0, 0, 0), rgb(65, 65, 65)  60%, rgb(0, 0, 0));*/
+    background-color: rgba(0, 0, 0, 1);
 }
 
 #NepTuNe {
@@ -43,7 +44,7 @@ body {
 .popup {
     display: none;
     color: #4da0cd;
-    background-color: rgba(0, 47, 70, 1);
+    background-color: #012131;
     padding: 15px;
     border-radius: 3px;
     box-shadow:0 0 2px rgba(0,0,0,.5);
@@ -114,7 +115,7 @@ i  {
 //         TRAITEMENT  NAVBAR  PRINCIPALE         //
 //////////////////////////////////////////////////*/    
 #my1stNavBar {
-    background-color: #004365;
+    background-color: #00121b;
     min-height: 8vh;
     padding: 0;
     z-index: 2;
@@ -137,7 +138,7 @@ i  {
 //       TRAITEMENT  NAVBAR  UNIVERS          //
 //////////////////////////////////////////////*/    
 #mainNav {
-    background-color: #002f46;
+    background-color: #012131;
     z-index: 2;
 }
 
@@ -169,7 +170,7 @@ i  {
  *  Menu caché
  */
 .dropdown-menu {
-    background-color: #002f46;
+    background-color: rgba(1, 33, 49, 0.5);
 }
 
 .dropdown-item:hover {
@@ -210,7 +211,7 @@ i  {
 //              CONTAINER PRINCIPAL              //
 /////////////////////////////////////////////////*/
 #mainContainer {
-    background-color: rgba(0,67,101, 0.2);
+    background-color: rgba(1,33,49, 0.2);
     min-height: 80vh;
     padding-top: 2vh;
     padding-bottom: 2vh;
@@ -223,7 +224,7 @@ i  {
     position: relative;
     z-index: 2;
     min-height: 12vh;
-    background-color: #004365;
+    background-color: #00121b;
     color: white;
     width: 100%;
 }
@@ -243,7 +244,7 @@ i  {
     margin-top: 10vh;
     margin-left: 1%;
     height: 60vh;
-    background-color: rgba(0, 47, 70, 1);  
+    background-color: #012131;  
     border-radius: 10px 10px 10px 10px;
     box-shadow: 5px 10px 1px 1px black;  
     overflow: hidden;
@@ -424,6 +425,7 @@ i  {
     border-top-width: 1px;
     margin-top: 5%;
     margin-bottom: 5%;
+    padding-top: 20px;
     font-size: 1.2em;
     font-weight: bold;
 }
@@ -442,6 +444,10 @@ i  {
 .ql-toolbar {
     font-weight: bold;
     background-color: rgba(85, 80, 80, 0.5);
+}
+
+div.ql-editor.ql-blank::before {
+    color: #668da3;
 }
 
 /*////////////////////////////////////////
@@ -515,7 +521,7 @@ i  {
      */
      .modal {
         display: none;
-        background-color: #004365;
+        background-color: #012131;
         color: white;
         border-radius:3px;
         box-shadow:0 0 2px rgba(0,0,0,.5);
@@ -591,12 +597,12 @@ i  {
         width: 100%;
         margin-top: 5vh;
         margin-bottom: 5vh;
-        background-color: rgba(0, 47, 70, 0.9);
+        background-image: linear-gradient(90deg, rgb(1, 19, 29) 40%, rgb(12, 46, 61));
         border-width: 1px;
-        border-radius: 50px 20px 50px 20px;
+        border-radius: 15px 15px 15px 15px;
         box-shadow: 3px 3px 1px 1px black;  
         color: whitesmoke;
-        font-size: 4em;
+        font-size: 1.6em;
         font-weight: bold;
     }
 
@@ -766,7 +772,7 @@ i  {
      */
     .modal {
         display: none;
-        background-color: #004365;
+        background-color: #012131;
         color: white;
         border-radius:3px;
         box-shadow:0 0 2px rgba(0,0,0,.5);
@@ -842,9 +848,9 @@ i  {
         width: 100%;
         margin-top: 5vh;
         margin-bottom: 5vh;
-        background-color: rgba(0, 47, 70, 0.9);
+        background-image: linear-gradient(90deg, rgb(1, 19, 29) 40%, rgb(12, 46, 61));
         border-width: 1px;
-        border-radius: 50px 20px 50px 20px;
+        border-radius: 15px 15px 15px 15px;
         box-shadow: 3px 3px 1px 1px black;  
         color: whitesmoke;
         font-size: 1.6em;

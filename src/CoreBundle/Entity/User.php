@@ -46,6 +46,7 @@ class User implements UserInterface
 
    /**
      * @ORM\OneToOne(targetEntity="PictureProfile", cascade={"persist", "remove"}, mappedBy="user")
+     * @Assert\Valid()
      * One profile's picture has one user
      */
     private $pictureProfile;

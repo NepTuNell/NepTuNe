@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\Valid;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -219,11 +220,11 @@ class UserController extends Controller
                          ->add('lastname', TextType::class)
                          ->add('username', TextType::class)
                          ->add('email', EmailType::class)
-                         ->add('pictureProfile', PictureProfileType::class, [
-                             'required' => false
-                         ])
                          ->add('password', PasswordType::class, [
-                            'mapped' => false
+                            'mapped' => false,
+                        ])
+                        ->add('pictureProfile', PictureProfileType::class, [
+                            'required' => false,
                         ])
                         ->getForm();
         
@@ -248,6 +249,7 @@ class UserController extends Controller
                 } else {
                 
                     $message[] = 'Mot de passe incorrect !';
+                    $this->manager->refresh($user);
 
                 }
                 
