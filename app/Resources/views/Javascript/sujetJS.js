@@ -39,45 +39,33 @@ new Vue({
             $("body").css('cursor', 'wait');
 
             if ( null !== section ) {
-
                 if ( null === this.input || "" === this.input.trim() ) {
-
                     var $url = Routing.generate('sujet_list_search_section', {
                         'theme': theme,
                         'section': section,
                         'option': $select
                     });
-
                 } else  {
-
                     var $url = Routing.generate('sujet_list_search_section', {
                         'theme': theme,
                         'section': section, 
                         'libelle': this.input.trim(),
                         'option': $select
                     });
-
                 }
-
             } else {
-
                 if ( null === this.input || "" === this.input.trim() ) {
-
                     var $url = Routing.generate('sujet_list_search_theme', {
                         'theme': theme,
                         'option': $select
                     });
-
                 } else  {
-
                     var $url = Routing.generate('sujet_list_search_theme', {
                         'theme': theme, 
                         'libelle': this.input.trim(),
                         'option': $select
                     });
-
                 }
-
             }
 
             axios ({
@@ -90,7 +78,6 @@ new Vue({
             .then((response)  => { 
 
                 if ( response.status === 200 || response.status === 0 ) {
-
                     /**
                      * Destruction de la table
                      */
@@ -101,7 +88,6 @@ new Vue({
                      * Création de la table
                      */
                     this.sujets = response.data; 
-
                 } 
                
             })
@@ -158,7 +144,6 @@ new Vue({
             .then((response)  => { 
 
                 if ( response.status === 200 || response.status === 0 ) {
-
                     /**
                      * Destruction de la table
                      */
@@ -171,7 +156,6 @@ new Vue({
                     this.sujets = response.data; 
                     alert("Sujet supprimé !");
                     this.refreshSubjectHandleInput();
-
                 } 
                
             })
@@ -196,11 +180,9 @@ new Vue({
             }).then((response) => {
 
                 if ( response.status === 200 || response.status === 0 ) {
-
                     // Utilisateur a le droit de supprimer un sujet   
                     this.userAuthorised = response.data['authorised'];
                     this.userID         = response.data['userID'];
-
                 } 
 
             }).catch( function(error) {
@@ -216,13 +198,9 @@ new Vue({
             var params = $("input").attr("id").split(",");
         
             if ( params.length > 1 ) {
-
                 this.handleSearch(params[0], params[1]);
-
             } else {
-
                 this.handleSearch(params[0]);
-
             }
 
         }
@@ -242,13 +220,11 @@ new Vue({
 
         // Création de la table
         $myTable = $('#myDataTable').DataTable({
-
-                "dom": '<"top"<"clear">>rt<"bottom"p<"clear">>',
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
-                },
-                "retrieve": true
-
+            "dom": '<"top"<"clear">>rt<"bottom"p<"clear">>',
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/French.json"
+            },
+            "retrieve": true
         });
 
         // Curseur par défaut

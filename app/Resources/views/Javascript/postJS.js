@@ -59,29 +59,20 @@ vuePost = new Vue({
             const $postObj = $('#'+$post);
                     
             if ( false === this.editors.hasOwnProperty($key) ) {
-
                 this.editors[$key] = new Quill("#"+$('#'+$post).attr('name'), options);
-
             }
              
             // Si le commentaire est déjà en édition 
             if ( $('#'+$post).hasClass('PostShown') ) {
-                
                 this.deletePostShown()
-
             // Si le commentaire n'est pas en édition alors on le passe
-            } else {
-
+            } 
+            else {
                 this.deletePostShown()
-
                 // Passage du commentaire à éditer à visible
                 $('#'+$post).addClass('PostShown');
                 $('#'+$post).css('display', 'block');
-
             }
-
-            // Modification du css des rich text editor
-            this.editorCssRebuilt()
 
             // Calcul du nombre d'éléments
             this.countElem($postObj, 'Edit');
@@ -116,7 +107,6 @@ vuePost = new Vue({
 
             // Routage spécifique si il y a un commentaire alors édition sinon création
             if ( null !== $post ) {
-
                 $modeExe = "current";
                 $key = $('#'+$post).attr('name');
                 $content   = this.editors[$key].root.innerHTML;
@@ -128,9 +118,7 @@ vuePost = new Vue({
                 });
 
                 $pictures = $('#ulPictureEdit > li > input');
-  
             } else {
-
                 $modeExe = "last";
                 $content = this.editor.root.innerHTML;
 
@@ -139,28 +127,21 @@ vuePost = new Vue({
                 });
 
                 $pictures = $('#ulPictureNew > li > input');
-
             }
 
             // Si aucunes données dans le commentaire alors retour, la regex est là pour supprimer les balises mises avec l'éditeur de texte. 
             if ( null !== $content || "" !== $content ) {
-
                 var $string  = $content;
                 var $reg     = /<\s*[!\/]?\s*[a-zA-Z0-9]*[\/]?\s*>/;
 
                 while ( $reg.test($string) ) {
-
                     $string = $string.replace($reg, "");
-
                 }
 
                 if ( null === $string || "" === $string.trim() ) {
-
                     alert("Aucunes données à traiter!");
                     return;
-
                 }
-
             }
             
             // Nécessaire d'instancier un objet FormData pour l'envoie en Post (envoie plus simple à traiter)
@@ -169,74 +150,52 @@ vuePost = new Vue({
             var $count = 0;
 
             if ( $pictures.length ) {
-
                 $($pictures).each( function() {
-
-                    console.log(this)
                     if ( 0 !== this.files.length ) { 
 
                         if ( 2000000 < this.files[0].size ) {
-
                             alert("Le poids d'une image ne peut excéder 2 mo.");
                             return;
-
                         }
 
                         if ( this.files[0].type !== "image/jpeg" && this.files[0].type !== "image/jpg" && this.files[0].type !== "image/png" ) {
-
                             alert("Le format de l'image n'est pas valide. Format accepté png et jpeg.");
                             return;
-
                         }
 
                         $data.append('files'+$count, this.files[0]);
                         $count++;
-
                     }
-
                 })
-
             }
          
             // Curseur de chargement
             $("body").css('cursor', 'wait'); 
     
-            axios ({
-                        
+            axios ({  
                 method: 'post',
                 url: $url,
                 data: $data,
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
-
             })            
             .then( (response) => {
-
                 // Actualisation des commentaires et updated si status HTTP OK ou travail sur serveur local
                 if ( response.status === 200 || response.status === 0 ) {
-
                     this.refreshComment( $modeExe );
-
                 } else if ( response.status === 206 ) {
-
                     alert("Une ou plusieurs image n'a pas été téléchargée!\nVeuillez vérifier que le poids de l'image n'excède pas 2mo.")
-
                 } else {
-
                     alert("Une erreur est survenue ... ça peut arriver non ..?")
-
                 }
 
                 if ( null === $post ) {
                     this.editor.root.innerHTML = "";
                 }
-
             })
-            .catch ( function (error) {
-                                
-                console.log(error);
-                                
+            .catch ( function (error) {             
+                console.log(error);            
             })
                     
         },
@@ -252,8 +211,8 @@ vuePost = new Vue({
             } 
 
             this.stop = true;
-            $id = $commentId[0][0]
-        
+            $id = $commentId;
+           
             if ( null === $id ) {
                 return;
             }
@@ -265,30 +224,21 @@ vuePost = new Vue({
             var $data = new FormData();
             $data.set('postID', $id);
 
-            axios ({
-                        
+            axios ({   
                 method: 'post',
                 url: $url,
                 data: $data
-
             })            
             .then( (response) => {
-
                 // Actualisation des commentaires et updated si status HTTP OK ou travail sur serveur local
                 if ( response.status === 200 || response.status === 0 ) {
-
                     this.refreshComment('current');
-
                 }
-
             })
             .catch ( function (error) {
-                                
-                console.log(error);
-                                
+                console.log(error);       
             })
                     
-
         },
 
         /*****************************************************
@@ -308,14 +258,11 @@ vuePost = new Vue({
             });
                    
             axios ({
-
                 method: "get",
                 url:    $url,
                 responseType: 'json'
-
             })            
             .then( (response) => {
-                
                 // Initialisation variables globales à Vue
                 this.data  = [];
                 this.nbPages = 0;
@@ -326,44 +273,32 @@ vuePost = new Vue({
                  
                 // Création et placement des commentaires dans un tableau pour la pagination
                 for ( $i = 1; $i <= response.data.length; $i++ ) {
-
                     if ( ($i % 10) === 0 ) {
-
                         this.nbPages++;
                         $array = [];
 
                         while ( $index <= $i-1 ) {
-
                             $array.push(response.data[$index]);
                             $index++;
-
                         }
                         
                         if ( $array.length > 0 ) {
- 
                             this.data.push($array);
-                        
                         }
-
                     }
-
                 };
                 
                 // Traitement des derniers commentaires que le modulo n'a pas traité
                 if ( $index < response.data.length ) {
-
                     $array = [];
 
                     while ( $index < response.data.length ) {
-                        
                         $array.push(response.data[$index]);
                         $index++;
-
                     }
                 
                     this.data.push($array);
                     this.nbPages++;
-
                 }
                 
                 // Initialisation des commentaires à voir selon l'index sur lequel nous sommes placés dans le tableau "data" pour la pagination
@@ -377,9 +312,7 @@ vuePost = new Vue({
 
             })
             .catch ( function (error) {
-                                
                 console.log(error);
-                                
             })
 
         },
@@ -402,13 +335,9 @@ vuePost = new Vue({
 
             // Recherche de la plage de commentaires à voir dans data selon l'index (la page) en cours 
             if ( null === $page ) {
-
                 $index = 0;
-
             } else {
-
                 $index = $page-1;
-
             }
             
             // Création du premier élément (statique)
@@ -416,28 +345,18 @@ vuePost = new Vue({
 
             // Boucle sur le nombre de pages total
             if ( $index+1 > this.nbPages - 4 ) {
-                
                 for ( $i = this.nbPages - 4; $i <= this.nbPages; $i++ ) {
-
                     if ( $array.length <= 4 && $i > 0 && $i !== 1 && $i !== this.nbPages) {
                         $array.push($i);
                     } 
-
                 }
-            
             } else {
-    
                 for ( $i = $index; $i < this.nbPages; $i++ ) {
-            
                     if ( $array.length <= 4 && $i !== 0 &&
                          $i !== 1 && $i !== this.nbPages ) {
-
-                        $array.push($i);
-
+                            $array.push($i);
                     } 
-            
                 }           
-            
             } 
             
             // Dernière page (statique)
@@ -465,37 +384,27 @@ vuePost = new Vue({
             var $compteur = 0;
 
             $(".textEditor").each(function() {
-                        
                 // Suppression de l'éditeur de Quill
                 $(this).removeClass('ql-container ql-snow');
 
                 // Suppression des Toolbars
                 $( this ).parent().children().each( function() {
-
                     if ( $(this).hasClass('ql-toolbar') ) {
-                                 
                         $( this ).remove();
-
                     }
-
                 });
 
                 // Ajout de l'ID et du Nom au conteneur principal
                 $(this).parent().attr('name', 'editor'+$compteur);
                 $(this).attr('id', 'editor'+$compteur);
                 $compteur++;
-
             }); 
 
             // Suppression du formulaire de création d'un commentaire
             $("#editor_new").parent().children().each( function() {
-                            
                 if ( $(this).hasClass('ql-toolbar') ) {
-                                 
                     $( this ).remove();
-
                 }
-
             });
 
             $("#editor_new").removeClass('ql-container ql-snow');
@@ -503,30 +412,8 @@ vuePost = new Vue({
             // Création du formulaire de création d'un commentaire
             this.editor = new Quill("#editor_new", options);
 
-            // Modification css des rich text editor
-            this.editorCssRebuilt()
-
         },
 
-        /*******************************************************************
-         *       Design des blocs de commentaires (rich text editor)
-         ******************************************************************/
-        editorCssRebuilt: function () {
-
-            // Changement de style pour les formulaires : Toolbar (bordures... style que je n'ai pas pu changer via CSS)
-            $('.ql-toolbar').each( function() {
-                $(this).css('border', '1px solid rgba(0, 47, 70, 1)');
-            });
-
-            $('.ql-stroke').css('stroke', '#668da3')   
-            $('.ql-picker').css('color', '#668da3')
-            $('.ql-fill').css('fill', '#668da3')
-             
-            // Changement de style pour les formulaires : Editeur (bordures... style que je n'ai pas pu changer via CSS)
-            $('.ql-container').css('border', '1px solid rgba(0, 47, 70, 1)');
-
-        },
-        
         /*******************************************************************
          *          Suppression des commentaires en mode édition 
          ******************************************************************/
@@ -534,23 +421,17 @@ vuePost = new Vue({
 
             // Suppression du ou des commentaire(s) en mode édition avec liste d'images
             if ( $('#ulPictureEdit').length ) {
-                
                 $('#ulPictureEdit').remove();
-
             }
 
             if ( $(".PostShown").length ) {
-
                 $(".PostShown").css('display', 'none');
                 $(".PostShown").removeClass('PostShown');
-
             }
 
             // Remise à l'état d'origine du block nouveau commentaire
             if ( $('#ulPictureNew').length ) {
-                
                 $('#ulPictureNew').remove();
-
             }
 
         },
@@ -570,27 +451,17 @@ vuePost = new Vue({
 
             // Suppression du block de signalement en édition des commentaires sauf celui cliqué
             if ( $elems.length ) {
-                
                 $elems.each( function() {
-
                     if ( $(this).attr('id') !== $elem.attr('id') ) {
-                        
                         $(this).removeClass('reclamationShow');
-                    
                     }
-
                 });
-                    
             }
             
             if( $elem.css('display') === 'block' ) {
-
                 $('#'+$id).removeClass('reclamationShow');
-
             } else {
-
                 $('#'+$id).addClass('reclamationShow');
-
             }
 
         },
@@ -614,9 +485,7 @@ vuePost = new Vue({
             }).then((response) => {
 
                 if ( response.status === 200 || response.status === 0 ) {
-
                     this.refreshComment("current");
-
                 } 
 
             }).catch( function(error) {
@@ -633,15 +502,11 @@ vuePost = new Vue({
         addPicture: function (modeExe = "") {
 
             if ( "Edit" === modeExe.trim() ) {
-
                 var elem    = $('div').find('.PostShown');
                 var listeId = "ulPictureEdit";
-
             } else {
-
                 var elem    = $('#newPost');
                 var listeId = "ulPictureNew";
-
             }
         
             var exist    = false;
@@ -674,39 +539,29 @@ vuePost = new Vue({
         
             // Pour toutes lignes : Ajout  d'un id, d'un logo  
             $('#'+listeId+' > li').each( function() {
-
                 var item = $( this );
 
                 if ( "Edit" === modeExe.trim() ) {
-
                     id = "PictureEdit"+"_"+compteur;
                     item.attr('id', id);
                     item.append('<i style="float: right; color: white;" class="fas fa-trash imgCursor"></i>');
-
                 } else {
-
                     id = "PictureNew"+"_"+compteur;
                     item.attr('id', id);
                     item.append('<i style="float: right; color: white;" class="fas fa-trash imgCursor"></i>');
-
                 }
 
                 compteur++;
-
             }) 
             
             // Ajout fonction de visualisation de l'image sur les input
             $('#'+listeId+' > li > i').click( function()  {
-
                 vuePost.removePictureSelector($(this).parent(), modeExe);
-                
             })
 
             // Ajout fonction de visualisation de l'image sur les input
             $('#'+listeId+' > li > input').change( function() {
-
                 vuePost.viewPicture(this);
-                
             })
 
         },
@@ -740,14 +595,12 @@ vuePost = new Vue({
 
                 // Actualisation des commentaires et updated si status HTTP OK ou travail sur serveur local
                 if ( response.status === 200 || response.status === 0 ) {
-
                     this.refreshComment('current');
-
                 }
 
             })
             .catch ( function (error) {
-                                
+                            
                 console.log(error);
                                 
             })
@@ -782,7 +635,6 @@ vuePost = new Vue({
             
                 // Ajout de la balise image vide
                 if ( !imgChild.length ) {
-
                     liParent.append('<img class="col-4" src="#" alt="your image" style="margin-top: 2%; margin-bottom: 2%;"/>')
                     var imgChild = $(liParent.children('img'));
                 } 
@@ -799,6 +651,15 @@ vuePost = new Vue({
         },
 
         /*************************************************
+         *   Ouverture de l'image dans un nouvel onglet
+         ************************************************/
+        resizePicture: function (el) {
+
+            window.open(""+$('#'+el).attr('src'));
+
+        },
+
+        /*************************************************
          *   Compte le nombre d'image et de sélecteur 
          *   d'image du commentaire
          ************************************************/
@@ -811,37 +672,23 @@ vuePost = new Vue({
             }
 
             // Si supérieur à 3 alors boutton bleu sinon bouton rouge
-            switch ( modeExe.trim() ) 
-            {
-
+            switch ( modeExe.trim() ) {
                 case "Edit":
-
                     if ( 2 < nbPictures ) {
-
                         $('i[name="addPictureButtonEdit"]').css('color', 'red');
-
-                    } else {
-
+                    } 
+                    else {
                         $('i[name="addPictureButtonEdit"]').css('color', 'blue');
-
                     }
-
                 break;
-
                 case "New":
-
                     if ( 2 < nbPictures ) {
-
                         $('i[name="addPictureButtonNew"]').css('color', 'red');
-
-                    } else {
-
+                    } 
+                    else {
                         $('i[name="addPictureButtonNew"]').css('color', 'blue');
-
                     }
-
                 break;
-
             }
 
             return nbPictures;
@@ -864,14 +711,11 @@ vuePost = new Vue({
             }).then((response) => {
 
                 if ( response.status === 200 || response.status === 0 ) {
-
                     // Utilisateur a le droit de supprimer un sujet   
                     this.userAuthorised = response.data['authorised'];
                     this.userID         = response.data['userID'];
-
                     // Mise à jour de l'historique utilisateur pour stats
                     this.registerActivity();
-
                 } 
 
             }).catch( function(error) {
@@ -888,7 +732,6 @@ vuePost = new Vue({
         registerActivity: function () {
             
             if ( 0 !== this.userID ) {
-
                 $url =  Routing.generate('register_activity', {
                     'user':  this.userID,
                     'sujet': this.sujet
@@ -899,12 +742,12 @@ vuePost = new Vue({
                     method: 'get',
                     url: $url,
                     responseType: 'json',
-                    
+               
                 }) 
                 .catch ( function (error) {
-                
+
                     console.log(error);
-                
+
                 })
 
             }
@@ -936,9 +779,7 @@ vuePost = new Vue({
             }).then((response) => {
 
                 if ( response.status === 200 || response.status === 0 ) {
-
                     this.refreshComment('current');
-
                 } 
 
             }).catch( function(error) {
@@ -957,9 +798,7 @@ vuePost = new Vue({
             setInterval( () => {   
                 
                 if ( $(".PostShown").length || $(".reclamationShow").length || this.stop === true || this.sujet === 0 ) {
-                
                     return;
-    
                 }
                 
                 $url = Routing.generate("post_count", {
@@ -967,35 +806,25 @@ vuePost = new Vue({
                 })
 
                 axios({
-
                     method: 'get',
                     url: $url,
                     responseType: 'json',
-
                 })
                 .then((response) => {
-
                     if ( response.status === 200 || response.status === 0 ) {
-               
                         if ( this.nbComment !== response.data[0][1] ) {
-
                             if ( this.loaded === true ) {
                                 this.refreshComment("current");
                             }
 
                             this.nbComment = response.data[0][1];
-                        
                         } 
                         
                         this.loaded = true;
-
                     } 
-
                 })
                 .catch( function(error) {
-
                     console.log(error)
-
                 })
                 
             }, 5000 );
@@ -1017,13 +846,11 @@ vuePost = new Vue({
         
         // Nexttick utilisé car chargement asynchrone
         this.$nextTick( () => {
-            
+
             // Affichage des commentaires au chargement de l'instance de vue et donc de la page
             this.refreshComment();
-
             // Actualisation des commentaires 
             this.refreshAuto();
-
             // Page chargée
             this.stop = false;
         
@@ -1049,4 +876,3 @@ vuePost = new Vue({
     }
 
 });
-

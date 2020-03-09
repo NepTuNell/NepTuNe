@@ -23,7 +23,6 @@ $(document).ready(function () {
          * Valable si utilisateur connecté
          */
         if ( null !== winMod || null !== imgMod ) {
-
             // Position des éléments
             var winModPosition = winMod.getBoundingClientRect(); 
             var imgModPosition = imgMod.getBoundingClientRect();
@@ -47,24 +46,15 @@ $(document).ready(function () {
             // Test des positions du curseur pour affichage ou fermeture de la popup 
             if ( event.clientY < imgModPosition['bottom'] && event.clientY > imgModPosition['top'] &&
                  event.clientX > imgModPosition['left'] && event.clientX < imgModPosition['right']) {
-
                 winMod.style.display = "flex";
-
             } else {
-
                 if (event.clientY < winModPosition['bottom'] && event.clientY > winModPosition['top'] &&
                     event.clientX > winModPosition['left'] && event.clientX < winModPosition['right']) {
-
                     winMod.style.display = "flex";
-
                 } else {
-
                     winMod.style.display = "none";
-
                 }
-
             }
-
         }
         
         /******************************************************
@@ -76,14 +66,10 @@ $(document).ready(function () {
         // Test de la position du curseur Fermeture des listes  
         if ( event.clientY < containerPos['bottom'] || event.clientY > containerPos['top'] ||
              event.clientX < containerPos['left'] || event.clientX > containerPos['right'] ) {
-            
             // Fermeture de toutes les fenêtres ouvertes
             $('.dropdown-submenu > a').next('ul').each( function() {
-
                 $(this).hide();
-
             })
-
         }
 
         /****************************************************************
@@ -91,32 +77,20 @@ $(document).ready(function () {
          ****************************************************************/
 
         $('.dropdown-submenu > a').on("click", function (event) {
-          
             // Fermeture de toutes les fenêtres ouverte
             if ( $(this).next('ul').css("display") === "none" ) {
-
                 $('.dropdown-submenu > a').next('ul').each( function() {
-
                     $(this).hide();
-
                 })
-
                 $(this).next('ul').show(500, "swing");
-
             } else {
-
-                
                 $(this).next('ul').hide(500, "swing");
-
             }
-                
-            console.log('test')
 
             // Attention utiliser stopImmediatePropagation pour éviter d'effectuer la fonction autant de fois qu'il y a de .dropdown-submenu > a !
             //event.stopPropagation();
             event.stopImmediatePropagation();
             event.preventDefault();
-
         });
 
         /****************************************************************
@@ -126,30 +100,20 @@ $(document).ready(function () {
         var popupToDisplay = $('.popup');
         
         if ( popupHelp.length ) {
-
             var popupHelpPos      = popupHelp[0].getBoundingClientRect();
             var popupToDisplayPos = popupToDisplay[0].getBoundingClientRect();
 
             if ( event.clientY < popupHelpPos['bottom'] && event.clientY > popupHelpPos['top'] &&
                  event.clientX > popupHelpPos['left']   && event.clientX < popupHelpPos['right']) {
-                
                 popupToDisplay.css('display', 'block');
-
             } else {
-
-                if ( event.clientY < popupToDisplayPos['bottom'] && event.clientY > popupToDisplayPos['top'] &&
-                     event.clientX > popupToDisplayPos['left']   && event.clientX < popupToDisplayPos['right']) {
-                
-                    popupToDisplay.css('display', 'block');
-
+                if (event.clientY < popupToDisplayPos['bottom'] && event.clientY > popupToDisplayPos['top'] &&
+                    event.clientX > popupToDisplayPos['left']   && event.clientX < popupToDisplayPos['right']) {
+                     popupToDisplay.css('display', 'block');
                 } else {
-
                     popupToDisplay.css('display', 'none');
-
                 }
-
             }
-        
         }
 
     });
@@ -160,9 +124,7 @@ $(document).ready(function () {
     Vue.filter('dateFR', function (value) {
                         
         if ( !value ) {
-
-            return ''
-                            
+            return ''     
         }
 
         var date = value.date.split(" ", 1).join();

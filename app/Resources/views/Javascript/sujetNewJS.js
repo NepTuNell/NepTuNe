@@ -65,35 +65,26 @@ vuePost = new Vue({
 
             // Test si sujet renseigné
             if ( this.sujetLibelle.trim() === "" ) {
-
                 alert("Veuillez saisir le titre du sujet !")
                 return;
-
             }
 
             if ( this.modeExe.trim() === "Création" ) {
-
                 $content = this.editor.root.innerHTML;
 
                 // Si aucunes données dans le commentaire alors retour, la regex est là pour supprimer les balises mises avec l'éditeur de texte. 
                 if ( null !== $content || "" !== $content ) {
-
                     var $string  = $content;
                     var $reg     = /<\s*[!\/]?\s*[a-zA-Z0-9]*[\/]?\s*>/;
 
                     while ( $reg.test($string) ) {
-
                         $string = $string.replace($reg, "");
-
                     }
 
                     if ( null === $string || "" === $string.trim() ) {
-
                         alert("Aucunes données à traiter!");
                         return;
-
                     }
-
                 }
 
                 // Blocage du programme
@@ -103,31 +94,20 @@ vuePost = new Vue({
                 $pictures = $('#ulPictureNew > li > input');
 
                 if ( $pictures.length ) {
-
                     $($pictures).each( function() {
-
                         if ( 0 !== this.files.length ) { 
-
                             if ( 2000000 < this.files[0].size ) {
-
                                 alert("Le poids d'une image ne peut excéder 2 mo.");
                                 return;
-
                             }
 
                             if ( this.files[0].type !== "image/jpeg" && this.files[0].type !== "image/jpg" && this.files[0].type !== "image/png" ) {
-
                                 alert("Le format de l'image n'est pas valide. Format accepté png et jpeg.");
                                 return;
-
                             }
-
                         }
-
                     })
-
                 }
-            
             }
 
             // Routage création du sujet
@@ -135,28 +115,20 @@ vuePost = new Vue({
             this.themeID = $("span[name='theme']").attr("id");
 
             if ( this.modeExe.trim() === "Création" ) {
-
                 if ( this.sectionID !== 0) {
-
                     $url = Routing.generate('sujet_new_section', {
                         'theme': this.themeID,
                         'section': this.sectionID
                     });
-
                 } else {
-
                     $url = Routing.generate('sujet_new_theme', {
                         'theme': this.themeID
                     });
-
                 }
-            
             } else {
-
                 $url = Routing.generate('sujet_edit', {
                     'sujet': this.sujetID
                 });
-
             }
 
             $data = new FormData();
@@ -172,7 +144,6 @@ vuePost = new Vue({
             .then( (response) => {
 
                 if ( response.status === 200 || response.status === 0 ) {
-
                     // Récupération de l'ID du sujet créé
                     this.sujetID = response.data;
                     
@@ -182,7 +153,6 @@ vuePost = new Vue({
                     } else {
                         alert("Modification du sujet réussi !");
                     }
-
                 }
 
             })
@@ -219,18 +189,12 @@ vuePost = new Vue({
             var $count = 0;
 
             if ( $pictures.length ) {
-
                 $($pictures).each( function() {
-
                     if ( 0 !== this.files.length ) { 
-
                         $data.append('files'+$count, this.files[0]);
                         $count++;
-
                     }
-
                 })
-
             }
          
             // Curseur de chargement
@@ -250,22 +214,16 @@ vuePost = new Vue({
 
                 // Actualisation des commentaires et updated si status HTTP OK ou travail sur serveur local
                 if ( response.status === 200 || response.status === 0 ) {
-
                     // Redirection sur le sujet créé
                     $url = Routing.generate('post_view', {
                         'sujet': this.sujetID
                     });
 
                     window.location.href=''+$url+'';
-
                 } else if ( response.status === 206 ) {
-
                     alert("Une ou plusieurs image n'a pas été téléchargée!\nVeuillez vérifier que le poids de l'image n'excède pas 2mo.")
-
                 } else {
-
                     alert("Une erreur est survenue ... ça peut arriver non ..?")
-
                 }
 
             })
@@ -284,18 +242,6 @@ vuePost = new Vue({
             
             // Création du formulaire de création d'un commentaire
             this.editor = new Quill("#editor_new", options);
-
-            // Changement de style pour les formulaires : Toolbar (bordures... style que je n'ai pas pu changer via CSS)
-            $('.ql-toolbar').each( function() {
-                $(this).css('border', '1px solid rgba(0, 47, 70, 1)');
-            });
-
-            $('.ql-stroke').css('stroke', 'rgba(0, 47, 70, 1)')   
-            $('.ql-picker').css('color', 'rgba(0, 47, 70, 1)')
-            $('.ql-fill').css('fill', 'rgba(0, 47, 70, 1)')
-
-            // Changement de style pour les formulaires : Editeur (bordures... style que je n'ai pas pu changer via CSS)
-            $('.ql-container').css('border', '1px solid rgba(0, 47, 70, 1)');
 
         },
 
@@ -336,27 +282,21 @@ vuePost = new Vue({
         
             // Pour toutes lignes : Ajout  d'un id, d'un logo  
             $('#'+listeId+' > li').each( function() {
-
                 var item = $( this );
                 id = "PictureNew"+"_"+compteur;
                 item.attr('id', id);
                 item.append('<i style="float: right; color: white;" class="fas fa-trash imgCursor"></i>');
                 compteur++;
-
             }) 
             
             // Ajout fonction de visualisation de l'image sur les input
             $('#'+listeId+' > li > i').click( function()  {
-
                 vuePost.removePictureSelector($(this).parent());
-                
             })
 
             // Ajout fonction de visualisation de l'image sur les input
             $('#'+listeId+' > li > input').change( function() {
-
-                vuePost.viewPicture(this);
-                
+                vuePost.viewPicture(this);               
             })
 
         },
@@ -381,7 +321,6 @@ vuePost = new Vue({
         viewPicture: function (el) {
 
             if (el.files && el.files[0]) {
-
                 var reader   = new FileReader();
                 var element  = $(el);
                 var liParent = $(element.parent());
@@ -389,7 +328,6 @@ vuePost = new Vue({
             
                 // Ajout de la balise image vide
                 if ( !imgChild.length ) {
-
                     liParent.append('<img class="col-4" src="#" alt="your image" style="margin-top: 2%; margin-bottom: 2%;"/>')
                     var imgChild = $(liParent.children('img'));
                 } 
@@ -400,7 +338,6 @@ vuePost = new Vue({
                 }
                 
                 reader.readAsDataURL(element[0].files[0]);
-            
             }
             
         },
@@ -415,13 +352,9 @@ vuePost = new Vue({
 
             // Si supérieur à 3 alors boutton bleu sinon bouton rouge
             if ( 2 < nbPictures ) {
-
                 $('i[name="addPictureButtonNew"]').css('color', 'red');
-
             } else {
-
                 $('i[name="addPictureButtonNew"]').css('color', 'blue');
-
             }
 
             return nbPictures;
@@ -444,11 +377,9 @@ vuePost = new Vue({
             }).then((response) => {
 
                 if ( response.status === 200 || response.status === 0 ) {
-
                     // Utilisateur a le droit de supprimer un sujet   
                     this.userAuthorised = response.data['authorised'];
                     this.userID         = response.data['userID'];
-
                 } 
 
             }).catch( function(error) {
@@ -477,9 +408,7 @@ vuePost = new Vue({
             }).then((response) => {
 
                 if ( response.status === 200 || response.status === 0 ) {
-
                     this.sujetLibelle = response.data;
-
                 } 
 
             }).catch( function(error) {

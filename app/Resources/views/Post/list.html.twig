@@ -12,11 +12,11 @@
             <div v-for="obj in comments" class="col-12 offset-lg-1 col-lg-10" style="margin-bottom: 2%;">
   
                 <div class="userPostUsername textSize col-12">
-                    <img v-if="obj.comment.pictureName !== null && obj.comment.pictureExtension !== null && obj.comment.pictureID !== null" class="col-lg-1 col-1 imgPictureProfilePost" v-bind:src="'/jimmy/FORUM/web/upload/imgProfil/'+[[obj.comment.pictureName]]+'_'+[[obj.comment.pictureID]]+'.'+[[obj.comment.pictureExtension]]"></img>
+                    <img v-if="obj.comment.pictureName !== null && obj.comment.pictureExtension !== null && obj.comment.pictureID !== null" class="col-lg-1 col-1 imgPictureProfilePost" v-bind:src="'/jimmy/FORUM/web/upload/imgProfil/'+obj.comment.pictureName+'_'+obj.comment.pictureID+'.'+obj.comment.pictureExtension"></img>
                     <span>[[obj.comment.username]]</span>
                     <span v-if="obj.comment.id_user === userID || userAuthorised === true" class="imgEdit">
-                        <a v-on:click="editComment([[obj.comment.id_user]]+'_'+[[obj.comment.id]])"><i class="fas fa-edit imgCursor"></i></a>
-                        <a v-on:click="deleteComment([[obj.comment.id]])"><i class="fas fa-trash imgCursor"></i></a>
+                        <a v-on:click="editComment(obj.comment.id_user+'_'+obj.comment.id)"><i class="fas fa-edit imgCursor"></i></a>
+                        <a v-on:click="deleteComment(obj.comment.id)"><i class="fas fa-trash imgCursor"></i></a>
                     </span>
                 </div>
 
@@ -26,8 +26,8 @@
                
                 <div class="userPostPictures row">
                     <div v-for="picture in obj.pictures" class="col-lg-4 col-12">
-                        <img class="col-lg-10 imgPost col-10 " v-bind:src="'/jimmy/FORUM/web/upload/images/'+[[picture.pictureName]]+'_'+[[picture.id]]+[[picture.pictureExtension]]" v-bind:alt="[[picture.pictureName]]+[[picture.pictureExtension]]"></img>
-                        <i v-if="obj.comment.id_user === userID || userAuthorised === true" class="fas fa-trash imgCursor col-lg-1 col-2 " v-on:click="removePicture([[picture.id]])"></i>
+                        <img v-bind:id="picture.pictureName+'_'+picture.id" class="col-lg-10 imgPost col-10 " v-on:click="resizePicture(picture.pictureName+'_'+picture.id)" v-bind:src="'/jimmy/FORUM/web/upload/images/'+picture.pictureName+'_'+picture.id+picture.pictureExtension" v-bind:alt="picture.pictureName+picture.pictureExtension"></img>
+                        <i v-if="obj.comment.id_user === userID || userAuthorised === true" class="fas fa-trash imgCursor col-lg-1 col-2 " v-on:click="removePicture(picture.id)"></i>
                     </div>
                 </div>
                 
@@ -35,16 +35,16 @@
                     Posté le : [[obj.comment.date | dateFR]]
                 </div>
                 
-                <div style="display: none" v-bind:id="[[obj.comment.id_user]]+'_'+[[obj.comment.id]]">
+                <div style="display: none" v-bind:id="obj.comment.id_user+'_'+obj.comment.id">
                     <div v-html="obj.comment.commentaire" class="textEditor"></div>
-                    <a type="submit" style="margin-right:5%;" v-on:click="postComment([[obj.comment.id_user]]+'_'+[[obj.comment.id]])"><i class="fas fa-share-square imgCursor buttonEdit"></i></a>
+                    <a type="submit" style="margin-right:5%;" v-on:click="postComment(obj.comment.id_user+'_'+obj.comment.id)"><i class="fas fa-share-square imgCursor buttonEdit"></i></a>
                     <div class="textColor">Ajouter une image<i style="margin-left: 2%;" name="addPictureButtonEdit" class="fas fa-plus-circle imgCursor iButton" v-on:click="addPicture('Edit')"></i></div>
                 </div>
 
                 <div class="col-12">
-                    <a><i class="fas fa-thumbs-up imgCursor iLike" v-on:click="like([[obj.comment.id]], 1)"></i></a>
-                    <a><i class="fas fa-thumbs-down imgCursor iDisLike" v-on:click="like([[obj.comment.id]], 2)"></i></a>
-                    <a class="textSize"><i class="fas fa-exclamation-triangle imgCursor iReclamation" v-on:click="printReclamation('reclamationWindow'+[[obj.comment.id]])"></i></a>
+                    <a><i class="fas fa-thumbs-up imgCursor iLike" v-on:click="like(obj.comment.id, 1)"></i></a>
+                    <a><i class="fas fa-thumbs-down imgCursor iDisLike" v-on:click="like(obj.comment.id, 2)"></i></a>
+                    <a class="textSize"><i class="fas fa-exclamation-triangle imgCursor iReclamation" v-on:click="printReclamation('reclamationWindow'+obj.comment.id)"></i></a>
                 </div>
 
                 <div class="col-12">
@@ -52,15 +52,15 @@
                     <div class="iDisLikeCount">[[obj.comment.nbDisLike]]</div>
                 </div>
      
-                <div class="col-12 reclamationWindow textColor" v-bind:id="'reclamationWindow'+[[obj.comment.id]]">
+                <div class="col-12 reclamationWindow textColor" v-bind:id="'reclamationWindow'+obj.comment.id">
                     <p v-if="obj.comment.reclamationID === null">
                        Vous êtes sur le point de signaler le contenu du commentaire.<br>
                        Le contenu sera étudié par un administrateur dans les plus brefs délais.<br><br>
-                       Cliquez ici: <a href="#!" v-on:click="reclamation([[obj.comment.id]])">Signaler</a>
+                       Cliquez ici: <a href="#!" v-on:click="reclamation(obj.comment.id)">Signaler</a>
                     </p>
                     <p v-else>
                        Vous avez signaler le contenu de ce commentaire.<br>
-                       Pour retirer le signalement cliquez ici: <a href="#!" v-on:click="reclamation([[obj.comment.id]])">Retirer le signalement</a>.<br><br>
+                       Pour retirer le signalement cliquez ici: <a href="#!" v-on:click="reclamation(obj.comment.id)">Retirer le signalement</a>.<br><br>
                     </p>
                 </div>
 

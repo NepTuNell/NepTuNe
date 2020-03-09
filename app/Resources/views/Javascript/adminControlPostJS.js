@@ -58,78 +58,58 @@ vuePost = new Vue({
 
                     // Vérification si sujet du commentaire présent dans l'array
                     for ( $j = 0; $j < this.sujets.length; $j++) {
-
                         if ( this.sujets[$j].id === 0 ) {
-
                             $firstElem = true;
-
                         }
                         
                         if ( this.sujets[$j].id === response.data[$i-1].comment.sujetID ) {
-
                             $elem = true;
-
                         }
-
                     }
 
                     // Ajout de "<tous>" dans la liste
                     if ( !$firstElem ) {
-
                         this.sujets.push({
                             'id': 0,
                             'libelle': '<tous>'
                         });
-
                     }
 
                     // Ajout de chaque sujet une seule fois dans le filtre 
                     if ( !$elem ) {
-
                         this.sujets.push({
                             'id': response.data[$i-1].comment.sujetID,
                             'libelle': response.data[$i-1].comment.sujetLibelle
                         });
-
                     }
                     
                     if ( ($i % 10) === 0 ) {
-
                         this.nbPages++;
                         $array = [];
 
                         while ( $index <= $i-1 ) {
-
                             $array.push(response.data[$index]);
                             $index++;
-
                         }
-                        
+                    
                         if ( $array.length > 0 ) {
- 
                             this.data.push($array);
-                        
                         }
-
                     }
 
                 };
                  
                 // Traitement des derniers commentaires que le modulo n'a pas traité
                 if ( $index < response.data.length ) {
-
                     $array = [];
 
                     while ( $index < response.data.length ) {
-                        
                         $array.push(response.data[$index]);
                         $index++;
-
                     }
                     
                     this.data.push($array);
                     this.nbPages++;
-
                 }
                 
                 // Initialisation des commentaires à voir selon l'index sur lequel nous sommes placés dans le tableau "data" pour la pagination
@@ -156,13 +136,9 @@ vuePost = new Vue({
 
             // Recherche de la plage de commentaires à voir dans data selon l'index (la page) en cours 
             if ( null === $page ) {
-
                 $index = 0;
-
             } else {
-
                 $index = $page-1;
-
             }
  
             // Création du premier élément (statique)
@@ -170,28 +146,18 @@ vuePost = new Vue({
              
             // Boucle sur le nombre de pages total
             if ( $index+1 > this.nbPages - 4 ) {
-                
                 for ( $i = this.nbPages - 4; $i <= this.nbPages; $i++ ) {
-
                     if ( $array.length <= 4 && $i > 0 && $i !== 1 && $i !== this.nbPages) {
                         $array.push($i);
                     } 
-
                 }
-            
             } else {
-    
                 for ( $i = $index; $i < this.nbPages; $i++ ) {
-            
                     if ( $array.length <= 4 && $i !== 0 &&
                          $i !== 1 && $i !== this.nbPages ) {
-
                         $array.push($i);
-
                     } 
-            
                 }           
-            
             } 
             
             // Dernière page (statique)
@@ -243,9 +209,7 @@ vuePost = new Vue({
 
                 // Actualisation des commentaires et updated si status HTTP OK ou travail sur serveur local
                 if ( response.status === 200 || response.status === 0 ) {
-
                     this.refreshComment();
-
                 }
 
             })
@@ -254,7 +218,6 @@ vuePost = new Vue({
                 console.log(error);
                                 
             })
-                    
 
         },
         
