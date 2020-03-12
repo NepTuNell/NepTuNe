@@ -336,6 +336,21 @@ i  {
     margin-right: 5%; 
 }
 
+/*/////////////////////////////////////////////
+//           ADMIN CONTROLE BACKUP           //
+/////////////////////////////////////////////*/
+.backupContainer {
+    background-color: transparent;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    border-style: none;
+    border-left-style: solid;
+    padding-left: 5%;
+    color: #668da3;;
+    max-height: 50vh;
+    overflow-y: scroll;
+}
+
 /*/////////////////////////////////////////
 //         TRAITEMENT FORMULAIRE         //
 /////////////////////////////////////////*/

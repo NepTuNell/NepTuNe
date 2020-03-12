@@ -2,21 +2,27 @@
 
 namespace BackendBundle\Controller;
 
+use DateTime;
 use CoreBundle\Entity\Post;
 use CoreBundle\Entity\User;
 use CoreBundle\Entity\Sujet;
 use CoreBundle\Entity\Picture;
 use BackendBundle\Entity\Theme;
 use CoreBundle\Services\Mailer;
+use BackendBundle\Entity\Backup;
 use BackendBundle\Entity\Univers;
 use BackendBundle\Entity\PostControl;
 use Symfony\Component\HttpFoundation\Request;
+use BackendBundle\Repository\BackupRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -389,6 +395,104 @@ class AdminController extends Controller
 
         return $response;
     
+    }
+
+    /**
+     * @Route("/backup/bdd/list", name="admin_backup_restaure")
+     * @Method({"GET", "POST"})
+     */
+    function bddBackUpList(Request $request)
+    {
+        if ( !$this->isGranted('ROLE_ADMIN') ) {
+            throw $this->createAccessDeniedException('Vous essayer d\'accéder à des ressources protégées !');
+        }
+        
+        $universList = $this->manager->getRepository(Univers::class)->findAll();
+        $backupUseByForm = new Backup;
+        $backupList = $this->manager->getRepository(Backup::class)->fetchAllBackup();
+        $form = $this->createForm('BackendBundle\Form\BackupType', $backupUseByForm);
+       
+        $form->handleRequest($request);
+
+        if ( "POST" === $request->getMethod() ) {
+
+            if ( $form->isSubmitted() && $form->isValid() ) {
+                
+                $libelle = $form->get('backups')->getData()->getLibelle();
+           
+                // Restauration du nom des backups dans la bdd
+                $directoryPath = "/home/jimmy/html/FORUM/web/backup/BDD/";
+                $files = scandir($directoryPath);
+          
+                if ( null !== $libelle && "" !== $libelle ) {
+
+                    exec('mysql -ujimmy -p2018 jimmy_forum < /home/jimmy/html/FORUM/web/backup/BDD/'.$libelle);
+                    $this->addFlash('success', 'La base de donnée a été restaurée !');
+
+                    foreach ( $files as $file ) {
+
+                        $result = $this->manager->getRepository(Backup::class)->fetchBackup($file);
+                        
+                        if ( 1 !== $result && "." !== $file && ".." !== $file ) {
+                            $date = new DateTime(substr($file, 7, 10));
+                            $backup = new Backup();
+                            $backup->setLibelle($file);
+                            $backup->setDate($date);
+                            $this->manager->persist($backup);
+                            $this->manager->flush();
+                        }
+                    
+                    }
+
+                    $form = $this->createForm('BackendBundle\Form\BackupType', $backupUseByForm);
+
+                }
+
+            }
+
+            $errors = $this->get('validator')->validate($backupUseByForm);
+
+        }
+
+        return $this->render('Admin/controlBackup.html.twig', [
+            'form'   =>  $form->createView(),
+            'universList' => $universList 
+        ]);
+
+    }
+
+    /**
+     * @Route("/backup/bdd/create", name="admin_backup_bdd")
+     * @Method({"GET", "POST"})
+     */
+    function dump_MySQL()
+    {
+
+        if ( !$this->isGranted('ROLE_ADMIN') ) {
+            throw $this->createAccessDeniedException('Vous essayer d\'accéder à des ressources protégées !');
+        }
+
+        sleep(1);
+        $date  = new DateTime();
+
+        do {
+            $libelle = "backup_".$date->format('d-m-Y').'_'.$date->getTimestamp();
+            $backupExist = $this->manager->getRepository(Backup::class)->findOneBy([
+                'libelle'   => $libelle.'.sql'
+            ]);
+        } while ( null !== $backupExist );
+
+        $libelle .= '.sql';
+        $backup = new Backup;
+        $backup->setLibelle($libelle);
+        $backup->setDate($date);
+        
+        $result = exec('mysqldump -ujimmy -p2018 --databases jimmy_forum > /home/jimmy/html/FORUM/web/backup/BDD/'.$libelle);
+        $this->manager->persist($backup);
+        $this->manager->flush();
+
+        return $this->redirectToRoute('admin_backup_restaure');
+
     }
 
 }
