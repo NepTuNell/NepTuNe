@@ -12,6 +12,7 @@ use CoreBundle\Services\Mailer;
 use BackendBundle\Entity\Backup;
 use BackendBundle\Entity\Univers;
 use BackendBundle\Entity\PostControl;
+use CoreBundle\Entity\PictureProfile;
 use Symfony\Component\HttpFoundation\Request;
 use BackendBundle\Repository\BackupRepository;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -411,20 +412,27 @@ class AdminController extends Controller
         $backupUseByForm = new Backup;
         $backupList = $this->manager->getRepository(Backup::class)->fetchAllBackup();
         $form = $this->createForm('BackendBundle\Form\BackupType', $backupUseByForm);
+        $message = null;
        
         $form->handleRequest($request);
 
         if ( "POST" === $request->getMethod() ) {
 
             if ( $form->isSubmitted() && $form->isValid() ) {
+
+                if ( null !== $form->get('backups')->getData() ) {
+
+                    $libelle = $form->get('backups')->getData()->getLibelle();
                 
-                $libelle = $form->get('backups')->getData()->getLibelle();
-           
-                // Restauration du nom des backups dans la bdd
-                $directoryPath = "/home/jimmy/html/FORUM/web/backup/BDD/";
-                $files = scandir($directoryPath);
-          
-                if ( null !== $libelle && "" !== $libelle ) {
+                    // Restauration du nom des backups dans la bdd
+                    $directoryPath = "/home/jimmy/html/FORUM/web/backup/BDD/";
+                    $files = scandir($directoryPath);
+
+                    $picturesPath = "/home/jimmy/html/FORUM/web/backup/images/";
+                    $picturesList = scandir($picturesPath);
+                    
+                    $picturesProfilPath = "/home/jimmy/html/FORUM/web/backup/imgProfil/";
+                    $picturesProfilList = scandir($picturesProfilPath);
 
                     exec('mysql -ujimmy -p2018 jimmy_forum < /home/jimmy/html/FORUM/web/backup/BDD/'.$libelle);
                     $this->addFlash('success', 'La base de donnée a été restaurée !');
@@ -444,19 +452,74 @@ class AdminController extends Controller
                     
                     }
 
+                    // Restauration des images dans le dossier public images
+                    foreach ( $picturesList as $picture ) {
+
+                        if ( '.' !== $picture && '..' !== $picture ) {
+
+                            // Nom de l'image
+                            $pos1 = strripos($picture, '.');
+                            $name = substr($picture, 0, $pos1);
+                            $ext  = substr($picture, $pos1);
+                            
+                            // Id de l'image
+                            $pos2  = strripos($name, '_')+1;
+                            $id    = substr($name, $pos2);
+                         
+                            // Lecture de l'image dans la base de donnée
+                            $imgExist = $this->manager->getRepository(Picture::class)->find($id);
+                            
+                            // Si elle existe j'utilise rsync vers le répertoire des images affichées (pour être sûr de son existence)
+                            if ( null !== $imgExist ) {
+                                exec('rsync /home/jimmy/html/FORUM/web/backup/images/"'.$name.$ext.'" /home/jimmy/html/FORUM/web/upload/images/"'.$name.$ext.'"');
+                            }
+                        
+                        }
+
+                    }
+
+                    // Restauration des images des profils dans le dossier public imgProfil
+                    foreach ( $picturesProfilList as $picture ) {
+
+                        if ( '.' !== $picture && '..' !== $picture ) {
+
+                            // Nom de l'image
+                            $pos1 = strripos($picture, '.');
+                            $name = substr($picture, 0, $pos1);
+                            $ext  = substr($picture, $pos1);
+                            
+                            // Id de l'image
+                            $pos2  = strripos($name, '_')+1;
+                            $id    = substr($name, $pos2);
+                             
+                            // Lecture de l'image dans la base de donnée
+                            $imgExist = $this->manager->getRepository(PictureProfile::class)->find($id);
+                            
+                            // Si elle existe j'utilise rsync vers le répertoire des images affichées (pour être sûr de son existence)
+                            if ( null !== $imgExist ) {
+                                exec('rsync /home/jimmy/html/FORUM/web/backup/imgProfil/"'.$name.$ext.'" /home/jimmy/html/FORUM/web/upload/imgProfil/"'.$name.$ext.'"');
+                            }
+                        
+                        }
+
+                    }
+
                     $form = $this->createForm('BackendBundle\Form\BackupType', $backupUseByForm);
+
+                } else {
+
+                    $message = ['Veuillez sélectionner une sauvegarde à restaurer !'];
 
                 }
 
             }
 
-            $errors = $this->get('validator')->validate($backupUseByForm);
-
         }
 
         return $this->render('Admin/controlBackup.html.twig', [
             'form'   =>  $form->createView(),
-            'universList' => $universList 
+            'universList' => $universList, 
+            'message'   => $message
         ]);
 
     }
@@ -487,7 +550,15 @@ class AdminController extends Controller
         $backup->setLibelle($libelle);
         $backup->setDate($date);
         
-        $result = exec('mysqldump -ujimmy -p2018 --databases jimmy_forum > /home/jimmy/html/FORUM/web/backup/BDD/'.$libelle);
+        // Backup de la base de données
+        exec('mysqldump -ujimmy -p2018 --databases jimmy_forum > /home/jimmy/html/FORUM/web/backup/BDD/'.$libelle);
+
+        // Backup des images
+        exec('rsync -r /home/jimmy/html/FORUM/web/upload/images/ /home/jimmy/html/FORUM/web/backup/images/');
+
+        // Backup des images des profils
+        exec('rsync -r /home/jimmy/html/FORUM/web/upload/imgProfil/ /home/jimmy/html/FORUM/web/backup/imgProfil/');
+
         $this->manager->persist($backup);
         $this->manager->flush();
 

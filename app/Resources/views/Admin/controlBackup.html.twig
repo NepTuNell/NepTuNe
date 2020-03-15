@@ -10,7 +10,7 @@
             {{ form_start(form, {'action': path('admin_backup_restaure'), 'method': 'post', 'attr': {'novalidate': 'novalidate'}}) }}
 
                 <div class="form-group row">   
-                    {{ form_label(form.backups, 'Liste des fichiers de restaurations de la base de données', {'label_attr': {'class': 'col-12 textSize textColor'} }) }}
+                    {{ form_label(form.backups, 'Liste des sauvegardes de la base de données', {'label_attr': {'class': 'col-12 textSize textColor'} }) }}
                     {{ form_widget(form.backups, {'attr': {'class': 'form-control col-12 backupContainer'}}) }}
                 </div>
 
@@ -25,7 +25,6 @@
         </div>
 
         {{ include('Templates/Error/flash.html.twig') }}
-        {{ include('Templates/Error/error.html.twig') }}
         {{ include('Templates/Error/message.html.twig') }}
     
     </div>

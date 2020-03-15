@@ -95,8 +95,6 @@ vuePost = new Vue({
                 return;
             } 
 
-            this.stop = true;
-
             // Initialisation des variables
             var $modeExe  = null;
             var $url      = null;
@@ -169,6 +167,8 @@ vuePost = new Vue({
                 })
             }
          
+            this.stop = true;
+
             // Curseur de chargement
             $("body").css('cursor', 'wait'); 
     

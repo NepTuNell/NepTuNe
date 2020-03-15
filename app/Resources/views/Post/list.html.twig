@@ -26,7 +26,7 @@
                
                 <div class="userPostPictures row">
                     <div v-for="picture in obj.pictures" class="col-lg-4 col-12">
-                        <img v-bind:id="picture.pictureName+'_'+picture.id" class="col-lg-10 col-10 imgPost" v-on:click="resizePicture(picture.pictureName+'_'+picture.id)" v-bind:src="'/jimmy/FORUM/web/upload/images/'+picture.pictureName+'_'+picture.id+picture.pictureExtension" v-bind:alt="picture.pictureName+picture.pictureExtension"></img>
+                        <img v-bind:id="'Picture_'+picture.id" class="col-lg-10 col-10 imgPost" v-on:click="resizePicture('Picture_'+picture.id)" v-bind:src="'/jimmy/FORUM/web/upload/images/'+picture.pictureName+'_'+picture.id+picture.pictureExtension" v-bind:alt="picture.pictureName+picture.pictureExtension"></img>
                         <i v-if="obj.comment.id_user === userID || userAuthorised === true" class="fas fa-trash imgCursor col-lg-1 col-2 " v-on:click="removePicture(picture.id)"></i>
                     </div>
                 </div>

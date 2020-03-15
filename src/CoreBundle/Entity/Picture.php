@@ -180,8 +180,9 @@ class Picture
     public function preupload($file)
     {
         
-        $this->setPictureName(strstr($this->file['name'], '.', true));
-        $this->setPictureExtension(strstr($this->file['name'], '.', false));
+        $pos = strripos($this->file['name'], '.');
+        $this->setPictureName(substr($this->file['name'], 0, $pos));
+        $this->setPictureExtension(substr($this->file['name'], $pos));
 
     }
 
