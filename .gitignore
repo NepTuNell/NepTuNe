@@ -2,6 +2,7 @@
 /build/
 /phpunit.xml
 var/
+tests/
 vendor/
 web/bundles
 web/upload
