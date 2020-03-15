@@ -1,9 +1,9 @@
 /.web-server-pid
-/app/config
+app/config
 /build/
 /phpunit.xml
-/var
-/vendor/
+var
+vendor/
 /web/bundles/
 /web/upload
 /web/backup
