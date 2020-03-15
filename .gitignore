@@ -8,3 +8,4 @@ web/bundles
 web/upload
 web/backup
 app/config
+src/AppBundle
