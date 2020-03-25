@@ -102,8 +102,6 @@ class UserController extends Controller
 
         }
  
-        
-        
         return $this->render('User/home.html.twig', [
 
             'universList'           => $universList,
@@ -187,7 +185,7 @@ class UserController extends Controller
         return $this->render('User/Registration/register.html.twig', 
             array(
                     'form'          => $form->createview(),
-                    'errors'         => $errors,
+                    'errors'        => $errors,
                     'message'       => $message,
                     'universList'   => $univers
                 )
