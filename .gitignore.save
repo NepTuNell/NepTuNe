@@ -1,8 +1,0 @@
-/.web-server-p
-/build/
-/phpunit.xml
-var
-vendor/
-web/bundles/
-web/upload
-web/backup
