@@ -1,0 +1,194 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+
+namespace BackendBundle\Entity;
+
+use CoreBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
+use BackendBundle\Entity\Univers;
+
+/**
+ * Activity
+ *
+ * @ORM\Table(name=&quot;activity&quot;)
+ * @ORM\Entity(repositoryClass=&quot;BackendBundle\Repository\ActivityRepository&quot;)
+ */
+class Activity
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name=&quot;id&quot;, type=&quot;integer&quot;)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy=&quot;AUTO&quot;)
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name=&quot;date&quot;, type=&quot;datetime&quot;)
+     */
+    private $date;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy=&quot;activities&quot;)
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Univers::class, inversedBy=&quot;activities&quot;)
+     */
+    private $univers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Theme::class, inversedBy=&quot;activities&quot;)
+     */
+    private $theme;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this-&gt;id;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     *
+     * @return Activity
+     */
+    public function setDate($date)
+    {
+        $this-&gt;date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this-&gt;date;
+    }
+
+    /**
+     * Set user
+     *
+     * @param string $user
+     *
+     * @return Activity
+     */
+    public function setUser($user)
+    {
+        $this-&gt;user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return string
+     */
+    public function getUser()
+    {
+        return $this-&gt;user;
+    }
+    
+    /**
+     * Get univers
+     * 
+     * @return Univers
+     */
+    public function getUnivers()
+    {
+        return $this-&gt;univers;
+    }
+
+    /**
+     * Set univers
+     * 
+     * @return Univers
+     */
+    public function setUnivers(Univers $univers)
+    {
+        $this-&gt;univers = $univers;
+    }
+
+    /**
+     * Get Theme
+     * 
+     * @return Theme
+     */
+    public function getTheme()
+    {
+        return $this-&gt;theme;
+    }
+
+    /**
+     * Set Theme
+     * 
+     * @return Theme
+     */
+    public function setTheme(Theme $theme)
+    {
+        $this-&gt;theme = $theme;
+
+        return $this;
+    }
+
+}
+
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all();
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

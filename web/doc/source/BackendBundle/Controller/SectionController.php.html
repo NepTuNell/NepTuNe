@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+
+namespace BackendBundle\Controller;
+
+use CoreBundle\Entity\User;
+use CoreBundle\Entity\Sujet;
+use BackendBundle\Entity\Theme;
+use BackendBundle\Entity\Section;
+use BackendBundle\Entity\Univers;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+
+/**
+ * 
+ * Theme controller.
+ *
+ * @Route(&quot;section&quot;)
+ */
+class SectionController extends Controller
+{
+
+    /**
+     * Objet utilis&eacute; pour stocker l'ObjectManager de Doctrine.
+     * Sert &agrave; administrer la base de donn&eacute;es.
+     * 
+     * @var ObjectManager
+     */
+    private $manager;
+
+    /**
+     * Constructeur de la classe
+     * 
+     * @var ObjectManager
+     */
+    public function __construct(ObjectManager $manager)
+    {
+        $this-&gt;manager = $manager;
+    }
+
+    /**
+     * Cr&eacute;ation d'une nouvelle section
+     *
+     * @Route(&quot;/new/{theme}&quot;, name=&quot;section_new&quot;, requirements={&quot;theme&quot;=&quot;\d+&quot;})
+     * @Method({&quot;GET&quot;, &quot;POST&quot;})
+     */
+    public function newSection(Request $request, Theme $theme)
+    {
+        
+        if ( !$this-&gt;isGranted('ROLE_ADMIN') || !$this-&gt;isGranted('IS_AUTHENTICATED_FULLY') ) {
+
+            throw $this-&gt;createAccessDeniedException('Vous n\'avez pas les droits n&eacute;cessaires pour acc&eacute;der &agrave; cette section !');
+
+        }
+
+        $errors         = null;
+        $universList    = $this-&gt;manager-&gt;getRepository(Univers::class)-&gt;findAll();
+        $section        = new Section();
+        $form           = $this-&gt;createForm('BackendBundle\Form\SectionType', $section);
+        $form-&gt;handleRequest($request);
+
+        if ( &quot;POST&quot; === $request-&gt;getMethod() ) {
+
+            if ( $form-&gt;isSubmitted() &amp;&amp; $form-&gt;isValid() ) {
+
+                
+                $section-&gt;setTheme($theme);
+                $this-&gt;manager-&gt;persist($section);
+                $this-&gt;manager-&gt;flush();
+                $this-&gt;addFlash('success', 'Une nouvelle section a &eacute;t&eacute; cr&eacute;&eacute;e !');
+                
+                return $this-&gt;redirectToRoute('section_edit', ['section' =&gt; $section-&gt;getId()]);
+
+            }
+
+            $errors = $this-&gt;get('validator')-&gt;validate($theme);
+
+        }
+
+        return $this-&gt;render('Admin/Section/edit.html.twig', array(
+
+            'form' =&gt; $form-&gt;createView(),
+            'universList' =&gt; $universList,
+            'errors' =&gt; $errors
+
+        ));
+
+    }   
+
+    /**
+     * Modification d'une section existante
+     *
+     * @Route(&quot;/edit/{section}&quot;, name=&quot;section_edit&quot;, requirements={&quot;section&quot;=&quot;\d+&quot;})
+     * @Method({&quot;GET&quot;, &quot;POST&quot;})
+     */
+    public function editSection(Request $request, Section $section)
+    {
+        
+        if ( !$this-&gt;isGranted('ROLE_ADMIN') || !$this-&gt;isGranted('IS_AUTHENTICATED_FULLY') ) {
+
+            throw $this-&gt;createAccessDeniedException('Vous n\'avez pas les droits n&eacute;cessaires pour acc&eacute;der &agrave; cette section !');
+
+        }
+
+        $errors = null;
+        $universList = $this-&gt;manager-&gt;getRepository(Univers::class)-&gt;findAll();
+        $form = $this-&gt;createForm('BackendBundle\Form\SectionType', $section);
+        $form-&gt;handleRequest($request);
+
+        if ( &quot;POST&quot; === $request-&gt;getMethod() ) {
+
+            if ( $form-&gt;isSubmitted() &amp;&amp; $form-&gt;isValid() ) {
+                
+                $this-&gt;manager-&gt;persist($section);
+                $this-&gt;manager-&gt;flush();
+                $this-&gt;addFlash('success', 'La section a &eacute;t&eacute; modifi&eacute;e !');
+
+            }
+
+            $errors = $this-&gt;get('validator')-&gt;validate($section);
+
+        }
+
+        return $this-&gt;render('Admin/Section/edit.html.twig', array(
+
+            'form'          =&gt; $form-&gt;createView(),
+            'errors'        =&gt; $errors,
+            'universList'   =&gt; $universList,
+
+        ));
+
+    }   
+
+    /**
+     * Suppression d'une section
+     *
+     * @Route(&quot;/delete/{section}&quot;, name=&quot;section_delete&quot;)
+     * @Method(&quot;POST&quot;)
+     */
+    public function deleteSection(Request $request, Section $section)
+    {
+
+        if ( !$this-&gt;isGranted('ROLE_ADMIN') || !$this-&gt;isGranted('IS_AUTHENTICATED_FULLY') ) {
+            throw $this-&gt;createAccessDeniedException('Vous n\'avez pas les droits n&eacute;cessaires pour acc&eacute;der &agrave; cette section !');
+        }
+        
+        $message     = array();
+        $universList = $this-&gt;manager-&gt;getRepository(Univers::class)-&gt;findAll();
+        
+        if ( &quot;GET&quot; === $request-&gt;getMethod() ) {
+
+            $sujets   = $this-&gt;manager-&gt;getRepository(Sujet::class)-&gt;findBy([
+                'section' =&gt; $section,
+            ]);
+
+            if ( count($sujets) &gt; 0 ) {
+                $message[] = &quot;La section est utilis&eacute;e !&quot;;
+            } else {
+                $this-&gt;manager-&gt;remove($section);
+                $this-&gt;manager-&gt;flush();
+            }
+
+        } 
+
+        return $this-&gt;render('Admin/controlForum.html.twig', [
+            &quot;message&quot;   =&gt;   $message,
+            &quot;universList&quot; =&gt; $universList,
+        ]);
+
+    }
+
+    /**
+     * Cette fonction retourne la liste des sections
+     * 
+     * @Route(&quot;/liste/{theme}&quot;, name=&quot;section_list&quot;)
+     * @Method(&quot;GET&quot;)
+     */
+    public function listSection(Theme $theme)
+    {
+        $universList  = $this-&gt;manager-&gt;getRepository(Univers::class)-&gt;findAll();
+        $sectionsList = $this-&gt;manager-&gt;getRepository(Section::class)-&gt;findBy([
+            'theme' =&gt; $theme,
+        ]);
+
+        return $this-&gt;render('Section/list.html.twig', [
+            'sectionList' =&gt; $sectionsList,
+            'universList' =&gt; $universList,
+        ]);
+
+    }
+
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all();
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

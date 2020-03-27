@@ -1,0 +1,56 @@
+{% extends "index.html.twig" %}
+
+{% block content %}
+    
+    <div class="row">
+        
+        <div class="offset-2 col-8">
+        
+            <div class="col-12 text-center title-Header" style="margin-top: 15%; margin-bottom: 15%">Inscription</div>
+
+            <div class="form-group">
+
+                {{ form_start(form, {'action': path('user_new'), 'method': 'post', 'attr': {'novalidate': 'novalidate'}}) }}
+                    <div class="form-group row">
+                        {{ form_label(form.firstname, 'Nom', {'label_attr': {'class': 'col-4 textColor'} }) }}
+                        {{ form_widget(form.firstname, {'attr': {'class': 'form-control col-8'} }) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.lastname, 'Prénom', {'label_attr': {'class': 'col-4 textColor'} }) }}
+                        {{ form_widget(form.lastname, {'attr': {'class': 'form-control col-8'} }) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.username, 'Pseudo', {'label_attr': {'class': 'col-4 textColor'} }) }}
+                        {{ form_widget(form.username, {'attr': {'class': 'form-control col-8'} }) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.email, 'Adresse email', {'label_attr': {'class': 'col-4 textColor'} }) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control col-8'} }) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.password, 'Mot de passe', {'label_attr': {'class': 'col-4 textColor'} }) }}
+                        {{ form_widget(form.password, {'attr': {'class': 'form-control col-8'} }) }}
+                    </div>
+                    <div class="form-group row">
+                        {{ form_label(form.confirm_password, 'Confirmer le mot de passe', {'label_attr': {'class': 'col-4 textColor'} }) }}
+                        {{ form_widget(form.confirm_password, {'attr': {'class': 'form-control col-8'} }) }}
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-1 col-3">
+                            <input class="btn btn-primary button-size" type="submit" value="Valider" />
+                        </div>
+                    </div>
+                {{ form_end(form) }}
+
+            </div>
+
+        </div>
+
+        <!-- Liste des erreurs -->
+        {{ include('Templates/Error/error.html.twig') }}
+        {{ include('Templates/Error/message.html.twig') }}
+        {{ include('Templates/Error/flash.html.twig') }}
+
+    </div>
+    
+{% endblock %}

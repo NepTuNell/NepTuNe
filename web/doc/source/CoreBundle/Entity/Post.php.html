@@ -1,0 +1,256 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+
+namespace CoreBundle\Entity;
+
+use CoreBundle\Entity\User;
+use CoreBundle\Entity\Sujet;
+use CoreBundle\Entity\Picture;
+use Doctrine\ORM\Mapping as ORM;
+use BackendBundle\Entity\PostControl;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * Post
+ *
+ * @ORM\Table(name=&quot;post&quot;)
+ * @ORM\Entity(repositoryClass=&quot;CoreBundle\Repository\PostRepository&quot;)
+ */
+class Post
+{
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name=&quot;id&quot;, type=&quot;integer&quot;)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy=&quot;AUTO&quot;)
+     */
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Sujet::class, inversedBy=&quot;posts&quot;)
+     */
+    private $sujet;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy=&quot;posts&quot;)
+     */
+    private $user;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name=&quot;commentaire&quot;, type=&quot;text&quot;)
+     */
+    private $commentaire;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name=&quot;date&quot;, type=&quot;datetime&quot;)
+     */
+    private $date;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Picture::class, mappedBy=&quot;post&quot;, cascade={&quot;persist&quot;, &quot;remove&quot;})
+     */
+    private $pictures;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PostLike::class, mappedBy=&quot;post&quot;, cascade={&quot;persist&quot;, &quot;remove&quot;})
+     */
+    private $postLikes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PostControl::class, mappedBy=&quot;post&quot;, cascade={&quot;persist&quot;, &quot;remove&quot;})
+     */
+    private $postsControl;
+    
+    /**
+     * Constructeur de la classe
+     */
+    public function __construct()
+    {
+        $this-&gt;pictures     = new ArrayCollection();
+        $this-&gt;postLikes    = new ArrayCollection();
+        $this-&gt;postsControl = new ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this-&gt;id;
+    }
+
+    /**
+     * Set Sujet
+     *
+     * @param Sujet $sujet
+     *
+     * @return Sujet
+     */
+    public function setSujet(Sujet $sujet)
+    {
+        $this-&gt;sujet = $sujet;
+
+        return $this;
+    }
+
+    /**
+     * Get sujet
+     *
+     * @return Sujet
+     */
+    public function getSujet()
+    {
+        return $this-&gt;sujet;
+    }
+
+    public function setUser(User $user)
+    {
+        $this-&gt;user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     * 
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this-&gt;user;
+    }
+
+    /**
+     * Set commentaire
+     *
+     * @param string $commentaire
+     *
+     * @return Post
+     */
+    public function setCommentaire($commentaire)
+    {
+        $this-&gt;commentaire = $commentaire;
+
+        return $this;
+    }
+
+    /**
+     * Get commentaire
+     *
+     * @return string
+     */
+    public function getCommentaire()
+    {
+        return $this-&gt;commentaire;
+    }
+
+    /**
+     * Set date
+     */
+    public function setDate($date)
+    {
+        $this-&gt;date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     * 
+     * @return date
+     */
+    public function getDate()
+    {
+        return $this-&gt;date;
+    }
+
+    /**
+     * add picture (collection's method)
+     */
+    public function addPicture(Picture $picture)
+    {
+        $this-&gt;pictures[] = $picture;
+    }
+
+    /**
+     * remove picture (collection's method)
+     */
+    public function removePicture(Picture $picture)
+    {
+        $this-&gt;pictures-&gt;removeElement($picture);
+    }
+
+    /**
+     * get postLikes
+     * 
+     * @return ArrayCollection
+     */
+    public function getPostLikes()
+    {
+        return $this-&gt;postLikes;
+    }
+
+    /**
+     * Get postsControl
+     *
+     * @return ArrayCollection
+     */
+    public function getPostsControl()
+    {
+        return $this-&gt;postsControl;
+    }
+
+}
+
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all();
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

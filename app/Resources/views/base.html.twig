@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+
+<html lang="fr">
+
+    <head>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>NepTuNe.com</title>
+
+        <!-- jQuery, Ui, Data Tables -->
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+        <!-- Bibliothèques Boostrap-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+        <!-- Lien icone font awesome et CSS -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ asset('css/FORUM.css') }}"/>
+
+        <!-- Threes 3D -->
+        <script src="{{ asset('js/threes.js') }}"></script>
+
+        <!-- FOS Routing Bundle -->
+        <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+        <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+
+        <!-- development version, includes helpful console warnings -->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+        <!-- Core build with no theme, formatting, non-essential modules -->
+        <link href="//cdn.quilljs.com/1.3.6/quill.core.css" rel="stylesheet">
+        <script src="//cdn.quilljs.com/1.3.6/quill.core.js"></script>
+
+        <!-- Main Quill library -->
+        <script src="//cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script src="//cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+        <!-- Theme included stylesheets -->
+        <link href="//cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        <link href="//cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
+
+        
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+        <script type="text/javascript">
+            {% if columnChartUniv is defined and columnChartUniv is not null %}
+                {{gc_draw(columnChartUniv, 'statsUnivers')}}
+            {% endif %}
+            {% if columnChartTheme is defined and columnChartTheme is not null %}
+                {{gc_draw(columnChartTheme, 'statsTheme')}}
+            {% endif %}
+            {% if pieChartLike is defined and pieChartLike is not null %}
+                {{gc_draw(pieChartLike, 'statLike')}}
+            {% endif %}
+        </script>
+        
+
+    </head>
+
+    <body>
+        <!-- HEADER -->
+        <header>
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg navbar-light" id="my1stNavBar">
+                <div class="collapse navbar-collapse container-fluid">
+                    <div id="NepTuNeTitle">
+                        NepTuNe
+                    </div>
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="link mainNavSizeText" href="{{path('user_index')}}">
+                                <i class="fas fa-user"></i>
+                                Accueil
+                            </a>
+                        </li>
+                    </ul> 
+                    {% if not app.user %}
+                        <div class="my-2 my-lg-0 mainNavSizeText">
+                            <div>
+                                <a href="{{path('user_new')}}">S'enregister</a>
+                            </div>
+                            <div>
+                                <a href="{{path('login')}}">Se connecter</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="my-2 my-lg-0">
+                            {% if app.user.PictureProfile is defined and app.user.PictureProfile is not null %}
+                                <img class="imgCursor mainNavPictureUser" id="modalImage" src="{{ asset('upload/imgProfil/'~ app.user.PictureProfile.PictureFullName)}}">
+                            {% else %}
+                                <i class="fas fa-user-circle imgCursor mainNavPictureUserNone" id="modalImage"></i>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    {% if app.user %}
+                        <!-- Fenêtre modale informations et déconnexion -->
+                        <div class="modal row justify-content-around" id="modalWindow">
+                            <div class="text-center col-12" id="modalUsername">Bienvenue
+                                {{ app.user.username | striptags | nl2br }}
+                            </div>
+                            <div class=" text-center col-12">
+                                <a href="{{path('user_edit')}}" class="modalElem">
+                                    <i class="fas fa-user-edit"></i>Mon compte
+                                </a>
+                            </div>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class=" text-center col-12">
+                                    <a href="{{path('admin_dashboard')}}" class="modalElem">
+                                        <i class="fas fa-users-cog"></i>Administration
+                                    </a>
+                                </div>
+                            {% endif %}
+                            <div class="text-center col-12">
+                                <a id="modalDisconnect" href="{{path('logout')}}">Déconnexion</a>
+                            </div>
+                        </div>
+                        <!-- Fenêtre modale informations et déconnexion -->
+                    {% endif %}
+                </div>
+            </nav>
+            <!-- Navbar -->
+        </header>
+
+        <!-- Corps du site -->
+        <div class="container-fluid" id="backGround"> 
+            {% block body %}{% endblock %}
+       </div>
+    
+        <!-- Footer -->
+        <footer class="page-footer" id="main_footer">
+            <!-- Footer Links -->
+            <div class="container-fluid text-center text-md-left">
+                <!-- Grid row -->
+                <div class="row">
+                    <!-- Grid column -->
+                    <div class="col-md-6 mt-md-0 mt-3">
+                        <!-- Content -->
+                        <h5 class="text-uppercase">Projet</h5>
+                        <p>Documentation : <a href="#">github</a>.</p>
+                    </div>
+                </div>
+                <!-- Copyright -->
+                <div class="footer-copyright text-center py-3">Vous pouvez retrouver le code source du projet en accès libre ici : 
+                    <a href="https://github.com/NepTuNell/NepTuNe" target="_blank">github</a>
+                </div>
+                <!-- Copyright -->
+            </div>
+        </footer>
+        <!-- Footer -->
+
+        <!-- Chargement des fonctions javascript personnelles si l'utilisateur est connecté -->
+        <script>
+            {{ include('Javascript/baseJS.js') }}
+            {{ include('Javascript/3DJs.js') }}
+            {% block javascripts %}
+
+            {% endblock %}
+        </script>
+       
+    </body>
+
+</html>

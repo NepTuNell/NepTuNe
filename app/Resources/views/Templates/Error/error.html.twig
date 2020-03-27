@@ -1,0 +1,16 @@
+
+<!-- Liste des erreurs -->
+
+{% if errors is defined and errors is not null and errors|length > 0 %}
+    <div class="offset-2 col-8 offset-2">
+        <div class="alert alert-danger" style="margin-top: 10%">
+            {% for error in errors %}
+                <div class="col-12 form-error text-center"> 
+                    {{ error.message }} 
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+                
+

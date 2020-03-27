@@ -1,0 +1,24 @@
+
+<!-- Navigation dans le profil utilisateur -->
+
+<div class="col-2" id="profileNav">
+    <div class="row">
+        <ul class="col-12">
+            <div class="row justify-content-around">  
+                <li><h5 id="profileLib">Mon compte</h5></li>   
+            </div>
+            <div class="row justify-content-around">
+                <li style="margin-top: 15%"><a class="profileLi" href="{{path('user_edit')}}">Mon profil</a></li>
+            </div>
+            <div class="row justify-content-around">
+                <li style="margin-top: 15%"><a class="profileLi" href="{{path('user_edit_accueil')}}">Page d'accueil</a></li>
+            </div>
+            <div class="row justify-content-around">
+                <li style="margin-top: 15%; color: white;"><a class="profileLi" href="{{path('user_reset_password')}}">Mot de passe</a></li>
+            </div>
+            <div class="row justify-content-around">
+                <li style="margin-top: 15%"><a class="profileLi" href="{{path('user_delete')}}">Supprimer le compte</a></li>
+            </div>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+<!-- Liste des situations d'un utilisateur -->
+<div class="row">
+    {% if universList is defined and universList is not null %}
+	<ul class="nav nav-tabs col-12" id="mainNav">
+        {% for univers in universList %}
+		    <li class="nav-item">
+			    
+                <a class="dropdown-toggle nav-link mainNavLi" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{univers.libelle}}</a>
+                
+                <ul class="dropdown-menu" role="menu" style="margin: 0; padding: 0; text-align: left;">
+                    {% for theme in univers.themes %}
+
+                        {% if theme.subdivise == 1 %}
+                                <li class="dropdown-submenu" onclick="test('mainNavDropDown{{theme.id}}')">
+                                    <a class="mainNavA dropdown-item" href="#" id="mainNavDropDown{{theme.id}}">
+                                       <span class="one">{{theme.libelle}}</span>
+                                       <i class="fa fa-caret-right mainNavI"></i>
+                                    </a> 
+                                    <ul class="mainNavDropDown">
+                                        {% for section in theme.sections %}
+                                            <li><a class="textColor libNavDropDown" href="{{path('sujet_list_section',{'theme': theme.id, 'section': section.id})}}">{{section.libelle}}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                        {% else %}
+                            <li><a class="dropdown-item" href="{{path('sujet_list_theme',{'theme': theme.id})}}">{{theme.libelle}}</a></li>
+                        {% endif %}
+
+                    {% endfor %}
+                </ul>
+
+		    </li>
+        {% endfor %}
+	</ul>
+    {% endif %}
+</div>

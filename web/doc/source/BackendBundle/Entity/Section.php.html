@@ -1,0 +1,195 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+
+namespace BackendBundle\Entity;
+
+use CoreBundle\Entity\Sujet;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Section
+ *
+ * @ORM\Table(name=&quot;section&quot;)
+ * @ORM\Entity(repositoryClass=&quot;BackendBundle\Repository\SectionRepository&quot;)
+ */
+class Section
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name=&quot;id&quot;, type=&quot;integer&quot;)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy=&quot;AUTO&quot;)
+     */
+    private $id;
+    
+    /**
+     * @ORM\OneToMany(targetEntity=Sujet::class, mappedBy=&quot;section&quot;, cascade={&quot;persist&quot;, &quot;remove&quot;})
+     */
+    private $sujets;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Theme::class, inversedBy=&quot;sections&quot;)
+     */
+    private $theme;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name=&quot;libelle&quot;, type=&quot;string&quot;, length=255, unique=false)
+     * @Assert\Length(
+     *      min=1,
+     *      max=25,
+     *      minMessage = &quot;Le libelle est trop court !&quot;,
+     *      maxMessage = &quot;Le libelle est trop long !&quot;
+     * )
+     * @Assert\NotBlank(message=&quot;Veuillez saisir le libell&eacute; !&quot;)
+     */
+    private $libelle;
+
+    /**
+     * Constructeur de la classe.
+     */
+    public function __construct()
+    {
+        $this-&gt;sujets = new ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this-&gt;id;
+    }
+
+    /**
+     * Set libelle
+     *
+     * @param string $libelle
+     *
+     * @return Section
+     */
+    public function setLibelle($libelle)
+    {
+        $this-&gt;libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string
+     */
+    public function getLibelle()
+    {
+        return $this-&gt;libelle;
+    }
+
+    /**
+     * Set theme
+     */
+    public function setTheme($theme)
+    {
+        $this-&gt;theme = $theme;
+
+        return $this;
+    }
+
+    /**
+     * Get theme
+     */
+    public function getTheme()
+    {
+        return $this-&gt;theme;
+    }
+
+    /****************************************************
+     *      Traitement des collections de Sujet
+     ****************************************************/
+
+    /**
+     * Add sujet (collection's method)
+     *
+     * @param \CoreBundle\Entity\Sujet $sujet
+     *
+     * @return Sujet
+     */
+    public function addSujet(\CoreBundle\Entity\Sujet $sujet)
+    {
+        $this-&gt;sujets[] = $sujet;
+
+        return $this;
+    }
+
+    /**
+     * Remove sujet (collection's method)
+     *
+     * @param \CoreBundle\Entity\Sujet $sujet
+     */
+    public function removeSujet(\CoreBundle\Entity\Sujet $sujet)
+    {
+        $this-&gt;sujets-&gt;removeElement($sujet);
+    }
+
+    /**
+     * Get sujets
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSujets()
+    {
+        return $this-&gt;sujets;
+    }
+
+}
+
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all();
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

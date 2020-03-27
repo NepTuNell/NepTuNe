@@ -1,0 +1,419 @@
+<?xml version="1.0"?>
+<checkstyle version="1.3.0">
+  <file name="CoreBundle/Form/UserType.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="13" severity="error" message="No summary for class \CoreBundle\Form\UserType" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="21" severity="error" message="Argument $builder is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="21" severity="error" message="Argument $options is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="34" severity="error" message="Argument $resolver is missing from the Docblock of configureOptions" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="CoreBundle/Entity/PictureProfile.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="82" severity="error" message="Argument $pictureName is missing from the Docblock of setPictureName" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="143" severity="error" message="Argument $user is missing from the Docblock of setUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="324" severity="error" message="Argument $serialized is missing from the Docblock of unserialize" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="25" severity="error" message="No summary for property $id" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="31" severity="error" message="No summary for property $user" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="38" severity="error" message="No summary for property $pictureName" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="45" severity="error" message="No summary for property $pictureExtension" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="58" severity="error" message="No summary for property $upload" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="BackendBundle/Controller/SectionController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="38" severity="error" message="Argument $manager is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="49" severity="error" message="Argument $request is missing from the Docblock of newSection" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="49" severity="error" message="Argument $theme is missing from the Docblock of newSection" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="98" severity="error" message="Argument $request is missing from the Docblock of editSection" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="98" severity="error" message="Argument $section is missing from the Docblock of editSection" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="142" severity="error" message="Argument $request is missing from the Docblock of deleteSection" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="142" severity="error" message="Argument $section is missing from the Docblock of deleteSection" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="180" severity="error" message="Argument $theme is missing from the Docblock of listSection" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="BackendBundle/Entity/Theme.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="144" severity="error" message="Argument $subdivise is missing from the Docblock of setSubdivise" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="29" severity="error" message="No summary for property $id" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="36" severity="error" message="No summary for property $activities" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="43" severity="error" message="No summary for property $univers" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="48" severity="error" message="No summary for property $sections" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="53" severity="error" message="No summary for property $sujets" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="67" severity="error" message="No summary for property $libelle" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="72" severity="error" message="No summary for property $subdivise" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="BackendBundle/Entity/Backup.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="24" severity="error" message="No summary for property $id" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="31" severity="error" message="No summary for property $libelle" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="38" severity="error" message="No summary for property $date" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="CoreBundle/Repository/PictureRepository.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="20" severity="error" message="Argument $id is missing from the Docblock of fetchByPost" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="CoreBundle/Controller/SujetController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="39" severity="error" message="Argument $manager is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="51" severity="error" message="Argument $theme is missing from the Docblock of listSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="51" severity="error" message="Argument $section is missing from the Docblock of listSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="73" severity="error" message="Argument $theme is missing from the Docblock of searchSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="73" severity="error" message="Argument $section is missing from the Docblock of searchSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="73" severity="error" message="Argument $libelle is missing from the Docblock of searchSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="73" severity="error" message="Argument $option is missing from the Docblock of searchSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="170" severity="error" message="Argument $request is missing from the Docblock of newSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="170" severity="error" message="Argument $theme is missing from the Docblock of newSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="170" severity="error" message="Argument $section is missing from the Docblock of newSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="222" severity="error" message="Argument $request is missing from the Docblock of editSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="222" severity="error" message="Argument $sujet is missing from the Docblock of editSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="263" severity="error" message="Argument $request is missing from the Docblock of deleteSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="263" severity="error" message="Argument $sujet is missing from the Docblock of deleteSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="301" severity="error" message="Argument $request is missing from the Docblock of fetchSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="301" severity="error" message="Argument $sujet is missing from the Docblock of fetchSujet" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="BackendBundle/Repository/PostControlRepository.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="BackendBundle/Repository/UniversRepository.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="BackendBundle/Controller/SecurityController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="14" severity="error" message="No summary for class \BackendBundle\Controller\SecurityController" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="42" severity="error" message="Argument $em is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="42" severity="error" message="Argument $mailer is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="86" severity="error" message="Argument $request is missing from the Docblock of resetPassword" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="152" severity="error" message="Argument $user is missing from the Docblock of confirmAccount" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="152" severity="error" message="Argument $key is missing from the Docblock of confirmAccount" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="183" severity="error" message="Argument $request is missing from the Docblock of checkAccount" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="222" severity="error" message="Argument $user is missing from the Docblock of checkAccountResetPassword" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="CoreBundle/Services/Mailer.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="12" severity="error" message="No summary for class \CoreBundle\Services\Mailer" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="162" severity="error" message="Argument $password is missing from the Docblock of resetPassword" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="162" severity="error" message="Name of argument $password does not match with the DocBlock's name $user in resetPassword()" source="phpDocumentor.file.PPC:ERR-50014"/>
+    <error line="44" severity="error" message="No summary for property $templating" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="CoreBundle/Security/UserChecker.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="18" severity="error" message="No summary for class \CoreBundle\Security\UserChecker" source="phpDocumentor.file.PPC:ERR-50005"/>
+  </file>
+  <file name="CoreBundle/Entity/Sujet.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="117" severity="error" message="Argument $theme is missing from the Docblock of setTheme" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="137" severity="error" message="Argument $section is missing from the Docblock of setSection" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="157" severity="error" message="Argument $date is missing from the Docblock of setDate" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="177" severity="error" message="Argument $user is missing from the Docblock of setUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="28" severity="error" message="No summary for property $id" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="33" severity="error" message="No summary for property $user" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="38" severity="error" message="No summary for property $posts" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="43" severity="error" message="No summary for property $theme" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="48" severity="error" message="No summary for property $section" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="63" severity="error" message="No summary for property $libelle" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="70" severity="error" message="No summary for property $date" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="BackendBundle/Controller/AdminController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="158" severity="error" message="Argument $user is missing from the Docblock of accountActivated" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="158" severity="error" message="Argument $param is missing from the Docblock of accountActivated" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="190" severity="error" message="Argument $user is missing from the Docblock of showAccount" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="211" severity="error" message="Argument $user is missing from the Docblock of accountRoles" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="211" severity="error" message="Argument $param is missing from the Docblock of accountRoles" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="286" severity="error" message="Argument $user is missing from the Docblock of reclamation" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="286" severity="error" message="Argument $post is missing from the Docblock of reclamation" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="328" severity="error" message="Argument $request is missing from the Docblock of view" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="345" severity="error" message="Argument $request is missing from the Docblock of listPostReclamation" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="345" severity="error" message="Argument $sujet is missing from the Docblock of listPostReclamation" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="345" severity="error" message="Argument $date is missing from the Docblock of listPostReclamation" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="345" severity="error" message="Argument $reclamation is missing from the Docblock of listPostReclamation" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="391" severity="error" message="Argument $request is missing from the Docblock of bddBackUpList" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="BackendBundle/Controller/UniversController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="35" severity="error" message="Argument $manager is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="46" severity="error" message="Argument $request is missing from the Docblock of newUnivers" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="93" severity="error" message="Argument $request is missing from the Docblock of editUnivers" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="93" severity="error" message="Argument $univers is missing from the Docblock of editUnivers" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="138" severity="error" message="Argument $request is missing from the Docblock of deleteUnivers" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="138" severity="error" message="Argument $univers is missing from the Docblock of deleteUnivers" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="CoreBundle/Form/PictureProfileType.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="10" severity="error" message="No summary for class \CoreBundle\Form\PictureProfileType" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="17" severity="error" message="Argument $builder is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="17" severity="error" message="Argument $options is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="29" severity="error" message="Argument $resolver is missing from the Docblock of configureOptions" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="CoreBundle/Entity/PostLike.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="67" severity="error" message="Argument $post is missing from the Docblock of setPost" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="85" severity="error" message="Argument $like is missing from the Docblock of setLike" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="103" severity="error" message="Argument $user is missing from the Docblock of setUserWhoLiked" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="121" severity="error" message="Argument $user is missing from the Docblock of setUserConcerned" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="22" severity="error" message="No summary for property $id" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="27" severity="error" message="No summary for property $post" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="32" severity="error" message="No summary for property $like" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="37" severity="error" message="No summary for property $userConcerned" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="42" severity="error" message="No summary for property $userWhoLiked" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="CoreBundle/CoreBundle.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="7" severity="error" message="No summary for class \CoreBundle\CoreBundle" source="phpDocumentor.file.PPC:ERR-50005"/>
+  </file>
+  <file name="BackendBundle/Repository/ActivityRepository.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="22" severity="error" message="Argument $user is missing from the Docblock of getActivitiesByUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="40" severity="error" message="Argument $user is missing from the Docblock of getUniversActivityByUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="40" severity="error" message="Argument $univers is missing from the Docblock of getUniversActivityByUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="61" severity="error" message="Argument $user is missing from the Docblock of getThemeActivityByUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="61" severity="error" message="Argument $theme is missing from the Docblock of getThemeActivityByUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="CoreBundle/Controller/PostController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="43" severity="error" message="Argument $manager is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="54" severity="error" message="Argument $request is missing from the Docblock of viewPageComment" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="54" severity="error" message="Argument $sujet is missing from the Docblock of viewPageComment" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="79" severity="error" message="Argument $request is missing from the Docblock of listComment" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="79" severity="error" message="Argument $sujet is missing from the Docblock of listComment" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="119" severity="error" message="Argument $request is missing from the Docblock of newComment" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="119" severity="error" message="Argument $sujet is missing from the Docblock of newComment" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="185" severity="error" message="Argument $request is missing from the Docblock of editComment" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="185" severity="error" message="Argument $sujet is missing from the Docblock of editComment" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="185" severity="error" message="Argument $post is missing from the Docblock of editComment" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="246" severity="error" message="Argument $request is missing from the Docblock of deleteComment" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="292" severity="error" message="Argument $picture is missing from the Docblock of deletePicture" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="316" severity="error" message="Argument $user is missing from the Docblock of like" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="316" severity="error" message="Argument $post is missing from the Docblock of like" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="316" severity="error" message="Argument $param is missing from the Docblock of like" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="400" severity="error" message="Argument $sujet is missing from the Docblock of countPost" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="CoreBundle/Repository/PostLikeRepository.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="21" severity="error" message="Argument $user is missing from the Docblock of countLikeAndDislikeByUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="39" severity="error" message="Argument $user is missing from the Docblock of countLikeByUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="57" severity="error" message="Argument $user is missing from the Docblock of countDislikeByUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="CoreBundle/Entity/Picture.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="65" severity="error" message="Argument $file is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="65" severity="error" message="Argument $post is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="128" severity="error" message="Argument $post is missing from the Docblock of setPost" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="166" severity="error" message="Argument $file is missing from the Docblock of setFile" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="183" severity="error" message="Argument $fullName is missing from the Docblock of setTmpFile" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="204" severity="error" message="Argument $file is missing from the Docblock of preupload" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="219" severity="error" message="Argument $file is missing from the Docblock of upload" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="28" severity="error" message="No summary for property $id" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="33" severity="error" message="No summary for property $post" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="40" severity="error" message="No summary for property $pictureName" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="47" severity="error" message="No summary for property $pictureExtension" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="CoreBundle/Form/PostType.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="11" severity="error" message="No summary for class \CoreBundle\Form\PostType" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="19" severity="error" message="Argument $builder is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="19" severity="error" message="Argument $options is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="27" severity="error" message="Argument $resolver is missing from the Docblock of configureOptions" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="BackendBundle/Repository/ThemeRepository.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="18" severity="error" message="Argument $univers is missing from the Docblock of getThemeByUnivers" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="CoreBundle/Entity/Post.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="113" severity="error" message="Argument $user is missing from the Docblock of setUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="113" severity="error" message="No summary for method setUser()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="157" severity="error" message="Argument $date is missing from the Docblock of setDate" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="177" severity="error" message="Argument $picture is missing from the Docblock of addPicture" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="185" severity="error" message="Argument $picture is missing from the Docblock of removePicture" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="28" severity="error" message="No summary for property $id" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="33" severity="error" message="No summary for property $sujet" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="38" severity="error" message="No summary for property $user" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="45" severity="error" message="No summary for property $commentaire" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="52" severity="error" message="No summary for property $date" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="57" severity="error" message="No summary for property $pictures" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="62" severity="error" message="No summary for property $postLikes" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="67" severity="error" message="No summary for property $postsControl" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="CoreBundle/Entity/User.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="220" severity="error" message="Argument $pictureProfile is missing from the Docblock of setPictureProfile" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="406" severity="error" message="Argument $activityUnivers is missing from the Docblock of setActivityUnivers" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="424" severity="error" message="Argument $activityTheme is missing from the Docblock of setActivityTheme" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="442" severity="error" message="Argument $activityLike is missing from the Docblock of setActivityLike" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="45" severity="error" message="No summary for property $id" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="52" severity="error" message="No summary for property $pictureProfile" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="64" severity="error" message="No summary for property $firstname" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="76" severity="error" message="No summary for property $lastname" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="88" severity="error" message="No summary for property $username" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="100" severity="error" message="No summary for property $email" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="112" severity="error" message="No summary for property $password" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="118" severity="error" message="No summary for property $confirm_password" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="125" severity="error" message="No summary for property $isActive" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="132" severity="error" message="No summary for property $lastActivity" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="139" severity="error" message="No summary for property $roles" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="146" severity="error" message="No summary for property $registerKey" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="151" severity="error" message="No summary for property $sujets" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="156" severity="error" message="No summary for property $posts" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="161" severity="error" message="No summary for property $postLiked" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="166" severity="error" message="No summary for property $activities" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="171" severity="error" message="No summary for property $activityUnivers" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="176" severity="error" message="No summary for property $activityTheme" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="181" severity="error" message="No summary for property $activityLike" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="186" severity="error" message="No summary for property $postsControl" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="BackendBundle/Form/SectionType.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="9" severity="error" message="No summary for class \BackendBundle\Form\SectionType" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="16" severity="error" message="Argument $builder is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="16" severity="error" message="Argument $options is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="26" severity="error" message="Argument $resolver is missing from the Docblock of configureOptions" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="BackendBundle/Entity/PostControl.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="74" severity="error" message="Argument $post is missing from the Docblock of setPost" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="25" severity="error" message="No summary for property $id" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="30" severity="error" message="No summary for property $user" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="35" severity="error" message="No summary for property $post" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="BackendBundle/Controller/ThemeController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="38" severity="error" message="Argument $manager is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="49" severity="error" message="Argument $request is missing from the Docblock of newTheme" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="49" severity="error" message="Argument $univers is missing from the Docblock of newTheme" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="99" severity="error" message="Argument $request is missing from the Docblock of editTheme" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="99" severity="error" message="Argument $theme is missing from the Docblock of editTheme" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="144" severity="error" message="Argument $request is missing from the Docblock of deleteTheme" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="144" severity="error" message="Argument $theme is missing from the Docblock of deleteTheme" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="BackendBundle/Tests/Controller/UniversControllerTest.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="7" severity="error" message="No summary for class \BackendBundle\Tests\Controller\UniversControllerTest" source="phpDocumentor.file.PPC:ERR-50005"/>
+  </file>
+  <file name="BackendBundle/Repository/BackupRepository.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="16" severity="error" message="No summary for method fetchAllBackup()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="27" severity="error" message="Argument $libelle is missing from the Docblock of fetchBackup" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="27" severity="error" message="No summary for method fetchBackup()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="CoreBundle/Listener/LogoutListener.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="18" severity="error" message="No summary for class \CoreBundle\Listener\LogoutListener" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="24" severity="error" message="Argument $manager is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="24" severity="error" message="Argument $token is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="24" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="33" severity="error" message="Argument $request is missing from the Docblock of logout" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="33" severity="error" message="Argument $response is missing from the Docblock of logout" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="33" severity="error" message="Argument $token is missing from the Docblock of logout" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="33" severity="error" message="No summary for method logout()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="21" severity="error" message="No summary for property $manager" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="22" severity="error" message="No summary for property $token" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="CoreBundle/Listener/LoginListener.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="19" severity="error" message="No summary for class \CoreBundle\Listener\LoginListener" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="22" severity="error" message="No summary for property $manager" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="23" severity="error" message="No summary for property $token" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="24" severity="error" message="No summary for property $router" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="BackendBundle/BackendBundle.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="7" severity="error" message="No summary for class \BackendBundle\BackendBundle" source="phpDocumentor.file.PPC:ERR-50005"/>
+  </file>
+  <file name="BackendBundle/Form/BackupType.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="13" severity="error" message="No summary for class \BackendBundle\Form\BackupType" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="20" severity="error" message="Argument $builder is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="20" severity="error" message="Argument $options is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="38" severity="error" message="Argument $resolver is missing from the Docblock of configureOptions" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="BackendBundle/Entity/Univers.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="28" severity="error" message="No summary for property $id" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="35" severity="error" message="No summary for property $themes" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="49" severity="error" message="No summary for property $libelle" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="56" severity="error" message="No summary for property $activities" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="CoreBundle/Form/SujetType.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="11" severity="error" message="No summary for class \CoreBundle\Form\SujetType" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="19" severity="error" message="Argument $builder is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="19" severity="error" message="Argument $options is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="27" severity="error" message="Argument $resolver is missing from the Docblock of configureOptions" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="BackendBundle/Repository/SectionRepository.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="CoreBundle/Controller/UserController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="34" severity="error" message="No summary for class \CoreBundle\Controller\UserController" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="74" severity="error" message="Argument $em is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="74" severity="error" message="Argument $token is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="74" severity="error" message="Argument $mailer is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="74" severity="error" message="Argument $googleGraph is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="136" severity="error" message="Argument $request is missing from the Docblock of newUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="213" severity="error" message="Argument $request is missing from the Docblock of editUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="288" severity="error" message="Argument $request is missing from the Docblock of editUserAccueil" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="361" severity="error" message="Argument $request is missing from the Docblock of deleteUser" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="408" severity="error" message="Argument $picture is missing from the Docblock of removePictureProfile" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="434" severity="error" message="Argument $user is missing from the Docblock of registerActivity" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="434" severity="error" message="Argument $sujet is missing from the Docblock of registerActivity" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="CoreBundle/Services/GoogleGraph.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="23" severity="error" message="No summary for class \CoreBundle\Services\GoogleGraph" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="37" severity="error" message="Argument $manager is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="45" severity="error" message="Argument $user is missing from the Docblock of getActivityUnivers" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="45" severity="error" message="Argument $universList is missing from the Docblock of getActivityUnivers" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="94" severity="error" message="Argument $user is missing from the Docblock of getActivityTheme" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="94" severity="error" message="Argument $universList is missing from the Docblock of getActivityTheme" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="142" severity="error" message="Argument $user is missing from the Docblock of getPieChartLike" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="BackendBundle/Form/ThemeType.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="11" severity="error" message="No summary for class \BackendBundle\Form\ThemeType" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="18" severity="error" message="Argument $builder is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="18" severity="error" message="Argument $options is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="29" severity="error" message="Argument $resolver is missing from the Docblock of configureOptions" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="CoreBundle/Repository/PictureProfileRepository.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="CoreBundle/Repository/SujetRepository.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="41" severity="error" message="Argument $options is missing from the Docblock of fetchAllSubject" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="82" severity="error" message="Argument $options is missing from the Docblock of fetchSubjectByLibelleContains" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="125" severity="error" message="Argument $options is missing from the Docblock of fetchSubjectByLibelleBegin" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="233" severity="error" message="Argument $sujet is missing from the Docblock of countPostQuery3" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="BackendBundle/Entity/Section.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="96" severity="error" message="Argument $theme is missing from the Docblock of setTheme" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="25" severity="error" message="No summary for property $id" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="30" severity="error" message="No summary for property $sujets" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="35" severity="error" message="No summary for property $theme" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="49" severity="error" message="No summary for property $libelle" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="BackendBundle/Entity/Activity.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="121" severity="error" message="Argument $univers is missing from the Docblock of setUnivers" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="141" severity="error" message="Argument $theme is missing from the Docblock of setTheme" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="24" severity="error" message="No summary for property $id" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="31" severity="error" message="No summary for property $date" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="36" severity="error" message="No summary for property $user" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="41" severity="error" message="No summary for property $univers" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="46" severity="error" message="No summary for property $theme" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="CoreBundle/Repository/PostRepository.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="CoreBundle/Repository/UserRepository.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="19" severity="error" message="Argument $id is missing from the Docblock of getUsersWithoutMe" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+  <file name="BackendBundle/Form/UniversType.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="11" severity="error" message="No summary for class \BackendBundle\Form\UniversType" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="18" severity="error" message="Argument $builder is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="18" severity="error" message="Argument $options is missing from the Docblock of buildForm" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="28" severity="error" message="Argument $resolver is missing from the Docblock of configureOptions" source="phpDocumentor.file.PPC:ERR-50015"/>
+  </file>
+</checkstyle>

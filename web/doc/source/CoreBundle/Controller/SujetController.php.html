@@ -1,0 +1,361 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+
+namespace CoreBundle\Controller;
+
+use CoreBundle\Entity\User;
+use CoreBundle\Entity\Sujet;
+use BackendBundle\Entity\Theme;
+use BackendBundle\Entity\Section;
+use BackendBundle\Entity\Univers;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+
+/**
+ * 
+ * Theme controller.
+ *
+ * @Route(&quot;sujet&quot;)
+ */
+class SujetController extends Controller
+{
+
+    /**
+     * Objet utilis&eacute; pour stocker l'ObjectManager de Doctrine.
+     * Sert &agrave; administrer la base de donn&eacute;es.
+     * 
+     * @var ObjectManager
+     */
+    private $manager;
+
+    /**
+     * Constructeur de la classe.
+     * 
+     * @var ObjectManager
+     */
+    public function __construct(ObjectManager $manager)
+    {
+        $this-&gt;manager = $manager;
+    }
+
+    /**
+     * Retourne la liste des sujets pour un th&egrave;me ou une section selectionn&eacute;e.
+     * 
+     * @Route(&quot;/liste/{theme}&quot;, name=&quot;sujet_list_theme&quot;, requirements={&quot;theme&quot;=&quot;\d+&quot;})
+     * @Route(&quot;/liste/{theme}/{section}&quot;, name=&quot;sujet_list_section&quot;, requirements={&quot;theme&quot;=&quot;\d+&quot;, &quot;section&quot;=&quot;\d+&quot;})
+     * @Method({&quot;GET&quot;, &quot;POST&quot;})
+     */
+    public function listSujet(Theme $theme, Section $section = null)
+    {
+    
+        $univerList = $this-&gt;manager-&gt;getRepository(Univers::class)-&gt;findAll();
+
+        return $this-&gt;render('Sujet/list.html.twig', [
+
+            'universList'   =&gt;  $univerList,
+            'theme'         =&gt;  $theme,
+            'section'       =&gt;  $section
+        
+        ]);
+
+    }
+
+    /**
+     * Fonction utlis&eacute;e pour filtrer les sujets.
+     * 
+     * @Route(&quot;/liste/filtre/theme/{theme}/{option}/{libelle}&quot;, name=&quot;sujet_list_search_theme&quot;, options = {&quot;expose&quot; = true}, requirements={&quot;theme&quot;=&quot;\d+&quot;})
+     * @Route(&quot;/liste/filtre/theme/{theme}/section/{section}/{option}/{libelle}&quot;, name=&quot;sujet_list_search_section&quot;, options = {&quot;expose&quot; = true}, requirements={&quot;theme&quot;=&quot;\d+&quot;,&quot;section&quot;=&quot;\d+&quot;})
+     * @Method({&quot;GET&quot;})
+     */
+    public function searchSujet(Theme $theme, Section $section = null, $libelle = null, $option)
+    {
+        
+        /**
+         * Mise &agrave; l'arr&ecirc;t du programme 
+         */
+        sleep(1);
+
+        if ( null !== $libelle &amp;&amp; &quot;&quot; !== $libelle ) {
+
+            if ( null !== $section ) {
+
+                switch ( $option )
+                {
+
+                    case 0:
+
+                        $result = $this-&gt;manager-&gt;getRepository(Sujet::class)-&gt;fetchSubjectByLibelleBegin([
+                            'section'     =&gt; $section,
+                            'libelle'     =&gt; $libelle,
+                        ]);
+
+                    break;
+
+                    case 1:
+
+                        $result = $this-&gt;manager-&gt;getRepository(Sujet::class)-&gt;fetchSubjectByLibelleContains([
+                            'section'     =&gt; $section,
+                            'libelle'     =&gt; $libelle,
+                        ]);
+
+                    break;
+                }
+
+            } else {
+
+                switch ( $option )
+                {
+
+                    case 0:
+
+                        $result = $this-&gt;manager-&gt;getRepository(Sujet::class)-&gt;fetchSubjectByLibelleBegin([
+                            'theme'     =&gt; $theme,
+                            'libelle'   =&gt; $libelle,
+                        ]);
+
+                    break;
+
+                    case 1:
+
+                        $result = $this-&gt;manager-&gt;getRepository(Sujet::class)-&gt;fetchSubjectByLibelleContains([
+                            'theme'     =&gt; $theme,
+                            'libelle'   =&gt; $libelle,
+                        ]);
+
+                    break;
+
+                }
+
+            }
+     
+        } else {
+
+            if ( null !== $section ) {
+                
+                $result = $this-&gt;manager-&gt;getRepository(Sujet::class)-&gt;fetchAllSubject([
+                    'section' =&gt; $section,
+                ]);
+
+            } else {
+
+                $result = $this-&gt;manager-&gt;getRepository(Sujet::class)-&gt;fetchAllSubject([
+                    'theme' =&gt; $theme,
+                ]);
+
+            }
+
+        }
+
+        $sujets = json_encode($result);
+
+        /**
+         * Envoie de la r&eacute;ponse en format JSON
+         */
+        $response = new Response($sujets);
+
+        return $response;
+
+    }
+
+    /**
+     * Cr&eacute;ation d'un sujet
+     *
+     * @Route(&quot;/new/{theme}&quot;, name=&quot;sujet_new_theme&quot;, options = {&quot;expose&quot; = true}, requirements={&quot;theme&quot;=&quot;\d+&quot;})
+     * @Route(&quot;/new/{theme}/{section}&quot;, name=&quot;sujet_new_section&quot;, options = {&quot;expose&quot; = true}, requirements={&quot;theme&quot;=&quot;\d+&quot;})
+     * @Method({&quot;GET&quot;, &quot;POST&quot;})
+     */
+    public function newSujet(Request $request, Theme $theme, Section $section = null)
+    {
+         
+        if ( !$this-&gt;isGranted('ROLE_USER') || !$this-&gt;isGranted('IS_AUTHENTICATED_FULLY') ) {
+
+            throw $this-&gt;createAccessDeniedException('Veuillez vous connecter !');
+
+        }
+
+        $user    = $this-&gt;get('security.token_storage')-&gt;getToken()-&gt;getUser();
+        $univers = $this-&gt;manager-&gt;getRepository(Univers::class)-&gt;findAll(); 
+        $errors  = null;
+        $sujet   = new Sujet();  
+
+        if ( &quot;POST&quot; === $request-&gt;getMethod() ) {
+             
+            if ( null !== $section ) {
+             
+                $sujet-&gt;setSection($section);
+    
+            } 
+
+            $sujet-&gt;setLibelle($request-&gt;request-&gt;get('content'));
+            $sujet-&gt;setTheme($theme);
+            $sujet-&gt;setDate(new \DateTime);
+            $sujet-&gt;setUser($user);
+            $this-&gt;manager-&gt;persist($sujet);
+            $this-&gt;manager-&gt;flush();
+            
+            $response = new Response(json_encode($sujet-&gt;getId()));
+
+            return $response;
+
+        }
+
+        return $this-&gt;render('Sujet/edit.html.twig', array(
+
+            'modeExe'       =&gt; 'Cr&eacute;ation',
+            'theme'         =&gt;  $theme,
+            'section'       =&gt;  $section,
+            'universList'   =&gt;  $univers,
+
+        ));
+
+    }   
+
+    /**
+     * Modification d'un sujet existant
+     *
+     * @Route(&quot;/edit/{sujet}&quot;, name=&quot;sujet_edit&quot;, options = {&quot;expose&quot; = true}, requirements={&quot;sujet&quot;=&quot;\d+&quot;})
+     * @Method({&quot;GET&quot;, &quot;POST&quot;})
+     */
+    public function editSujet(Request $request, Sujet $sujet)
+    {
+        
+        if ( !$this-&gt;isGranted('ROLE_USER') || !$this-&gt;isGranted('IS_AUTHENTICATED_FULLY') ) {
+
+            throw $this-&gt;createAccessDeniedException('Veuillez vous connecter !');
+
+        }
+
+        $user    = $this-&gt;get('security.token_storage')-&gt;getToken()-&gt;getUser();
+        $univers = $this-&gt;manager-&gt;getRepository(Univers::class)-&gt;findAll(); 
+
+        if ( &quot;POST&quot; === $request-&gt;getMethod() ) {
+
+            $sujet-&gt;setLibelle($request-&gt;request-&gt;get('content'));
+            $this-&gt;manager-&gt;persist($sujet);
+            $this-&gt;manager-&gt;flush();
+            
+            $response = new Response(json_encode($sujet-&gt;getId()));
+
+            return $response;
+
+        }
+
+        return $this-&gt;render('Sujet/edit.html.twig', array(
+
+            'modeExe'       =&gt; 'Modification',
+            'sujet'         =&gt;  $sujet,
+            'theme'         =&gt;  $sujet-&gt;getTheme(),
+            'universList'   =&gt;  $univers,
+
+        ));
+
+    }   
+
+    /**
+     * Suppression d'un sujet
+     *
+     * @Route(&quot;/{sujet}&quot;, name=&quot;sujet_delete&quot;, options = {&quot;expose&quot; = true}, requirements={&quot;sujet&quot;=&quot;\d+&quot;})
+     * @Method(&quot;GET&quot;)
+     */
+    public function deleteSujet(Request $request, Sujet $sujet)
+    {
+
+        if ( !$this-&gt;isGranted('ROLE_USER') || !$this-&gt;isGranted('IS_AUTHENTICATED_FULLY') ) {
+            throw $this-&gt;createAccessDeniedException('Vous n\'avez pas les droits n&eacute;cessaires pour acc&eacute;der &agrave; cette section !');
+        }
+       
+        $theme   = $sujet-&gt;getTheme();
+        $section = $sujet-&gt;getSection();
+
+        if ( &quot;GET&quot; === $request-&gt;getMethod() ) {
+
+            $this-&gt;manager-&gt;remove($sujet);
+            $this-&gt;manager-&gt;flush();
+
+        } 
+
+        if ( null !== $section ) {
+
+            return $this-&gt;redirectToRoute('sujet_list_section', [
+
+                'theme'=&gt; $theme-&gt;getId(), 
+                'section' =&gt; $section-&gt;getId()
+
+            ]);
+
+        }
+
+        return $this-&gt;redirectToRoute('sujet_list_theme', ['theme'=&gt; $theme-&gt;getId()]);
+
+    }
+
+    /**
+     * Retourne le titre d'un sujet
+     *
+     * @Route(&quot;/fetch/{sujet}&quot;, name=&quot;sujet_fetch&quot;, options = {&quot;expose&quot; = true}, requirements={&quot;sujet&quot;=&quot;\d+&quot;})
+     * @Method({&quot;GET&quot;, &quot;POST&quot;})
+     */
+    public function fetchSujet(Request $request, Sujet $sujet)
+    {
+        
+        if ( !$this-&gt;isGranted('ROLE_USER') || !$this-&gt;isGranted('IS_AUTHENTICATED_FULLY') ) {
+
+            throw $this-&gt;createAccessDeniedException('Veuillez vous connecter !');
+
+        }
+            
+        $response = new Response(json_encode($sujet-&gt;getLibelle()));
+
+        return $response;
+
+    }   
+
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all();
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

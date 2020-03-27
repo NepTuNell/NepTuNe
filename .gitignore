@@ -1,0 +1,11 @@
+/.web-server-pid
+/build/
+/phpunit.xml
+var/
+tests/
+vendor/
+web/bundles
+web/upload
+web/backup
+app/config
+src/AppBundle

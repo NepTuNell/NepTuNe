@@ -1,0 +1,506 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+
+namespace CoreBundle\Controller;
+
+use CoreBundle\Entity\User;
+use CoreBundle\Entity\Sujet;
+use BackendBundle\Entity\Theme;
+use CoreBundle\Services\Mailer;
+use BackendBundle\Entity\Univers;
+use BackendBundle\Entity\Activity;
+use CoreBundle\Services\GoogleGraph;
+use CoreBundle\Entity\PictureProfile;
+use CoreBundle\Form\PictureProfileType;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Validator\Constraints\Valid;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use CMEN\GoogleChartsBundle\GoogleCharts\Charts\PieChart;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
+/**
+ * @Route(&quot;home&quot;)
+ */
+class UserController extends Controller
+{
+
+    /**
+     * Objet utilis&eacute; pour stocker l'ObjectManager de Doctrine.
+     * Sert &agrave; administrer la base de donn&eacute;es.
+     * 
+     * @var ObjectManager
+     */
+    private $manager;
+
+    /**
+     * Objet symfony, utilis&eacute; principalement pour la r&eacute;cup&eacute;ration de l'utilisateur courant
+     * 
+     * @var TokenStorageInterface
+     */
+    private $token;
+
+    /**
+     * Object utilis&eacute; pour l'envoi des emails.
+     * 
+     * @var Mailer
+     */
+    private $mailer;
+    
+    /**
+     * Object utilis&eacute; pour la cr&eacute;ation des graphiques affich&eacute;s sur la page d'accueil.
+     * 
+     * @var GoogleGraph
+     */
+    private $googleGraph;
+
+    /**
+     * Constructeur de la classe
+     *
+     * @var ObjectManager
+     * @var TokenStorageInterface
+     * @var Mailer
+     * @var GoogleGraph
+     */
+    public function __construct(ObjectManager $em, TokenStorageInterface $token, Mailer $mailer, GoogleGraph $googleGraph)
+    {
+
+        $this-&gt;manager      = $em;
+        $this-&gt;mailer       = $mailer;
+        $this-&gt;googleGraph  = $googleGraph;
+        $this-&gt;token        = $token;
+
+    }
+
+
+    /**
+     * Page d'accueil de l'utilisateur
+     * 
+     * @Route(&quot;/&quot;, name=&quot;user_index&quot;, methods={&quot;GET&quot;})
+     */
+    public function index()
+    {
+
+        $columnChartUniv        = null;
+        $columnChartTheme       = null;
+        $pieChartLike           = null;
+        $data                   = array();
+        $user                   = $this-&gt;token-&gt;getToken()-&gt;getUser();
+        $universList            = $this-&gt;manager-&gt;getRepository(Univers::class)-&gt;findAll();
+        $subjectsLast           = $this-&gt;manager-&gt;getRepository(Sujet::class)-&gt;fetchLastSubjects();
+        $subjectsView           = $this-&gt;manager-&gt;getRepository(Sujet::class)-&gt;fetchMostViewSubjects();
+        
+        if ( $this-&gt;isGranted('IS_AUTHENTICATED_FULLY') &amp;&amp; $this-&gt;isGranted('ROLE_USER') ) {
+
+            if ( $user-&gt;getActivityUnivers() ) {
+                $columnChartUniv = $this-&gt;googleGraph-&gt;getActivityUnivers($user, $universList);
+            }
+
+            if ( $user-&gt;getActivityTheme() ) {
+                $columnChartTheme = $this-&gt;googleGraph-&gt;getActivityTheme($user, $universList);
+            }
+
+            if ( $user-&gt;getActivityLike() ) {
+                $pieChartLike = $this-&gt;googleGraph-&gt;getPieChartLike($user);
+            }
+
+        }
+ 
+        return $this-&gt;render('User/home.html.twig', [
+
+            'universList'           =&gt; $universList,
+            'subjectsLast'          =&gt; $subjectsLast,
+            'subjectsView'          =&gt; $subjectsView,
+            'columnChartUniv'       =&gt; $columnChartUniv,
+            'columnChartTheme'      =&gt; $columnChartTheme,
+            'pieChartLike'          =&gt; $pieChartLike,
+            
+        ]);
+
+    }
+
+    /**
+     * Cr&eacute;ation d'un utilisateur
+     * 
+     * @Route(&quot;/account/register&quot;, name=&quot;user_new&quot;, methods={&quot;GET&quot;, &quot;POST&quot;})
+     */
+    public function newUser(Request $request)
+    {
+        
+        $user    = new User;
+        $form    = $this-&gt;createForm('CoreBundle\Form\UserType', $user);
+        $univers = $this-&gt;manager-&gt;getRepository(Univers::class)-&gt;findAll();
+        $errors  = null;
+        $message = null;
+        
+        /**
+         * V&eacute;rifiaction type de requ&ecirc;te
+         */
+        if(&quot;POST&quot; === $request-&gt;getMethod()) {
+            
+            $form-&gt;handleRequest($request);
+            
+            if ( $form-&gt;isSubmitted() &amp;&amp; $form-&gt;isValid() ) {
+                
+                /**
+                 * Mots de passe saisies
+                 */
+                if ( $form[&quot;password&quot;]-&gt;getData() === $form[&quot;confirm_password&quot;]-&gt;getData() ) {
+                    
+                    /**
+                     *  Cr&eacute;ation de la cl&eacute; de confirmation
+                     */
+                    $registerKey = mt_rand(10, 255); 
+
+                    /**
+                     * Cryptage du mot de passe utilisateur
+                     * Attribution du r&ocirc;le utilisateur
+                     * Enregistrement BDD
+                     */
+                    $hash = $this-&gt;get('security.password_encoder')-&gt;encodePassword($user, $user-&gt;getPassword());
+                    $user-&gt;setPassword($hash);
+                    $user-&gt;setRegisterKey($registerKey);
+                    $user-&gt;setRoles(['ROLE_USER']);
+                    $this-&gt;manager-&gt;persist($user);
+                    $this-&gt;manager-&gt;flush();
+
+                    /**
+                     * Envoi email confirmation de compte et v&eacute;rification
+                     */
+                    $this-&gt;mailer-&gt;accountCreated($user);
+                    $this-&gt;addFlash('success', 'Votre compte &agrave; bien &eacute;t&eacute; enregistr&eacute;. Un email de confirmation vous a &eacute;t&eacute; envoy&eacute; !');
+
+                } else { 
+                
+                    $message[] = &quot;Les mots de passe saisies ne sont pas identiques !&quot;;
+
+                }
+                
+            } else  {
+                
+                $errors = $this-&gt;get('validator')-&gt;validate($user);
+            
+            }
+                
+        }          
+
+        return $this-&gt;render('User/Registration/register.html.twig', 
+            array(
+                    'form'          =&gt; $form-&gt;createview(),
+                    'errors'        =&gt; $errors,
+                    'message'       =&gt; $message,
+                    'universList'   =&gt; $univers
+                )
+        );
+        
+    }
+
+
+    /**
+     * Modification d'un utilisateur
+     * 
+     * @Route(&quot;/myaccount/profile&quot;, name=&quot;user_edit&quot;, methods={&quot;GET&quot;, &quot;POST&quot;})
+     */
+    public function editUser (Request $request) 
+    {
+        
+        if ( !$this-&gt;isGranted('ROLE_USER') || !$this-&gt;isGranted('IS_AUTHENTICATED_FULLY') ) {
+            throw $this-&gt;createAccessDeniedException('Veuillez vous connecter !');
+        }
+        
+        $picture = null;
+        $errors  = null;
+        $message = null;
+        $univers = $this-&gt;manager-&gt;getRepository(Univers::class)-&gt;findAll();
+        $user    = $this-&gt;token-&gt;getToken()-&gt;getUser();
+        $form    = $this-&gt;createFormBuilder($user)
+                         -&gt;add('firstname', TextType::class)
+                         -&gt;add('lastname', TextType::class)
+                         -&gt;add('username', TextType::class)
+                         -&gt;add('email', EmailType::class)
+                         -&gt;add('password', PasswordType::class, [
+                            'mapped' =&gt; false,
+                        ])
+                        -&gt;add('pictureProfile', PictureProfileType::class, [
+                            'required' =&gt; false,
+                        ])
+                        -&gt;getForm();
+        
+        $form-&gt;handleRequest($request);
+        
+        if ( &quot;POST&quot; === $request-&gt;getMethod()) {
+            
+            $picture = $user-&gt;getPictureProfile();
+
+            if ($form-&gt;isSubmitted() &amp;&amp; $form-&gt;isValid()) {
+                            
+                if ( password_verify($form[&quot;password&quot;]-&gt;getData(), $user-&gt;getPassword()) ) {
+
+                    if ( null !== $picture ) {
+                        $picture-&gt;setUser($user);
+                    }
+   
+                    $this-&gt;manager-&gt;persist($user);
+                    $this-&gt;manager-&gt;flush();
+                    $this-&gt;addFlash('success', 'Votre profil a &eacute;t&eacute; modifi&eacute; !');
+
+                } else {
+                
+                    $message[] = 'Mot de passe incorrect !';
+                    $this-&gt;manager-&gt;refresh($user);
+
+                }
+                
+            } else {
+                
+                $errors = $this-&gt;get('validator')-&gt;validate($user);
+                $this-&gt;manager-&gt;refresh($user);
+                
+            }      
+            
+        }
+
+        return $this-&gt;render('User/Profile/edit.html.twig', [
+            'form'          =&gt;  $form-&gt;createview(),
+            'universList'   =&gt;  $univers,
+            'user'          =&gt;  $user,
+            'message'       =&gt;  $message,
+            'errors'        =&gt;  $errors,
+        ]);
+        
+    }
+
+    /**
+     * Modification de la page d'accueil de l'utilisateur.
+     * S&eacute;lection des graphiques &agrave; afficher.
+     * 
+     * @Route(&quot;/myaccount/accueil&quot;, name=&quot;user_edit_accueil&quot;, methods={&quot;GET&quot;, &quot;POST&quot;})
+     */
+    public function editUserAccueil (Request $request) 
+    {
+        
+        if ( !$this-&gt;isGranted('ROLE_USER') || !$this-&gt;isGranted('IS_AUTHENTICATED_FULLY') ) {
+            throw $this-&gt;createAccessDeniedException('Veuillez vous connecter !');
+        }
+        
+        $errors  = null;
+        $message = null;
+        $univers = $this-&gt;manager-&gt;getRepository(Univers::class)-&gt;findAll();
+        $user    = $this-&gt;token-&gt;getToken()-&gt;getUser();
+        $form    = $this-&gt;createFormBuilder($user)
+                         -&gt;add('activityUnivers', CheckboxType::class, [
+                            'label' =&gt; &quot;Voir mon nombre de consultations par univers&quot;,
+                            'attr'  =&gt; [ 
+                                'style' =&gt; 'margin-right: 5%;'
+                            ],
+                            'label_attr' =&gt; [
+                                'class' =&gt; &quot;col-12 textColor&quot;
+                            ]
+                         ])
+                         -&gt;add('activityTheme', CheckboxType::class, [
+                            'label' =&gt; &quot;Voir mon nombre de consultations par th&egrave;me&quot;,
+                            'attr'  =&gt; [ 
+                                'style' =&gt; 'margin-right: 5%;'
+                            ],
+                            'label_attr' =&gt; [
+                                'class' =&gt; &quot;col-12 textColor&quot;
+                            ]
+                        ])
+                         -&gt;add('activityLike', CheckboxType::class, [
+                            'label' =&gt; &quot;Voir le nombre de mes commentaires aim&eacute;s&quot;,
+                            'attr'  =&gt; [ 
+                                'style' =&gt; 'margin-right: 5%;'
+                            ],
+                            'label_attr' =&gt; [
+                                'class' =&gt; &quot;col-12 textColor&quot;
+                            ]
+                        ])
+                         -&gt;getForm();
+        
+        $form-&gt;handleRequest($request);
+        
+        if ( &quot;POST&quot; === $request-&gt;getMethod()) {
+            
+            if ($form-&gt;isSubmitted() &amp;&amp; $form-&gt;isValid()) {
+                
+                $this-&gt;addFlash('success', 'Votre profil a &eacute;t&eacute; modifi&eacute; !');
+                $this-&gt;manager-&gt;persist($user);
+                $this-&gt;manager-&gt;flush();
+ 
+            } else {
+                
+                $errors = $this-&gt;get('validator')-&gt;validate($user);
+                
+            }      
+            
+        }
+
+        return $this-&gt;render('User/Profile/editAccueil.html.twig', [
+            'form'          =&gt;  $form-&gt;createview(),
+            'universList'   =&gt;  $univers,
+            'message'       =&gt;  $message,
+            'errors'        =&gt;  $errors,
+        ]);
+        
+    }
+
+    /**
+     * Suppression d'un utilisateur
+     * 
+     * @Route(&quot;/myaccount/profile/delete&quot;, name=&quot;user_delete&quot;, methods={&quot;GET&quot;, &quot;POST&quot;})
+     */
+    public function deleteUser (Request $request) 
+    {
+        
+        if ( !$this-&gt;isGranted('ROLE_USER') || !$this-&gt;isGranted('IS_AUTHENTICATED_FULLY') ) {
+            throw $this-&gt;createAccessDeniedException('Veuillez vous connecter !');
+        }
+        
+        $univers =  $this-&gt;manager-&gt;getRepository(Univers::class)-&gt;findAll();
+        $user    =  $this-&gt;token-&gt;getToken()-&gt;getUser();
+        $message =  null;
+       
+        if ( 'POST' === $request-&gt;getMethod() ) {
+            
+            if ( null !== $request-&gt;request-&gt;get('password') &amp;&amp; &quot;&quot; !== $request-&gt;request-&gt;get('password') ) {
+
+                if ( password_verify($request-&gt;request-&gt;get('password'), $user-&gt;getPassword()) ) {
+                        
+                    $user-&gt;setIsActive(false);
+                    $this-&gt;manager-&gt;persist($user);
+                    $this-&gt;manager-&gt;flush();
+                    
+                    return $this-&gt;redirectToRoute('logout');
+                    
+                } 
+
+                $message[] = 'Mot de passe incorrect !';
+
+            } else {
+
+                $message[] = 'Veuillez saisir votre mot de passe !';
+
+            }
+            
+        }
+        
+        return $this-&gt;render('User/Security/deleteAccount.html.twig', [
+            'universList' =&gt; $univers,
+            'message'     =&gt; $message,
+        ]);
+
+    }
+
+    /**
+     * Suppression de l'image de profil de l'utilisateur
+     * 
+     * @Route(&quot;/myaccount/profile/delete/Picture/{picture}&quot;, name=&quot;user_delete_picture&quot;, methods={&quot;GET&quot;, &quot;POST&quot;})
+     */
+    public function removePictureProfile(PictureProfile $picture)
+    {
+
+        $user = $this-&gt;token-&gt;getToken()-&gt;getUser();
+
+        if ( !$this-&gt;isGranted('ROLE_USER') || !$this-&gt;isGranted('IS_AUTHENTICATED_FULLY') ) {
+            throw $this-&gt;createAccessDeniedException('Veuillez vous connecter !');
+        }
+
+        if ( $picture-&gt;getUser() === $user ) {
+
+            $this-&gt;manager-&gt;remove($picture);
+            $this-&gt;manager-&gt;flush();
+            $this-&gt;manager-&gt;refresh($user);
+
+        }
+
+        return $this-&gt;redirectToRoute('user_edit');
+
+    }
+
+    /**
+     * Enregistrement de l'activit&eacute; de l'utilisateur 
+     * 
+     * @Route(&quot;/activity/{user}/{sujet}&quot;, name=&quot;register_activity&quot;, options = {&quot;expose&quot; = true}, methods={&quot;GET&quot;})
+     */
+    public function registerActivity(User $user, Sujet $sujet)
+    {
+
+        if ( $this-&gt;isGranted('ROLE_USER') &amp;&amp; $this-&gt;isGranted('IS_AUTHENTICATED_FULLY') ) {
+
+            if ( $sujet-&gt;getUser() !== $user ) {
+
+                $theme    = $sujet-&gt;getTheme();
+                $univers  = $sujet-&gt;getTheme()-&gt;getUnivers();
+                $activity = new Activity();
+                $activity-&gt;setDate(new \DateTime);
+                $activity-&gt;setUser($user);
+                $activity-&gt;setTheme($theme);
+                $activity-&gt;setUnivers($univers);
+                $this-&gt;manager-&gt;persist($activity);
+                $this-&gt;manager-&gt;flush();
+
+            }
+
+        }
+
+        $response = new Response(Response::HTTP_OK);
+
+        return $response;
+
+    }
+
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all();
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>
