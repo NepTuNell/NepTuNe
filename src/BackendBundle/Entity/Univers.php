@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace BackendBundle\Entity;
 
 use BackendBundle\Entity\Theme;
@@ -19,7 +22,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Univers
 {
     /**
-     * @var int
+     * ID de l'univers
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -28,14 +31,14 @@ class Univers
     private $id;
 
     /**
-     * @var Theme
+     * Thèmes existant dans cet univers
      * 
      * @ORM\OneToMany(targetEntity=Theme::class, mappedBy="univers", cascade={"persist", "remove"})
      */
     private $themes;
 
     /**
-     * @var string
+     * Libellé de l'univers
      *
      * @ORM\Column(name="libelle", type="string", length=255, unique=true)
      * @Assert\Length(
@@ -49,14 +52,14 @@ class Univers
     private $libelle;
     
     /**
-     * @var ArrayCollection
+     * Activités
      * 
      * @ORM\OneToMany(targetEntity=Activity::class, mappedBy="univers", cascade={"persist", "remove"})
      */
     private $activities;
 
     /**
-     * Magic's methods
+     * Constructeur de la classe
      */
     public function __construct()
     {
@@ -65,6 +68,9 @@ class Univers
         $this->activitiesThemes     = new ArrayCollection();
     }
 
+    /**
+     * Méthode magique utilisé pour définir l'affichage par défaut d'un objet.
+     */
     public function __toString()
     {
         return $this->getLibelle();
@@ -83,9 +89,8 @@ class Univers
     /**
      * Set libelle
      *
-     * @param string $libelle
-     *
-     * @return Univers
+     * @param string  
+     * @return string
      */
     public function setLibelle($libelle)
     {
@@ -105,11 +110,9 @@ class Univers
     }
 
     /**
-     * Add theme
+     * Ajout d'un thème (méthode des collections)
      *
-     * @param \BackendBundle\Entity\Theme $theme
-     *
-     * @return Univers
+     * @param \BackendBundle\Entity\Theme  
      */
     public function addTheme(\BackendBundle\Entity\Theme $theme)
     {
@@ -119,9 +122,9 @@ class Univers
     }
 
     /**
-     * Remove theme
+     * Suppression d'un thème (méthode des collections)
      *
-     * @param \BackendBundle\Entity\Theme $theme
+     * @param \BackendBundle\Entity\Theme  
      */
     public function removeTheme(\BackendBundle\Entity\Theme $theme)
     {

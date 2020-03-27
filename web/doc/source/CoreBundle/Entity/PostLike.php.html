@@ -1,0 +1,174 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+
+namespace CoreBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * PostLike
+ *
+ * @ORM\Table(name=&quot;post_like&quot;)
+ * @ORM\Entity(repositoryClass=&quot;CoreBundle\Repository\PostLikeRepository&quot;)
+ */
+class PostLike
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name=&quot;id&quot;, type=&quot;integer&quot;)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy=&quot;AUTO&quot;)
+     */
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Post::class, inversedBy=&quot;postLikes&quot;)
+     */
+    private $post;
+
+    /**
+     * @ORM\Column(name=&quot;post_like&quot;, type=&quot;boolean&quot;, nullable=true)
+     */
+    private $like;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class)
+     */
+    private $userConcerned;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy=&quot;postLiked&quot;)
+     */
+    private $userWhoLiked;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this-&gt;id;
+    }
+
+    /**
+     * Get post
+     * 
+     * @return Post
+     */
+    public function getPost()
+    {
+        return $this-&gt;post;
+    }
+
+    /**
+     * Set post
+     */
+    public function setPost(Post $post)
+    {
+        $this-&gt;post = $post;
+
+        return $this;
+    }
+
+    /**
+     * Get like
+     */
+    public function getLike()
+    {
+        return $this-&gt;like;
+    }
+
+    /**
+     * Set like
+     */
+    public function setLike($like)
+    {
+        $this-&gt;like = $like;
+
+        return $this;
+    }
+
+    /**
+     * Get userWhoLiked
+     */
+    public function getUserWhoLiked()
+    {
+        return $this-&gt;userWhoLiked;
+    }
+
+    /**
+     * Set userWhoLiked
+     */
+    public function setUserWhoLiked(User $user)
+    {
+        $this-&gt;userWhoLiked = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get userConcerned
+     */
+    public function getUserConcerned()
+    {
+        return $this-&gt;userConcerned;
+    }
+
+    /**
+     * Set userConcerned
+     */
+    public function setUserConcerned(User $user)
+    {
+        $this-&gt;userConcerned = $user;
+
+        return $this;
+    }
+    
+}
+
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all();
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

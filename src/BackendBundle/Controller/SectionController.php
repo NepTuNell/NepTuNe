@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author: Jimmy
+ */
+
 namespace BackendBundle\Controller;
 
 use CoreBundle\Entity\User;
@@ -23,27 +27,32 @@ class SectionController extends Controller
 {
 
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
+     * Objet utilisé pour stocker l'ObjectManager de Doctrine.
+     * Sert à administrer la base de données.
+     * 
      * @var ObjectManager
      */
     private $manager;
 
+    /**
+     * Constructeur de la classe
+     * 
+     * @param ObjectManager
+     */
     public function __construct(ObjectManager $manager)
     {
         $this->manager = $manager;
     }
 
     /**
-     * Creates a new theme entity.
-     *
+     * Création d'une nouvelle section
+     * 
+     * @param Request
+     * @param Theme
      * @Route("/new/{theme}", name="section_new", requirements={"theme"="\d+"})
      * @Method({"GET", "POST"})
      */
-    public function new(Request $request, Theme $theme)
+    public function newSection(Request $request, Theme $theme)
     {
         
         if ( !$this->isGranted('ROLE_ADMIN') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
@@ -87,12 +96,14 @@ class SectionController extends Controller
     }   
 
     /**
-     * Creates a new univer entity.
+     * Modification d'une section existante
      *
+     * @param Request
+     * @param Section
      * @Route("/edit/{section}", name="section_edit", requirements={"section"="\d+"})
      * @Method({"GET", "POST"})
      */
-    public function edit(Request $request, Section $section)
+    public function editSection(Request $request, Section $section)
     {
         
         if ( !$this->isGranted('ROLE_ADMIN') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
@@ -131,8 +142,10 @@ class SectionController extends Controller
     }   
 
     /**
-     * Deletes a univer entity.
-     *
+     * Suppression d'une section
+     * 
+     * @param Request
+     * @param Section
      * @Route("/delete/{section}", name="section_delete")
      * @Method("POST")
      */
@@ -169,6 +182,9 @@ class SectionController extends Controller
     }
 
     /**
+     * Cette fonction retourne la liste des sections
+     * 
+     * @param Theme
      * @Route("/liste/{theme}", name="section_list")
      * @Method("GET")
      */

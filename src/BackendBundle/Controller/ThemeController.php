@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace BackendBundle\Controller;
 
 use CoreBundle\Entity\User;
@@ -23,26 +26,32 @@ class ThemeController extends Controller
 {
 
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
+     * Objet utilisé pour stocker l'ObjectManager de Doctrine.
+     * Sert à administrer la base de données.
+     * 
      * @var ObjectManager
      */
     private $manager;
 
+    /**
+     * Constructeur de la classe.
+     * 
+     * @param ObjectManager
+     */
     public function __construct(ObjectManager $manager)
     {
         $this->manager = $manager;
     }
 
     /**
-     *
+     * Création d'un nouveau thème
+     * 
+     * @param Request
+     * @param Univers
      * @Route("/new/{univers}", name="theme_new", requirements={"univers"="\d+"})
      * @Method({"GET", "POST"})
      */
-    public function new(Request $request, Univers $univers)
+    public function newTheme(Request $request, Univers $univers)
     {
         
         if ( !$this->isGranted('ROLE_ADMIN') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
@@ -87,11 +96,14 @@ class ThemeController extends Controller
     }   
 
     /**
+     * Modification d'un thème existant
      * 
+     * @param Request
+     * @param Theme
      * @Route("/edit/{theme}", name="theme_edit", requirements={"theme"="\d+"})
      * @Method({"GET", "POST"})
      */
-    public function edit(Request $request, Theme $theme = null)
+    public function editTheme(Request $request, Theme $theme = null)
     {
         
         if ( !$this->isGranted('ROLE_ADMIN') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
@@ -131,8 +143,10 @@ class ThemeController extends Controller
     }   
 
     /**
-     * Deletes a univer entity.
-     *
+     * Suppression d'un thème
+     * 
+     * @param Request
+     * @param Theme
      * @Route("/{theme}", name="theme_delete")
      * @Method("POST")
      */

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy 
+ */
+
 namespace CoreBundle\Controller;
 
 use CoreBundle\Entity\User;
@@ -24,22 +28,26 @@ class SujetController extends Controller
 {
 
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
-     * @var ObjectManager
+     * Objet utilisé pour stocker l'ObjectManager de Doctrine.
+     * Sert à administrer la base de données.
      */
     private $manager;
 
+    /**
+     * Constructeur de la classe.
+     * 
+     * @param ObjectManager
+     */
     public function __construct(ObjectManager $manager)
     {
         $this->manager = $manager;
     }
 
     /**
-     *
+     * Retourne la liste des sujets pour un thème ou une section selectionnée.
+     * 
+     * @param Theme
+     * @param Section
      * @Route("/liste/{theme}", name="sujet_list_theme", requirements={"theme"="\d+"})
      * @Route("/liste/{theme}/{section}", name="sujet_list_section", requirements={"theme"="\d+", "section"="\d+"})
      * @Method({"GET", "POST"})
@@ -60,6 +68,12 @@ class SujetController extends Controller
     }
 
     /**
+     * Fonction utlisée pour filtrer les sujets.
+     * 
+     * @param Theme
+     * @param Section
+     * @param string
+     * @param int
      * @Route("/liste/filtre/theme/{theme}/{option}/{libelle}", name="sujet_list_search_theme", options = {"expose" = true}, requirements={"theme"="\d+"})
      * @Route("/liste/filtre/theme/{theme}/section/{section}/{option}/{libelle}", name="sujet_list_search_section", options = {"expose" = true}, requirements={"theme"="\d+","section"="\d+"})
      * @Method({"GET"})
@@ -148,22 +162,23 @@ class SujetController extends Controller
         /**
          * Envoie de la réponse en format JSON
          */
-        $response = new Response(
-            $sujets,
-        );
+        $response = new Response($sujets);
 
         return $response;
 
     }
 
     /**
-     * Creates a new theme entity.
-     *
+     * Création d'un sujet
+     * 
+     * @param Request
+     * @param Theme
+     * @param Section
      * @Route("/new/{theme}", name="sujet_new_theme", options = {"expose" = true}, requirements={"theme"="\d+"})
      * @Route("/new/{theme}/{section}", name="sujet_new_section", options = {"expose" = true}, requirements={"theme"="\d+"})
      * @Method({"GET", "POST"})
      */
-    public function new(Request $request, Theme $theme, Section $section = null)
+    public function newSujet(Request $request, Theme $theme, Section $section = null)
     {
          
         if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
@@ -192,9 +207,7 @@ class SujetController extends Controller
             $this->manager->persist($sujet);
             $this->manager->flush();
             
-            $response = new Response(
-                json_encode($sujet->getId())
-            );
+            $response = new Response(json_encode($sujet->getId()));
 
             return $response;
 
@@ -212,12 +225,14 @@ class SujetController extends Controller
     }   
 
     /**
-     * Creates a new univer entity.
-     *
+     * Modification d'un sujet existant
+     * 
+     * @param Request
+     * @param Sujet
      * @Route("/edit/{sujet}", name="sujet_edit", options = {"expose" = true}, requirements={"sujet"="\d+"})
      * @Method({"GET", "POST"})
      */
-    public function edit(Request $request, Sujet $sujet)
+    public function editSujet(Request $request, Sujet $sujet)
     {
         
         if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
@@ -235,9 +250,7 @@ class SujetController extends Controller
             $this->manager->persist($sujet);
             $this->manager->flush();
             
-            $response = new Response(
-                json_encode($sujet->getId())
-            );
+            $response = new Response(json_encode($sujet->getId()));
 
             return $response;
 
@@ -255,12 +268,14 @@ class SujetController extends Controller
     }   
 
     /**
-     * Deletes a univer entity.
-     *
+     * Suppression d'un sujet
+     * 
+     * @param Request
+     * @param Sujet
      * @Route("/{sujet}", name="sujet_delete", options = {"expose" = true}, requirements={"sujet"="\d+"})
      * @Method("GET")
      */
-    public function delete(Request $request, Sujet $sujet)
+    public function deleteSujet(Request $request, Sujet $sujet)
     {
 
         if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
@@ -293,8 +308,10 @@ class SujetController extends Controller
     }
 
     /**
-     * Creates a new univer entity.
-     *
+     * Retourne le titre d'un sujet
+     * 
+     * @param Request
+     * @param Sujet
      * @Route("/fetch/{sujet}", name="sujet_fetch", options = {"expose" = true}, requirements={"sujet"="\d+"})
      * @Method({"GET", "POST"})
      */
@@ -307,9 +324,7 @@ class SujetController extends Controller
 
         }
             
-        $response = new Response(
-            json_encode($sujet->getLibelle())
-        );
+        $response = new Response(json_encode($sujet->getLibelle()));
 
         return $response;
 

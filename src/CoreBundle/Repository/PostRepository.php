@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace CoreBundle\Repository;
 
 use CoreBundle\Entity\Post;
@@ -20,7 +23,9 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
 {
 
     /**
-     * Return all posts for one subject
+     * Retourne tous les commentaires d'un sujet
+     * 
+     * @param array
      */
     public function fetchAll( $options = array() )
     {
@@ -50,7 +55,7 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
                                         PostControl::class, 
                                         'pc',
                                         \Doctrine\ORM\Query\Expr\Join::WITH,
-                                        'pc.user = :user AND pc.post = p.id',
+                                        'pc.user = :user AND pc.post = p.id'
                                     )
                                     ->innerJoin(User::class, 'u')
                                     ->andWhere('p.user = u.id')
@@ -92,7 +97,9 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
     }
     
     /**
-     * Fetch subject which was reported by users
+     * Retourne les commentaires signalés en fonction des filtres sélectionnés
+     * 
+     * @param array
      */
     public function fetchAllAdmin( $options = array() )
     {
@@ -166,7 +173,7 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
-     * Return all likes for one post
+     * Retourne la requête SQL qui sélectionne le nombre de like d'un commentaire
      */
     public function countLike()
     {
@@ -183,7 +190,7 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
-     * Return all unlikes for one post
+     * Retourne la requête SQL qui sélectionne le nombre de dislike d'un commentaire
      */
     public function countDisLike()
     {
@@ -200,7 +207,7 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
     }
 
     /**
-     * Return all unlikes for one post
+     *  Retourne la requête SQL qui sélectionne le nombre de signalement d'un commentaire
      */
     public function countSignalement()
     {

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author : CHU VAN Jimmy
+ */
 namespace BackendBundle\Repository;
 
 use CoreBundle\Entity\User;
@@ -18,6 +21,8 @@ class ActivityRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * Nombre de consultation tout univers confondu 
+     * 
+     * @param User
      */
     public function getActivitiesByUser(User $user)
     {
@@ -36,6 +41,9 @@ class ActivityRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * Nombre de consultation pour un univers  
+     * 
+     * @param User
+     * @param Univers
      */
     public function getUniversActivityByUser(User $user, Univers $univers)
     {
@@ -57,6 +65,9 @@ class ActivityRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * Nombre de consultation pour un theme ou sujet par Univers  
+     * 
+     * @param User
+     * @param Theme
      */
     public function getThemeActivityByUser(User $user, Theme $theme)
     {

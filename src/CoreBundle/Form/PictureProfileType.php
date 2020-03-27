@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
+
 namespace CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -7,9 +11,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 
+/**
+ * FormType de l'image de profil
+ */
 class PictureProfileType extends AbstractType
 {
     /**
+     * FormType de l'image de profil
+     * 
+     * @param FormBuilderInterface
+     * @param array
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -22,6 +33,9 @@ class PictureProfileType extends AbstractType
     }
     
     /**
+     * Options du FormType
+     * 
+     * @param OptionsResolver
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
@@ -32,6 +46,8 @@ class PictureProfileType extends AbstractType
     }
 
     /**
+     * Préfix du formulaire rendu dans la vue
+     * 
      * {@inheritdoc}
      */
     public function getBlockPrefix()

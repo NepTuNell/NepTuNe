@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace CoreBundle\Entity;
 
 use Serializable;
@@ -36,7 +39,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class User implements UserInterface  
 {
     /**
-     * @var int
+     * ID de l'utilisateur
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -44,7 +47,9 @@ class User implements UserInterface
      */
     private $id;
 
-   /**
+    /**
+     * Image de profil
+     * 
      * @ORM\OneToOne(targetEntity="PictureProfile", cascade={"persist", "remove"}, mappedBy="user")
      * @Assert\Valid()
      * One profile's picture has one user
@@ -52,7 +57,7 @@ class User implements UserInterface
     private $pictureProfile;
 
     /**
-     * @var string
+     * Nom de famille
      *
      * @ORM\Column(name="firstname", type="string", length=255)
      * @Assert\Length(
@@ -64,7 +69,7 @@ class User implements UserInterface
     private $firstname;
 
     /**
-     * @var string
+     * Prénom
      *
      * @ORM\Column(name="lastname", type="string", length=255)
      * @Assert\Length(
@@ -76,7 +81,7 @@ class User implements UserInterface
     private $lastname;
 
     /**
-     * @var string
+     * Pseudonyme
      *
      * @ORM\Column(name="username", type="string", length=255, nullable=true, unique=true)
      * @Assert\Length(
@@ -88,7 +93,7 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @var string
+     * Email
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
      * @Assert\Length(
@@ -100,7 +105,7 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @var string
+     * Mot de passe
      *
      * @ORM\Column(name="password", type="string", length=255)
      * @Assert\Length(
@@ -112,81 +117,96 @@ class User implements UserInterface
     private $password;
 
     /**
-     * 
-     * @var string
+     * Confirmation du mot de passe
      */
     private $confirm_password;
 
     /**
-     * @var bool
+     * Compte actif
      *
      * @ORM\Column(name="isActive", type="boolean")
      */
     private $isActive;
 
     /**
-     * @var \DateTime
+     * Dernière activité
      *
      * @ORM\Column(name="lastActivity", type="datetime", nullable=true)
      */
     private $lastActivity;
 
     /**
-     * @var array
+     * Rôle de l'utilisateur
      *
      * @ORM\Column(name="roles", type="array")
      */
     private $roles;
 
     /**
-     * @var string
+     * Clé d'activation du compte
      *
      * @ORM\Column(name="registerKey", type="string", length=255, nullable=true)
      */
     private $registerKey;
 
     /**
+     * Sujets que l'utilisateur a créé
+     * 
      * @ORM\OneToMany(targetEntity=Sujet::class, mappedBy="user")
      */
     private $sujets;
 
     /**
+     * Commentaires que l'utilisateur a créé
+     * 
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="user")
      */
     private $posts;
     
     /**
+     * Commentaire que l'utilisateur a aimé
+     * 
      * @ORM\OneToMany(targetEntity=PostLike::class, mappedBy="userWhoLiked")
      */
     private $postLiked;
 
     /**
+     * Activités de l'utilisateur
+     * 
      * @ORM\OneToMany(targetEntity=Activity::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $activities;
 
     /**
+     * Activité de l'utilisateur par univers
+     * 
      * @ORM\Column(name="activityUnivers", type="boolean", nullable=true)
      */
     private $activityUnivers;
 
     /**
+     * Activité de l'utilisateur par thème
+     * 
      * @ORM\Column(name="activityTheme", type="boolean", nullable=true)
      */
     private $activityTheme;
 
     /**
+     * Nombre de j'aime pour les commentaires que l'utilisateur a posté
+     * 
      * @ORM\Column(name="activityLike", type="boolean", nullable=true)
      */
     private $activityLike;
 
     /**
+     * Commentaires signalés par l'utilisateur
+     * 
      * @ORM\OneToMany(targetEntity=PostControl::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private $postsControl;
 
     /**
-     * Compte non actif à la génération
+     * Constructeur de la classe
      */
     public function __construct()
     {
@@ -207,7 +227,7 @@ class User implements UserInterface
     }
 
     /**
-     * 
+     * Get pictureProfile
      */
     public function getPictureProfile()
     {
@@ -215,7 +235,9 @@ class User implements UserInterface
     }
 
     /**
+     * Set pictureProfile
      * 
+     * @param PictureProfile
      */
     public function setPictureProfile($pictureProfile = null)
     {
@@ -227,8 +249,7 @@ class User implements UserInterface
     /**
      * Set firstname
      *
-     * @param string $firstname
-     *
+     * @param string 
      * @return User
      */
     public function setFirstname($firstname)
@@ -251,8 +272,7 @@ class User implements UserInterface
     /**
      * Set lastname
      *
-     * @param string $lastname
-     *
+     * @param string  
      * @return User
      */
     public function setLastname($lastname)
@@ -275,9 +295,8 @@ class User implements UserInterface
     /**
      * Set email
      *
-     * @param string $email
-     *
-     * @return User
+     * @param string 
+     * @return string
      */
     public function setEmail($email)
     {
@@ -299,13 +318,12 @@ class User implements UserInterface
     /**
      * Set password
      *
-     * @param string $password
-     *
-     * @return User
+     * @param string  
+     * @return string
      */
-    public function setconfirmPassword($confirmPassword)
+    public function setconfirmPassword($password)
     {
-        $this->confirm_password = $confirmPassword;
+        $this->confirm_password = $password;
 
         return $this;
     }
@@ -323,9 +341,8 @@ class User implements UserInterface
     /**
      * Set isActive
      *
-     * @param boolean $isActive
-     *
-     * @return User
+     * @param boolean  
+     * @return boolean
      */
     public function setIsActive($isActive)
     {
@@ -347,9 +364,8 @@ class User implements UserInterface
     /**
      * Set lastActivity
      *
-     * @param \DateTime $lastActivity
-     *
-     * @return User
+     * @param \DateTime  
+     * @return \DateTime  
      */
     public function setLastActivity($lastActivity)
     {
@@ -371,9 +387,8 @@ class User implements UserInterface
     /**
      * Set registerKey
      *
-     * @param string $registerKey
-     *
-     * @return User
+     * @param string   
+     * @return string
      */
     public function setRegisterKey($registerKey)
     {
@@ -400,6 +415,12 @@ class User implements UserInterface
         return $this->activities;
     }
 
+    /**
+     * Set activityUnivers
+     * 
+     * @param boolean
+     * @return boolean
+     */
     public function setActivityUnivers($activityUnivers)
     {
         $this->activityUnivers = $activityUnivers;
@@ -407,11 +428,20 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * Get activityUnivers
+     */
     public function getActivityUnivers()
     {
         return $this->activityUnivers;
     }
 
+    /**
+     * Set activityTheme
+     * 
+     * @param boolean
+     * @return boolean
+     */
     public function setActivityTheme($activityTheme)
     {
         $this->activityTheme = $activityTheme;
@@ -419,11 +449,20 @@ class User implements UserInterface
         return $this;
     }
     
+    /**
+     * Get activityTheme
+     */
     public function getActivityTheme()
     {
         return $this->activityTheme;
     }
 
+    /**
+     * set activityLike
+     * 
+     * @param boolean
+     * @return boolean
+     */
     public function setActivityLike($activityLike)
     {
         $this->activityLike = $activityLike;
@@ -431,6 +470,9 @@ class User implements UserInterface
         return $this;
     }
     
+    /**
+     * Get activityLike
+     */
     public function getActivityLike()
     {
         return $this->activityLike;
@@ -453,9 +495,8 @@ class User implements UserInterface
     /**
      * Set username
      *
-     * @param string $username
-     *
-     * @return User
+     * @param string 
+     * @return string
      */
     public function setUsername($username)
     {
@@ -477,9 +518,8 @@ class User implements UserInterface
     /**
      * Set password
      *
-     * @param string $password
-     *
-     * @return User
+     * @param string 
+     * @return string
      */
     public function setPassword($password)
     {
@@ -501,9 +541,8 @@ class User implements UserInterface
     /**
      * Set roles
      *
-     * @param array $roles
-     *
-     * @return User
+     * @param array  
+     * @return array
      */
     public function setRoles($roles)
     {

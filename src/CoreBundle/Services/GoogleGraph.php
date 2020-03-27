@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace CoreBundle\Services;
 
 use CoreBundle\Entity\User;
@@ -19,22 +22,36 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use CMEN\GoogleChartsBundle\GoogleCharts\Charts\ComboChart;
 use CMEN\GoogleChartsBundle\GoogleCharts\Charts\ColumnChart;
  
-
+/**
+ * Classe utilisée pour afficher les graphes
+ */
 class GoogleGraph extends Controller
 {
     
     /**
-     * Undocumented variable
+     * Objet utilisé pour stocker l'ObjectManager de Doctrine.
+     * Sert à administrer la base de données.
      *
      * @var ObjectManager
      */
     private $manager;
 
+    /**
+     * Constructeur de la classe
+     * 
+     * @param ObjectManager
+     */
     public function __construct(ObjectManager $manager)
     {
         $this->manager = $manager;
     }
 
+    /**
+     * Retourne le graphique qui recense l'activité de l'utilisateur par univers
+     * 
+     * @param User
+     * @param Collection
+     */
     public function getActivityUnivers(User $user, $universList)
     {
         
@@ -81,6 +98,12 @@ class GoogleGraph extends Controller
 
     }
 
+    /**
+     * Retourne le graphique qui recense l'activité de l'utilisateur par thème
+     * 
+     * @param User
+     * @param Collection
+     */
     public function getActivityTheme(User $user, $universList)
     {
        
@@ -126,6 +149,11 @@ class GoogleGraph extends Controller
 
     }
 
+    /**
+     * Retourne le graphique qui recense les commentaires aimés de l'utilisateur
+     * 
+     * @param User
+     */
     public function getPieChartLike(User $user)
     {
        

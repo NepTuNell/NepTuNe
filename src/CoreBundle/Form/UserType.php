@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author : Jimmy
+ */
+
 namespace CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -10,11 +14,17 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use CoreBundle\Entity\PictureProfile;
 
+/**
+ * Formulaire basé sur l'entité utilisateur
+ */
 class UserType extends AbstractType
 {
 
     /**
-     * {@inheritdoc}
+     * FormType de l'utilisateur
+     * 
+     * @param FormBuilderInterface
+     * @param array
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -27,7 +37,9 @@ class UserType extends AbstractType
     }
     
     /**
-     * {@inheritdoc}
+     * Options du formulaire
+     * 
+     * @param OptionsResolver
      */
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -40,6 +52,8 @@ class UserType extends AbstractType
     }
 
     /**
+     * Préfixe du formulaire retourné dans la vue
+     * 
      * {@inheritdoc}
      */
     public function getBlockPrefix()

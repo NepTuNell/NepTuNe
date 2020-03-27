@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace BackendBundle\Form;
 
 use BackendBundle\Entity\Backup;
@@ -10,9 +13,16 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+/**
+ * Formulaire d'un backup
+ */
 class BackupType extends AbstractType
 {
     /**
+     * FormType des backups
+     * 
+     * @param FormBuilderInterface
+     * @param array
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -29,6 +39,9 @@ class BackupType extends AbstractType
     }
     
     /**
+     * Options du FormType des backups
+     * 
+     * @param OptionsResolver
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
@@ -39,6 +52,8 @@ class BackupType extends AbstractType
     }
 
     /**
+     * Préfixe du formulaire
+     * 
      * {@inheritdoc}
      */
     public function getBlockPrefix()

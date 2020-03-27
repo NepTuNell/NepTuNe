@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author : CHU VAN Jimmy
+ */
+
 namespace CoreBundle\Repository;
 
 use CoreBundle\Entity\Post;
@@ -15,6 +19,11 @@ use CoreBundle\Entity\PostLike;
 class PostLikeRepository extends \Doctrine\ORM\EntityRepository
 {
 
+    /**
+     * Fonction qui retourne le nombre de like et dislike d'un utilisateur
+     * 
+     * @param User
+     */
     public function countLikeAndDislikeByUser(User $user)
     {
 
@@ -30,6 +39,11 @@ class PostLikeRepository extends \Doctrine\ORM\EntityRepository
 
     }
 
+    /**
+     * Fonction qui retourne le nombre de like d'un utilisateur
+     * 
+     * @param User
+     */
     public function countLikeByUser(User $user)
     {
 
@@ -45,6 +59,11 @@ class PostLikeRepository extends \Doctrine\ORM\EntityRepository
 
     }
 
+    /**
+     * Fonction qui retourne le nombre de dislike d'un utilisateur
+     * 
+     * @param User
+     */
     public function countDislikeByUser(User $user)
     {
 

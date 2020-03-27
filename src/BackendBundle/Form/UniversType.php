@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace BackendBundle\Form;
 
 use BackendBundle\Form\ThemeType;
@@ -8,9 +11,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
+/**
+ * FormType d'un univers
+ */
 class UniversType extends AbstractType
 {
     /**
+     * FormType des univers
+     * 
+     * @param FormBuilderInterface
+     * @param array
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -19,6 +29,9 @@ class UniversType extends AbstractType
     }
     
     /**
+     * Options du FormType des univers
+     * 
+     * @param OptionsResolver
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
@@ -29,6 +42,8 @@ class UniversType extends AbstractType
     }
 
     /**
+     * Préfixe du FormType lors du rendu de la vue
+     * 
      * {@inheritdoc}
      */
     public function getBlockPrefix()

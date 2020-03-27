@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace BackendBundle\Entity;
 
 use CoreBundle\Entity\User;
@@ -16,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 class PostControl
 {
     /**
-     * @var int
+     * ID du commentaire signalé
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -25,11 +28,15 @@ class PostControl
     private $id;
 
     /**
+     * Utilisateur qui a signalé le commentaire
+     * 
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="postsControl")
      */
     private $user;
 
     /**
+     * Commentaire signalé
+     * 
      * @ORM\ManyToOne(targetEntity=Post::class, inversedBy="postsControl")
      */
     private $post;
@@ -47,11 +54,10 @@ class PostControl
     /**
      * Set user
      *
-     * @param string $user
-     *
-     * @return Activity
+     * @param User  
+     * @return User
      */
-    public function setUser($user)
+    public function setUser(User $user)
     {
         $this->user = $user;
 
@@ -61,7 +67,7 @@ class PostControl
     /**
      * Get user
      *
-     * @return string
+     * @return User
      */
     public function getUser()
     {
@@ -70,6 +76,9 @@ class PostControl
 
     /**
      * Set Post
+     * 
+     * @param Post
+     * @return Post
      */
     public function setPost(Post $post)
     {

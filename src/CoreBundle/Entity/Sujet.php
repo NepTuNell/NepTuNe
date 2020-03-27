@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
+
 namespace CoreBundle\Entity;
 
 use CoreBundle\Entity\User;
@@ -19,7 +23,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Sujet
 {
     /**
-     * @var int
+     * ID du sujet
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -28,27 +32,35 @@ class Sujet
     private $id;
 
     /**
+     * Utilisateur qui a créé le sujet
+     * 
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sujets")
      */
     private $user;
 
     /**
+     * Commentaires associés aux sujet
+     * 
      * @ORM\OneToMany(targetEntity=Post::class, mappedBy="sujet", cascade={"persist", "remove"})
      */
     private $posts;
 
     /**
+     * Thème auquel le sujet est associé
+     * 
      * @ORM\ManyToOne(targetEntity=Theme::class, inversedBy="sujets")
      */
     private $theme;
 
     /**
+     * Section à laquelle le sujet est associée
+     * 
      * @ORM\ManyToOne(targetEntity=Section::class, inversedBy="sujets")
      */
     private $section;
 
     /**
-     * @var string
+     * Libellé du sujet
      *
      * @ORM\Column(name="libelle", type="string", length=255)
      * @Assert\Length(
@@ -62,15 +74,15 @@ class Sujet
      */
     private $libelle;
 
-     /**
-     * @var string
+    /**
+     * Date de création du sujet 
      *
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
     /**
-     * CONSTRUCTOR
+     * Constructeur de la classe
      */
     public function __construct()
     {
@@ -90,7 +102,7 @@ class Sujet
     /**
      * Set libelle
      *
-     * @param string $libelle
+     * @param string
      *
      * @return Sujet
      */
@@ -113,8 +125,10 @@ class Sujet
 
     /**
      * Set theme 
+     * 
+     * @param Theme
      */
-    public function setTheme($theme)
+    public function setTheme(Theme $theme)
     {
         $this->theme = $theme;
 
@@ -133,8 +147,10 @@ class Sujet
 
     /**
      * Set section
+     * 
+     * @param Section
      */
-    public function setSection($section)
+    public function setSection(Section $section)
     {
         $this->section = $section;
 
@@ -153,6 +169,8 @@ class Sujet
 
     /**
      * Set date
+     * 
+     * @param date
      */
     public function setDate($date)
     {
@@ -173,6 +191,8 @@ class Sujet
 
     /**
      * Set User
+     * 
+     * @param User
      */
     public function setUser( User $user )
     {

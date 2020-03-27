@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
+
 namespace BackendBundle\Controller;
 
 use CoreBundle\Entity\User;
@@ -20,27 +24,31 @@ class UniversController extends Controller
 {
 
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
+     * Objet utilisé pour stocker l'ObjectManager de Doctrine.
+     * Sert à administrer la base de données.
+     * 
      * @var ObjectManager
      */
     private $manager;
 
+    /**
+     * Constructeur de la classe.
+     * 
+     * @param ObjectManager
+     */
     public function __construct(ObjectManager $manager)
     {
         $this->manager = $manager;
     }
 
     /**
-     * Creates a new univer entity.
+     * Création d'un nouvel univers
      * 
+     * @param Request
      * @Route("/new", name="univers_new")
      * @Method({"GET", "POST"})
      */
-    public function new(Request $request)
+    public function newUnivers(Request $request)
     {
         
         if ( !$this->isGranted('ROLE_ADMIN') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
@@ -82,12 +90,14 @@ class UniversController extends Controller
     }   
 
     /**
-     * Creates a new univer entity.
+     * Modification d'un univers existant
      * 
+     * @param Request
+     * @param Univers
      * @Route("/edit/{id}", name="univers_edit")
      * @Method({"GET", "POST"})
      */
-    public function edit(Request $request, Univers $univers = null)
+    public function editUnivers(Request $request, Univers $univers = null)
     {
         
         if ( !$this->isGranted('ROLE_ADMIN') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
@@ -127,12 +137,14 @@ class UniversController extends Controller
     }   
 
     /**
-     * Deletes a univer entity.
+     * Suppression d'un univers
      *
+     * @param Request
+     * @param Univers
      * @Route("/{id}", name="univers_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, Univers $univers)
+    public function deleteUnivers(Request $request, Univers $univers)
     {
 
         if ( !$this->isGranted('ROLE_ADMIN') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {

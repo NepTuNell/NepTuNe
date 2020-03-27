@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author : Jimmy
+ */
+
 namespace BackendBundle\Entity;
 
 use CoreBundle\Entity\Sujet;
@@ -20,7 +24,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Theme
 {
     /**
-     * @var int
+     * ID du thème
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -29,31 +33,35 @@ class Theme
     private $id;
 
     /**
-     * @var Univers
+     * Activités associées aux thèmes
      *
      * @ORM\OneToMany(targetEntity=Activity::class, mappedBy="theme", cascade={"persist", "remove"})
      */
     private $activities;
 
     /**
-     * @var Univers
+     * Univers auquel le thème est associé
      *
      * @ORM\ManyToOne(targetEntity=Univers::class, inversedBy="themes")
      */
     private $univers;
 
     /**
+     * Sections associées au thème
+     * 
      * @ORM\OneToMany(targetEntity=Section::class, mappedBy="theme" , cascade={"persist", "remove"})
      */
     private $sections;
 
     /**
+     * Sujets du thème
+     * 
      * @ORM\OneToMany(targetEntity=Sujet::class, mappedBy="theme")
      */
     private $sujets;
 
     /**
-     * @var string
+     * Libellé du thème
      *
      * @ORM\Column(name="libelle", type="string", length=255, unique=true)
      * @Assert\Length(
@@ -67,12 +75,14 @@ class Theme
     private $libelle;
 
     /**
+     * Si le thème est divisé en section
+     * 
      * @ORM\Column(name="subdivise", type="boolean")
      */
     private $subdivise;
 
     /**
-     * 
+     * Constructeur de la classe.
      */
     public function __construct()
     {
@@ -139,7 +149,9 @@ class Theme
     }
 
     /**
+     * Set subdivise
      * 
+     * @param subdivise
      */
     public function setSubdivise($subdivise)
     {
@@ -173,7 +185,7 @@ class Theme
      ****************************************************/
 
     /**
-     * Add section
+     * Add section (collection's method)
      *
      * @param \BackendBundle\Entity\Section $section
      *
@@ -187,7 +199,7 @@ class Theme
     }
 
     /**
-     * Remove section
+     * Remove section (collection's method)
      *
      * @param \BackendBundle\Entity\Section $section
      */
@@ -211,7 +223,7 @@ class Theme
      ****************************************************/
 
     /**
-     * Add sujet
+     * Add sujet (collection's method)
      *
      * @param \CoreBundle\Entity\Sujet $sujet
      *
@@ -225,7 +237,7 @@ class Theme
     }
 
     /**
-     * Remove sujet
+     * Remove sujet (collection's method)
      *
      * @param \CoreBundle\Entity\Sujet $sujet
      */

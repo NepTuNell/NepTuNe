@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace BackendBundle\Entity;
 
 use CoreBundle\Entity\Sujet;
@@ -16,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Section
 {
     /**
-     * @var int
+     * ID de la section
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -25,17 +28,21 @@ class Section
     private $id;
     
     /**
+     * Sujets associés à la section
+     * 
      * @ORM\OneToMany(targetEntity=Sujet::class, mappedBy="section", cascade={"persist", "remove"})
      */
     private $sujets;
 
     /**
+     * Thème auquel la section est associée
+     * 
      * @ORM\ManyToOne(targetEntity=Theme::class, inversedBy="sections")
      */
     private $theme;
 
     /**
-     * @var string
+     * Libellé de la section
      *
      * @ORM\Column(name="libelle", type="string", length=255, unique=false)
      * @Assert\Length(
@@ -49,7 +56,7 @@ class Section
     private $libelle;
 
     /**
-     * 
+     * Constructeur de la classe.
      */
     public function __construct()
     {
@@ -69,9 +76,8 @@ class Section
     /**
      * Set libelle
      *
-     * @param string $libelle
-     *
-     * @return Section
+     * @param string 
+     * @return string
      */
     public function setLibelle($libelle)
     {
@@ -91,7 +97,9 @@ class Section
     }
 
     /**
+     * Set theme
      * 
+     * @param Theme
      */
     public function setTheme($theme)
     {
@@ -101,7 +109,7 @@ class Section
     }
 
     /**
-     * 
+     * Get theme
      */
     public function getTheme()
     {
@@ -113,11 +121,9 @@ class Section
      ****************************************************/
 
     /**
-     * Add sujet
+     * Ajout d'un sujet (méthode relative au traitement d'une collection)
      *
-     * @param \CoreBundle\Entity\Sujet $sujet
-     *
-     * @return Sujet
+     * @param \CoreBundle\Entity\Sujet 
      */
     public function addSujet(\CoreBundle\Entity\Sujet $sujet)
     {
@@ -127,9 +133,9 @@ class Section
     }
 
     /**
-     * Remove sujet
+     * Suppression d'un sujet (méthode relative au traitement d'une collection)
      *
-     * @param \CoreBundle\Entity\Sujet $sujet
+     * @param \CoreBundle\Entity\Sujet  
      */
     public function removeSujet(\CoreBundle\Entity\Sujet $sujet)
     {

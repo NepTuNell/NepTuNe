@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy 
+ */
+
 namespace CoreBundle\Services;
 
 use Symfony\Bundle\FrameworkBundle\Controller\TemplateController;
@@ -8,7 +12,9 @@ use Symfony\Component\Routing\RouterInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use CoreBundle\Entity\User;
 
-
+/**
+ * Class servant au mailing
+ */
 class Mailer extends Controller
 {
     
@@ -24,20 +30,23 @@ class Mailer extends Controller
     private $mailer;
 
     /**
-     * Undocumented variable
+     * Objet utilisé pour stocker l'ObjectManager de Doctrine.
+     * Sert à administrer la base de données.
      *
      * @var ObjectManager
      */
     private $manager;
 
     /**
-     * Undocumented variable
+     * Objet utilisé par Symfony pour Router
      *
      * @var RouterInterface
      */
     private $router;
 
-     /**
+    /**
+     * Objet twig pour création de template 
+     * 
      * @var Twig_Environment
      */
     private $templating;
@@ -48,7 +57,7 @@ class Mailer extends Controller
      ******************************/
 
     /**
-     * Undocumented function
+     * Constructeur de la classe
      *
      * @param \Swift_Mailer $mailer
      * @param \Twig_Environment $templating
@@ -66,7 +75,7 @@ class Mailer extends Controller
     }
 
     /**
-     * Undocumented function
+     * Envoi d'un email lors de la création d'un compte
      *
      * @param User $user
      * @return void
@@ -90,7 +99,7 @@ class Mailer extends Controller
     
 
     /**
-     * Undocumented function
+     * Envoi d'un email lorsque l'administrateur réactive un compte
      *
      * @param User $user
      * @return void
@@ -110,7 +119,7 @@ class Mailer extends Controller
 
 
     /**
-     * Undocumented function
+     * Envoi d'un email lorsque l'administrateur désactive un compte
      *
      * @param User $user
      * @return void
@@ -129,7 +138,7 @@ class Mailer extends Controller
     }
 
     /**
-     * Undocumented function
+     * Envoi d'un email lorsque l'utilisateur vérifie son compte lors d'une demande de réinitialisation du mot de passe
      *
      * @param User $user
      * @return void
@@ -152,9 +161,11 @@ class Mailer extends Controller
     }
 
     /**
-     * Undocumented function
+     * Envoi d'un email qui contient le nouveau mot de passe
+     * Après avoir vérifié son compte lors d'une demande de réinitialisation du mot de passe
      *
-     * @param User $user
+     * @param User
+     * @param string
      * @return void
      */
     public function resetPassword(User $user, $password)

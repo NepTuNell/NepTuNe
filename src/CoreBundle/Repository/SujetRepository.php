@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace CoreBundle\Repository;
 
 use CoreBundle\Entity\Post;
@@ -18,6 +21,9 @@ use Doctrine\ORM\Query\Expr\Join;
 class SujetRepository extends \Doctrine\ORM\EntityRepository
 {
 
+    /**
+     * Retourne la requête SQL qui renvoie le nombre de commentaire pour un sujet (méthode 1)
+     */
     public function countPostQuery()
     {
 
@@ -34,6 +40,8 @@ class SujetRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * Recherche tous les sujets dans un thème ou une section spécifique
+     * 
+     * @param array
      */
     public function fetchAllSubject($options = array())
     {
@@ -75,6 +83,8 @@ class SujetRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * Recherche d'un ou plusieurs sujet(s) dans un thème ou une section spécifique option contient
+     * 
+     * @param array
      */
     public function fetchSubjectByLibelleContains($options = array())
     {
@@ -118,6 +128,8 @@ class SujetRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * Recherche d'un ou plusieurs sujet(s) dans un thème ou une section spécifique option commence par
+     * 
+     * @param array
      */
     public function fetchSubjectByLibelleBegin($options = array())
     {
@@ -207,6 +219,9 @@ class SujetRepository extends \Doctrine\ORM\EntityRepository
      
     }
 
+    /**
+     * Retourne la requête SQL qui renvoie le nombre de commentaire pour un sujet (méthode 2)
+     */
     public function countPostQuery2()
     {
 
@@ -221,6 +236,11 @@ class SujetRepository extends \Doctrine\ORM\EntityRepository
 
     }
 
+    /**
+     * Retourne la requête SQL qui renvoie le nombre de commentaire pour un sujet (méthode 3)
+     * 
+     * @param Sujet
+     */
     public function countPostQuery3(Sujet $sujet)
     {
 

@@ -1,6 +1,8 @@
 <?php
 
-/* 
+/**  
+ * author : CHU VAN Jimmy
+ * 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -16,15 +18,30 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Routing\RouterInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
+/**
+ * Classe utilisée pour "écouter" lors de la connexion 
+ */
 class LoginListener implements AuthenticationSuccessHandlerInterface 
 {
- 
+    
+    /**
+     * Objet utilisé pour stocker l'ObjectManager de Doctrine.
+     * Sert à administrer la base de données.
+     */
     private $manager;
+
+    /**
+     *  Objet symfony, utilisé principalement pour la récupération de l'utilisateur courant
+     */
     private $token;
+
+    /**
+     * Objet utilisé pour le routing
+     */
     private $router;
     
     /**
-     * Undocumented function
+     * Constructeur de la classe
      *
      * @param ObjectManager $manager
      * @param TokenStorageInterface $token
@@ -40,7 +57,7 @@ class LoginListener implements AuthenticationSuccessHandlerInterface
     }
     
     /**
-     * Undocumented function
+     * Redirection après authentification
      *
      * @param Request $request
      * @param TokenInterface $token

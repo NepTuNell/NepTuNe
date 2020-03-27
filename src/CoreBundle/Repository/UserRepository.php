@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace CoreBundle\Repository;
 
 use CoreBundle\Entity\User;
@@ -15,6 +18,8 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 
     /**
      * Trouve tous les utilisateurs sauf l'utilisateur actif
+     * 
+     * @param int
      */
     public function getUsersWithoutMe( $id )
     {

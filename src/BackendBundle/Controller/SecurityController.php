@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy 
+ */
+
 namespace BackendBundle\Controller;
 
 use CoreBundle\Entity\User;
@@ -10,7 +14,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-
+/**
+ * Sécurité du site
+ */
 class SecurityController extends Controller
 {
     
@@ -19,20 +25,25 @@ class SecurityController extends Controller
      ******************************/
 
     /**
+     * Objet utilisé pour stocker l'ObjectManager de Doctrine.
+     * Sert à administrer la base de données.
+     * 
      * @var ObjectManager
      */
     private $manager;
 
     /**
+     * Object utilisé pour l'envoi des emails.
+     * 
      * @var Mailer
      */
     private $mailer;
     
     /**
-     * Undocumented variable
-     *
-     * @var ObjectManager
-     * @var Mailer
+     * Constructeur de la classe
+     * 
+     * @param ObjectManager
+     * @param Mailer
      */
     public function __construct(ObjectManager $em, Mailer $mailer)
     {
@@ -43,10 +54,9 @@ class SecurityController extends Controller
     }
 
     /**
-     * Undocumented function
+     * Fonction de login interne à Symfony
      * 
      * @Route("/login", name="login", methods={"GET", "POST"})
-     * @return void
      */
     public function login ()
     {
@@ -65,10 +75,9 @@ class SecurityController extends Controller
 
 
     /**
-     * Undocumented function
+     * Fonction de déconnexion interne à Symfony
      * 
      * @Route("/logout", name="logout", methods={"GET", "POST"})
-     * @return void
      */
     public function logout ()
     {
@@ -76,11 +85,10 @@ class SecurityController extends Controller
     }
     
     /**
-     * Undocumented function
+     * Fonction utilisée pour changer le mot de passe de l'utilisateur
      * 
+     * @param Request
      * @Route("/home/password", name="user_reset_password", methods={"GET", "POST"})
-     * @param Request $request
-     * @return void
      */
     public function resetPassword (Request $request)
     {
@@ -144,12 +152,11 @@ class SecurityController extends Controller
     }
     
     /**
-     * Undocumented function
+     * Cette fonction est utilisé pour activer le compte de l'utilisateur suite à son inscription.
      * 
+     * @param User
+     * @param string
      * @Route("/home/account/verify/{id}/{key}", name="user_confirm_account", methods={"GET"})
-     * @param User $user
-     * @param [type] $key
-     * @return void
      */
     public function confirmAccount(User $user, $key)
     {
@@ -176,12 +183,12 @@ class SecurityController extends Controller
     }
 
     /**
-     * Undocumented function
+     * Fonction utilisé pour vérifier le compte de l'utilisateur.
+     * Lorsqu'un utilisateur oubli son mot de passe, il passera par cette fonction pour vérifier son compte.
+     * La fonction envoie un email à l'utilisateur pour réinitialiser son mot de passe.
      * 
+     * @param Request
      * @Route("/home/check/account", name="user_check_account", methods={"POST","GET"})
-     * @param User $user
-     * @param [type] $key
-     * @return void
      */
     public function checkAccount(Request $request)
     {
@@ -218,12 +225,10 @@ class SecurityController extends Controller
     }
 
     /**
-     * Undocumented function
+     * Génération aléatoire d'un mot de passe et envoi du mot de passe par email.
      * 
+     * @param User
      * @Route("/home/account/reset/password/{id}", name="user_check_account_reset_password", methods={"GET"})
-     * @param User $user
-     * @param [type] $key
-     * @return void
      */
     public function checkAccountResetPassword(User $user)
     {

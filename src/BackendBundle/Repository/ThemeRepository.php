@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace BackendBundle\Repository;
 
 use BackendBundle\Entity\Theme;
@@ -14,6 +17,8 @@ class ThemeRepository extends \Doctrine\ORM\EntityRepository
 {
     /**
      * Nombre de theme pour un univers
+     * 
+     * @param Univers
      */
     public function getThemeByUnivers(Univers $univers)
     {

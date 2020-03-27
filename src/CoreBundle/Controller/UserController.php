@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace CoreBundle\Controller;
 
 use CoreBundle\Entity\User;
@@ -29,36 +32,49 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
+ * Controller des utilisateurs
+ * 
  * @Route("home")
  */
 class UserController extends Controller
 {
 
     /**
+     * Objet utilisé pour stocker l'ObjectManager de Doctrine.
+     * Sert à administrer la base de données.
+     * 
      * @var ObjectManager
      */
     private $manager;
 
     /**
-     * @var
+     * Objet symfony, utilisé principalement pour la récupération de l'utilisateur courant
+     * 
+     * @var TokenStorageInterface
      */
     private $token;
 
     /**
+     * Object utilisé pour l'envoi des emails.
+     * 
      * @var Mailer
      */
     private $mailer;
     
     /**
+     * Object utilisé pour la création des graphiques affichés sur la page d'accueil.
+     * 
      * @var GoogleGraph
      */
     private $googleGraph;
 
     /**
-     * Undocumented variable
+     * Constructeur de la classe
      *
-     * @var ObjectManager
-     * @var Mailer
+     * @param ObjectManager
+     * @param TokenStorageInterface
+     * @param Mailer
+     * @param GoogleGraph
      */
     public function __construct(ObjectManager $em, TokenStorageInterface $token, Mailer $mailer, GoogleGraph $googleGraph)
     {
@@ -72,6 +88,8 @@ class UserController extends Controller
 
 
     /**
+     * Page d'accueil de l'utilisateur
+     * 
      * @Route("/", name="user_index", methods={"GET"})
      */
     public function index()
@@ -116,11 +134,10 @@ class UserController extends Controller
     }
 
     /**
-     * Undocumented function
+     * Création d'un utilisateur
      * 
+     * @param Request
      * @Route("/account/register", name="user_new", methods={"GET", "POST"})
-     * @param Request $request
-     * @return void
      */
     public function newUser(Request $request)
     {
@@ -195,11 +212,10 @@ class UserController extends Controller
 
 
     /**
-     * Undocumented function
+     * Modification d'un utilisateur
      * 
+     * @param Request
      * @Route("/myaccount/profile", name="user_edit", methods={"GET", "POST"})
-     * @param Request $request
-     * @return void
      */
     public function editUser (Request $request) 
     {
@@ -271,11 +287,11 @@ class UserController extends Controller
     }
 
     /**
-     * Undocumented function
+     * Modification de la page d'accueil de l'utilisateur.
+     * Sélection des graphiques à afficher.
      * 
+     * @param Request
      * @Route("/myaccount/accueil", name="user_edit_accueil", methods={"GET", "POST"})
-     * @param Request $request
-     * @return void
      */
     public function editUserAccueil (Request $request) 
     {
@@ -289,9 +305,33 @@ class UserController extends Controller
         $univers = $this->manager->getRepository(Univers::class)->findAll();
         $user    = $this->token->getToken()->getUser();
         $form    = $this->createFormBuilder($user)
-                         ->add('activityUnivers', CheckboxType::class)
-                         ->add('activityTheme', CheckboxType::class)
-                         ->add('activityLike', CheckboxType::class)
+                         ->add('activityUnivers', CheckboxType::class, [
+                            'label' => "Voir mon nombre de consultations par univers",
+                            'attr'  => [ 
+                                'style' => 'margin-right: 5%;'
+                            ],
+                            'label_attr' => [
+                                'class' => "col-12 textColor"
+                            ]
+                         ])
+                         ->add('activityTheme', CheckboxType::class, [
+                            'label' => "Voir mon nombre de consultations par thème",
+                            'attr'  => [ 
+                                'style' => 'margin-right: 5%;'
+                            ],
+                            'label_attr' => [
+                                'class' => "col-12 textColor"
+                            ]
+                        ])
+                         ->add('activityLike', CheckboxType::class, [
+                            'label' => "Voir le nombre de mes commentaires aimés",
+                            'attr'  => [ 
+                                'style' => 'margin-right: 5%;'
+                            ],
+                            'label_attr' => [
+                                'class' => "col-12 textColor"
+                            ]
+                        ])
                          ->getForm();
         
         $form->handleRequest($request);
@@ -322,11 +362,10 @@ class UserController extends Controller
     }
 
     /**
-     * Undocumented function
+     * Suppression d'un utilisateur
      * 
+     * @param Request
      * @Route("/myaccount/profile/delete", name="user_delete", methods={"GET", "POST"})
-     * @param Request $request
-     * @return void
      */
     public function deleteUser (Request $request) 
     {
@@ -371,11 +410,10 @@ class UserController extends Controller
     }
 
     /**
-     * Undocumented function
+     * Suppression de l'image de profil de l'utilisateur
      * 
+     * @param PictureProfile
      * @Route("/myaccount/profile/delete/Picture/{picture}", name="user_delete_picture", methods={"GET", "POST"})
-     * @param Request $request
-     * @return void
      */
     public function removePictureProfile(PictureProfile $picture)
     {
@@ -399,6 +437,10 @@ class UserController extends Controller
     }
 
     /**
+     * Enregistrement de l'activité de l'utilisateur 
+     * 
+     * @param User
+     * @param Sujet
      * @Route("/activity/{user}/{sujet}", name="register_activity", options = {"expose" = true}, methods={"GET"})
      */
     public function registerActivity(User $user, Sujet $sujet)
@@ -422,9 +464,7 @@ class UserController extends Controller
 
         }
 
-        $response = new Response(
-            Response::HTTP_OK,
-        );
+        $response = new Response(Response::HTTP_OK);
 
         return $response;
 

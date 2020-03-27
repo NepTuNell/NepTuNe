@@ -1,0 +1,240 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+
+namespace CoreBundle\Entity;
+
+use CoreBundle\Entity\User;
+use BackendBundle\Entity\Theme;
+use Doctrine\ORM\Mapping as ORM;
+use BackendBundle\Entity\Section;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
+/**
+ * Sujet
+ *
+ * @ORM\Table(name=&quot;sujet&quot;)
+ * @ORM\Entity(repositoryClass=&quot;CoreBundle\Repository\SujetRepository&quot;)
+ */
+class Sujet
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name=&quot;id&quot;, type=&quot;integer&quot;)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy=&quot;AUTO&quot;)
+     */
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy=&quot;sujets&quot;)
+     */
+    private $user;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Post::class, mappedBy=&quot;sujet&quot;, cascade={&quot;persist&quot;, &quot;remove&quot;})
+     */
+    private $posts;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Theme::class, inversedBy=&quot;sujets&quot;)
+     */
+    private $theme;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Section::class, inversedBy=&quot;sujets&quot;)
+     */
+    private $section;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name=&quot;libelle&quot;, type=&quot;string&quot;, length=255)
+     * @Assert\Length(
+     *      min=2,
+     *      max=35,
+     *      minMessage = &quot;Le libelle est trop court !&quot;,
+     *      maxMessage = &quot;Le libelle est trop long, veuillez saisir 35 carat&egrave;res maximum !&quot;
+     * )
+     * @Assert\NotBlank(message=&quot;Veuillez saisir le libell&eacute; !&quot;)
+     * 
+     */
+    private $libelle;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name=&quot;date&quot;, type=&quot;datetime&quot;)
+     */
+    private $date;
+
+    /**
+     * Constructeur de la classe
+     */
+    public function __construct()
+    {
+        $this-&gt;posts = new ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this-&gt;id;
+    }
+
+    /**
+     * Set libelle
+     *
+     * @param string $libelle
+     *
+     * @return Sujet
+     */
+    public function setLibelle($libelle)
+    {
+        $this-&gt;libelle = $libelle;
+
+        return $this;
+    }
+
+    /**
+     * Get libelle
+     *
+     * @return string
+     */
+    public function getLibelle()
+    {
+        return $this-&gt;libelle;
+    }
+
+    /**
+     * Set theme 
+     */
+    public function setTheme($theme)
+    {
+        $this-&gt;theme = $theme;
+
+        return $this;
+    }
+
+    /**
+     * Get theme
+     * 
+     * @return Theme
+     */
+    public function getTheme()
+    {
+        return $this-&gt;theme;
+    }
+
+    /**
+     * Set section
+     */
+    public function setSection($section)
+    {
+        $this-&gt;section = $section;
+
+        return $this;
+    }
+
+    /**
+     * Get section
+     * 
+     * @return Section
+     */
+    public function getSection()
+    {
+        return $this-&gt;section;
+    }
+
+    /**
+     * Set date
+     */
+    public function setDate($date)
+    {
+        $this-&gt;date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     * 
+     * @return date
+     */
+    public function getDate()
+    {
+        return $this-&gt;date;
+    }
+
+    /**
+     * Set User
+     */
+    public function setUser( User $user )
+    {
+        $this-&gt;user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     * 
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this-&gt;user;
+    }
+
+}
+
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all();
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

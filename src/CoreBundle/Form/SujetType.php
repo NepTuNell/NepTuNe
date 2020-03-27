@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -7,11 +10,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-
+/**
+ * FormType d'un sujet
+ */
 class SujetType extends AbstractType
 {
 
     /**
+     * FormType du sujet
+     * 
+     * @param FormBuilderInterface
+     * @param array
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -20,6 +29,9 @@ class SujetType extends AbstractType
     }
     
     /**
+     * Options du FormType
+     * 
+     * @param OptionsResolver
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
@@ -30,6 +42,8 @@ class SujetType extends AbstractType
     }
 
     /**
+     * Préfixe du FormType lors du rendu
+     * 
      * {@inheritdoc}
      */
     public function getBlockPrefix()

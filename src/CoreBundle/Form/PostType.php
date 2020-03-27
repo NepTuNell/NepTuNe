@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author : CHU VAN Jimmy
+ */
 namespace CoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -7,11 +10,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
-
+/**
+ * FormType d'un commentaire
+ */
 class PostType extends AbstractType
 {
 
     /**
+     * FormType du commentaire
+     * 
+     * @param FormBuilderInterface
+     * @param array
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -20,6 +29,9 @@ class PostType extends AbstractType
     }
     
     /**
+     * Options du formulaire
+     * 
+     * @param OptionsResolver
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
@@ -30,6 +42,8 @@ class PostType extends AbstractType
     }
 
     /**
+     * Préfix du formulaire lors du rendu
+     * 
      * {@inheritdoc}
      */
     public function getBlockPrefix()

@@ -1,0 +1,376 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+
+namespace CoreBundle\Entity;
+
+use CoreBundle\Entity\User;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+/**
+ * Logo
+ *
+ * @ORM\Table(name=&quot;pictureProfile&quot;)
+ * @ORM\Entity(repositoryClass=&quot;CoreBundle\Repository\PictureProfileRepository&quot;)
+ * @ORM\HasLifecycleCallbacks
+ */
+class PictureProfile implements \Serializable
+{
+    
+    /**
+     * @ORM\Column(name=&quot;id&quot;, type=&quot;integer&quot;)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy=&quot;AUTO&quot;)
+     */
+    private $id;
+
+    /**
+     * @ORM\OneToOne(targetEntity=&quot;User&quot;, inversedBy=&quot;pictureProfile&quot;)
+     * One profile's picture has one user
+     */
+    private $user;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name=&quot;pictureName&quot;, type=&quot;string&quot;, length=255, nullable=true)
+     */
+    private $pictureName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name=&quot;pictureExtension&quot;, type=&quot;string&quot;, length=255, nullable=true)
+     */
+    private $pictureExtension;
+
+    /**
+     * @Assert\File(
+     *   maxSize = &quot;25M&quot;,
+     *   maxSizeMessage = &quot;Fichier trop volumineux, l'image ne doit pas exc&eacute;der 25 mo.&quot;,
+     *   mimeTypes = {&quot;image/png&quot;, &quot;image/jpeg&quot;, &quot;image/jpg&quot;},
+     *   mimeTypesMessage = &quot;Format de l'image non support&eacute;e, assurez vous d'utiliser ces formats : png, jpg/jpeg.&quot;
+     * )
+     * @Assert\Valid()
+     * 
+     * @var UploadedFile
+     */
+    private $upload;
+
+    /**
+     * @var string
+     * 
+     * Not used in the database
+     */
+    private $TempFile;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this-&gt;id;
+    }
+
+    /**
+     * Set logoName
+     *
+     * @return Logo
+     */
+    public function setPictureName($pictureName) 
+    {
+        $this-&gt;pictureName = $pictureName;
+    }
+
+    /**
+     * Get pictureName
+     *
+     * @return string
+     */
+    public function getPictureName()
+    {
+        return $this-&gt;pictureName;
+    }
+
+    /**
+     * Set pictureExtension
+     *
+     * @param string pictureExtension
+     */
+    public function setPictureExtension($pictureExtension)  
+    {
+        $this-&gt;pictureExtension = $pictureExtension;
+    }
+
+    /**
+     * Get pictureExtension
+     *
+     * @return string
+     */
+    public function getPictureExtension()
+    {
+        return $this-&gt;pictureExtension;
+    }
+
+    /**
+     * Set TempFile
+     * 
+     * @param string TempFile
+     * @return string
+     */
+    public function setTempFile($TempFile) 
+    {
+        $this-&gt;TempFile = $TempFile;
+
+        return $this;
+    }
+
+    /**
+     * Get TempFile
+     * 
+     * @return string
+     */
+    public function getTempFile()
+    {
+        return $this-&gt;TempFile;
+    }
+
+    /**
+     * Set User
+     */
+    public function setUser(User $user) 
+    {
+        $this-&gt;user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get User
+     */
+    public function getUser() 
+    {
+        return $this-&gt;user;
+    }
+
+    /**
+     * Get PictureFullName
+     * 
+     * @return string
+     */
+    public function getPictureFullName()
+    {
+        return $this-&gt;getPictureName().&quot;_&quot;.$this-&gt;getId().&quot;.&quot;.$this-&gt;getPictureExtension();
+    }
+
+    /**
+     * GetFullPath
+     * 
+     * @return string
+     */
+    public function getPath()
+    {
+        return '/home/jimmy/html/FORUM/web/upload/imgProfil';
+    }
+
+    /**
+     * get Upload
+     */
+    public function getUpload()
+    {
+        return $this-&gt;upload;
+    }
+
+    /**
+     * Set Upload
+     * 
+     * @param UploadedFile
+     */
+    public function setUpload(UploadedFile $upload = null)  
+    {
+
+        $this-&gt;upload = $upload;
+        
+        /**
+         * Si un fichier existe d&eacute;j&agrave;
+         */
+        if( null !== $this-&gt;getPictureName() ) {
+
+            /**
+             * Sauvegarde du fichier existant pour suppression apr&egrave;s enregistrement 
+             * du nouveau fichier dans la base de donn&eacute;es
+             */
+            $this-&gt;setTempFile( $this-&gt;getPictureName().&quot;_&quot;.$this-&gt;getId().&quot;.&quot;.$this-&gt;getPictureExtension() );
+
+            /**
+             * Passage des attributs &agrave; null
+             */
+            $this-&gt;setPictureName(null);
+            $this-&gt;setPictureExtension(null);
+
+        }
+
+    }
+
+    /**
+     * Avant le persist en base de donn&eacute;es
+     * 
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpdate()
+    {
+
+        /**
+         * Si pas de fichier on arr&ecirc;te
+         */
+        if( null === $this-&gt;upload ) {
+
+            return;
+ 
+        }
+
+        /**
+         * On prend la partie gauche apr&egrave;s le point dans le nom puis on le concat&egrave;ne avec l'Id attribu&eacute; (en prepersist si l'enregistrement n'existe pas)
+         * Attribution du nom du fichier
+         */
+        $fileName = strstr($this-&gt;upload-&gt;getClientOriginalName(), '.', true);
+        $this-&gt;setPictureName($fileName);
+
+        /**
+         * Attribution de l'extension du fichier
+         * Si l'extension ne peut &ecirc;tre suppos&eacute;e alors mise &agrave; .bin par d&eacute;faut
+         * (Tir&eacute; de la documentation symfony sur l'utilisation du type UploadedFile)
+         */
+        if(null === $this-&gt;upload-&gt;guessExtension()) {
+
+            $this-&gt;setPictureExtension('.bin');
+    
+        } else {
+
+            $this-&gt;setPictureExtension($this-&gt;upload-&gt;guessExtension());
+
+        }
+
+    }
+
+    /**
+     * Apr&egrave;s persist dans la base de donn&eacute;es
+     * 
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function update()
+    {
+
+        /**
+         * Si un fichier existe alors suppression
+         */
+        if( null !== $this-&gt;getTempFile() &amp;&amp; file_exists( $this-&gt;getPath().&quot;/&quot;.$this-&gt;getTempFile() ) ) {
+
+            unlink($this-&gt;getPath().&quot;/&quot;.$this-&gt;getTempFile());
+
+        }
+
+        /**
+         * D&eacute;placement du fichier
+         */
+        $this-&gt;upload-&gt;move($this-&gt;getPath(), $this-&gt;getPictureFullName());
+
+    }
+
+    /**
+     * Sauvegarde du nom dans une variable temporaire avant suppression dans la base
+     * de donn&eacute;es pour suppression du fichier physique via la fonction remove
+     * 
+     * @ORM\PreRemove()
+     */
+    public function preRemove()
+    {
+        $this-&gt;setTempFile( $this-&gt;getPictureFullName() );
+    }
+   
+    /**
+     * Suppression du fichier physique
+     * 
+     * @ORM\PostRemove()
+     */
+    public function remove()
+    {
+        if( file_exists( $this-&gt;getPath().&quot;/&quot;.$this-&gt;getTempFile() ) ) {
+
+            unlink( $this-&gt;getPath().&quot;/&quot;.$this-&gt;getTempFile() );
+
+        }
+    }
+
+    /*******************************
+     *      Serializer interface
+     *******************************/
+
+    /**
+     * Serialize
+     */
+    public function serialize()
+    {
+        return serialize($this-&gt;id);
+    }
+ 
+    /**
+     * Unserialize
+     */
+    public function unserialize($serialized)
+    {
+        $this-&gt;id = unserialize($serialized);
+ 
+    }
+
+}
+
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all();
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

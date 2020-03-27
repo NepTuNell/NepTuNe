@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy 
+ */
+
 namespace CoreBundle\Security;
 
 use CoreBundle\Entity\User as AppUser;
@@ -14,12 +18,15 @@ use Symfony\Component\Security\Core\Exception\AccountExpiredException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Routing\RouterInterface;
 
-
+/**
+ * Vérification utilisateur avant login et avant logout
+ */
 class UserChecker implements UserCheckerInterface
 {
     
     /**
-     * Undocumented variable
+     * Objet utilisé pour stocker l'ObjectManager de Doctrine.
+     * Sert à administrer la base de données.
      *
      * @var ObjectManager
      */
@@ -40,7 +47,7 @@ class UserChecker implements UserCheckerInterface
     private $router;
     
     /**
-     * Undocumented function
+     * Constructeur de la classe
      *
      * @param ObjectManager $manager
      * @param TokenStorageInterface $token
@@ -56,9 +63,9 @@ class UserChecker implements UserCheckerInterface
     }
     
     /**
-     * Undocumented function
+     * Vérification de l'utilisateur avec sa connexion (une fois que le formulaire de connexion est soumis)
      *
-     * @param UserInterface $user
+     * @param UserInterface
      * @return void
      */
     public function checkPreAuth(UserInterface $user)
@@ -80,9 +87,9 @@ class UserChecker implements UserCheckerInterface
     }
 
     /**
-     * Undocumented function
+     * Vérification de l'utilisateur juste après sa déconnexion (avant logout)
      *
-     * @param UserInterface $user
+     * @param UserInterface
      * @return void
      */
     public function checkPostAuth(UserInterface $user)

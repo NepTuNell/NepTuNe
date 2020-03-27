@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author: Jimmy
+ */
+
 namespace CoreBundle\Entity;
 
 use CoreBundle\Entity\User;
@@ -18,8 +22,8 @@ class PictureProfile implements \Serializable
 {
     
     /**
-     * @var int
-     *
+     * Id de l'image de profil
+     * 
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -27,26 +31,29 @@ class PictureProfile implements \Serializable
     private $id;
 
     /**
+     * Utilisateur associé à l'image de profil
+     * 
      * @ORM\OneToOne(targetEntity="User", inversedBy="pictureProfile")
      * One profile's picture has one user
      */
     private $user;
 
     /**
-     * @var string
+     * Nom de l'image de profil
      *
      * @ORM\Column(name="pictureName", type="string", length=255, nullable=true)
      */
     private $pictureName;
 
     /**
-     * @var string
+     * Extension de l'image de profil
      *
      * @ORM\Column(name="pictureExtension", type="string", length=255, nullable=true)
      */
     private $pictureExtension;
 
     /**
+     * Fichier uploadé (image de profil)
      * 
      * @Assert\File(
      *   maxSize = "25M",
@@ -61,9 +68,9 @@ class PictureProfile implements \Serializable
     private $upload;
 
     /**
-     * @var string
+     * Fichier temporaire
      * 
-     * No use in the database
+     * Not used in the database
      */
     private $TempFile;
 
@@ -79,9 +86,8 @@ class PictureProfile implements \Serializable
 
     /**
      * Set logoName
-     *
-     * @param string $logoName
-     *
+     * 
+     * @param pictureName
      * @return Logo
      */
     public function setPictureName($pictureName) 
@@ -103,8 +109,6 @@ class PictureProfile implements \Serializable
      * Set pictureExtension
      *
      * @param string pictureExtension
-     *
-     * @return 
      */
     public function setPictureExtension($pictureExtension)  
     {
@@ -144,6 +148,11 @@ class PictureProfile implements \Serializable
         return $this->TempFile;
     }
 
+    /**
+     * Set User
+     * 
+     * @param User
+     */
     public function setUser(User $user) 
     {
         $this->user = $user;
@@ -151,6 +160,9 @@ class PictureProfile implements \Serializable
         return $this;
     }
 
+    /**
+     * Get User
+     */
     public function getUser() 
     {
         return $this->user;
@@ -165,7 +177,6 @@ class PictureProfile implements \Serializable
     {
         return $this->getPictureName()."_".$this->getId().".".$this->getPictureExtension();
     }
-    
 
     /**
      * GetFullPath
@@ -177,13 +188,16 @@ class PictureProfile implements \Serializable
         return '/home/jimmy/html/FORUM/web/upload/imgProfil';
     }
 
+    /**
+     * get Upload
+     */
     public function getUpload()
     {
         return $this->upload;
     }
 
     /**
-     * Set Logo
+     * Set Upload
      * 
      * @param UploadedFile
      */
@@ -214,10 +228,10 @@ class PictureProfile implements \Serializable
     }
 
     /**
+     * Avant le persist en base de données
+     * 
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
-     * 
-     * Avant le persist en base de données
      */
     public function preUpdate()
     {
@@ -256,10 +270,10 @@ class PictureProfile implements \Serializable
     }
 
     /**
+     * Après persist dans la base de données
+     * 
      * @ORM\PostPersist()
      * @ORM\PostUpdate()
-     * 
-     * Après persist dans la base de données
      */
     public function update()
     {
@@ -281,10 +295,10 @@ class PictureProfile implements \Serializable
     }
 
     /**
-     * @ORM\PreRemove()
-     * 
      * Sauvegarde du nom dans une variable temporaire avant suppression dans la base
      * de données pour suppression du fichier physique via la fonction remove
+     * 
+     * @ORM\PreRemove()
      */
     public function preRemove()
     {
@@ -292,9 +306,9 @@ class PictureProfile implements \Serializable
     }
    
     /**
-     * @ORM\PostRemove()
-     * 
      * Suppression du fichier physique
+     * 
+     * @ORM\PostRemove()
      */
     public function remove()
     {
@@ -319,6 +333,8 @@ class PictureProfile implements \Serializable
  
     /**
      * Unserialize
+     * 
+     * @param serialized
      */
     public function unserialize($serialized)
     {

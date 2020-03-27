@@ -1,0 +1,136 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+
+namespace BackendBundle\Entity;
+
+use CoreBundle\Entity\User;
+use CoreBundle\Entity\Post;
+use BackendBundle\Entity\Univers;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * PostControl
+ *
+ * @ORM\Table(name=&quot;postControl&quot;)
+ * @ORM\Entity(repositoryClass=&quot;BackendBundle\Repository\PostControlRepository&quot;)
+ */
+class PostControl
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name=&quot;id&quot;, type=&quot;integer&quot;)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy=&quot;AUTO&quot;)
+     */
+    private $id;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy=&quot;postsControl&quot;)
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Post::class, inversedBy=&quot;postsControl&quot;)
+     */
+    private $post;
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this-&gt;id;
+    }
+
+    /**
+     * Set user
+     *
+     * @param string $user
+     *
+     * @return Activity
+     */
+    public function setUser($user)
+    {
+        $this-&gt;user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return string
+     */
+    public function getUser()
+    {
+        return $this-&gt;user;
+    }
+
+    /**
+     * Set Post
+     */
+    public function setPost(Post $post)
+    {
+        $this-&gt;post = $post;
+
+        return $this;
+
+    }
+    
+    /**
+     * Get Post
+     */
+    public function getPost()
+    {
+        return $this-&gt;post;
+    }
+
+}
+
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all();
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

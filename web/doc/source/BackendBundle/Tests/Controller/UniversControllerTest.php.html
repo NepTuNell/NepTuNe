@@ -1,0 +1,100 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+
+namespace BackendBundle\Tests\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+class UniversControllerTest extends WebTestCase
+{
+    /*
+    public function testCompleteScenario()
+    {
+        // Create a new client to browse the application
+        $client = static::createClient();
+
+        // Create a new entry in the database
+        $crawler = $client-&gt;request('GET', '/univers/');
+        $this-&gt;assertEquals(200, $client-&gt;getResponse()-&gt;getStatusCode(), &quot;Unexpected HTTP status code for GET /univers/&quot;);
+        $crawler = $client-&gt;click($crawler-&gt;selectLink('Create a new entry')-&gt;link());
+
+        // Fill in the form and submit it
+        $form = $crawler-&gt;selectButton('Create')-&gt;form(array(
+            'backendbundle_univers[field_name]'  =&gt; 'Test',
+            // ... other fields to fill
+        ));
+
+        $client-&gt;submit($form);
+        $crawler = $client-&gt;followRedirect();
+
+        // Check data in the show view
+        $this-&gt;assertGreaterThan(0, $crawler-&gt;filter('td:contains(&quot;Test&quot;)')-&gt;count(), 'Missing element td:contains(&quot;Test&quot;)');
+
+        // Edit the entity
+        $crawler = $client-&gt;click($crawler-&gt;selectLink('Edit')-&gt;link());
+
+        $form = $crawler-&gt;selectButton('Update')-&gt;form(array(
+            'backendbundle_univers[field_name]'  =&gt; 'Foo',
+            // ... other fields to fill
+        ));
+
+        $client-&gt;submit($form);
+        $crawler = $client-&gt;followRedirect();
+
+        // Check the element contains an attribute with value equals &quot;Foo&quot;
+        $this-&gt;assertGreaterThan(0, $crawler-&gt;filter('[value=&quot;Foo&quot;]')-&gt;count(), 'Missing element [value=&quot;Foo&quot;]');
+
+        // Delete the entity
+        $client-&gt;submit($crawler-&gt;selectButton('Delete')-&gt;form());
+        $crawler = $client-&gt;followRedirect();
+
+        // Check the entity has been delete on the list
+        $this-&gt;assertNotRegExp('/Foo/', $client-&gt;getResponse()-&gt;getContent());
+    }
+
+    */
+}
+</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all();
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Author : CHU VAN Jimmy
+ */
+
 namespace CoreBundle\Controller;
 
 use CoreBundle\Entity\Post;
@@ -28,25 +32,32 @@ class PostController extends Controller
 {
 
     /**
-     * @var User
-     */
-    private $user;
-
-    /**
+     * Objet utilisé pour stocker l'ObjectManager de Doctrine.
+     * Sert à administrer la base de données.
+     * 
      * @var ObjectManager
      */
     private $manager;
 
+    /**
+     * Constructeur de la classe
+     * 
+     * @param ObjectManager
+     */
     public function __construct(ObjectManager $manager)
     {
         $this->manager = $manager;
     }
 
     /**
+     * Fonction qui retourne la page où s'affichera les commentaires
+     * 
+     * @param Request
+     * @param Sujet
      * @Route("/view/{sujet}", name="post_view", options = {"expose" = true}, requirements={"sujet"="\d+"})
      * @Method({"GET", "POST"})
      */
-    public function view(Request $request, Sujet $sujet)
+    public function viewPageComment(Request $request, Sujet $sujet)
     {
 
         $universList = $this->manager->getRepository(Univers::class)->findAll();
@@ -65,10 +76,15 @@ class PostController extends Controller
     }
 
     /**
+     * Fonction qui retourne la liste des commentaires en fonction d'un sujet.
+     * Les commentaires retournés seront affichés sur la page renvoyée par la fonction "viewPageComment".
+     * 
+     * @param Request
+     * @param Sujet
      * @Route("/list/{sujet}", name="post_list", options = {"expose" = true}, requirements={"sujet"="\d+"})
      * @Method({"GET", "POST"})
      */
-    public function list(Request $request, Sujet $sujet)
+    public function listComment(Request $request, Sujet $sujet)
     {
 
         $data = array();
@@ -96,19 +112,21 @@ class PostController extends Controller
      
         $commentaires = json_encode($data);
 
-        $response = new Response(
-            $commentaires,
-        );
+        $response = new Response($commentaires);
 
         return $response;
 
     }
 
     /**
+     * Création d'un nouveau commentaire
+     * 
+     * @param Request
+     * @param Sujet
      * @Route("/new/commentaire/{sujet}", name="post_new", options = {"expose" = true}, requirements={"sujet"="\d+"})
      * @Method({"POST"})
      */
-    public function new(Request $request, Sujet $sujet)
+    public function newComment(Request $request, Sujet $sujet)
     {
         
         if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
@@ -144,9 +162,7 @@ class PostController extends Controller
 
                 if (  2000000 < $_FILES['files'.$i]['size'] ) {
 
-                    $response = new Response(
-                        Response::HTTP_PARTIAL_CONTENT,
-                    );
+                    $response = new Response(Response::HTTP_PARTIAL_CONTENT);
 
                     return $response;
 
@@ -158,15 +174,11 @@ class PostController extends Controller
 
             }
 
-            $response = new Response(
-                Response::HTTP_OK,
-            );
+            $response = new Response(Response::HTTP_OK);
         
         } else {
 
-            $response = new Response(
-                Response::HTTP_NOT_FOUND,
-            );
+            $response = new Response(Response::HTTP_NOT_FOUND);
 
         }
 
@@ -175,10 +187,15 @@ class PostController extends Controller
     }
 
     /**
+     * Modification d'un commentaire existant
+     * 
+     * @param Request
+     * @param Sujet
+     * @param Post
      * @Route("/edit/commentaire/{sujet}/{post}", name="post_edit", options = {"expose" = true}, requirements={"sujet"="\d+", "post"="\d+"})
      * @Method({"POST"})
      */
-    public function edit(Request $request, Sujet $sujet, Post $post = null)
+    public function editComment(Request $request, Sujet $sujet, Post $post = null)
     {
         
         if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
@@ -209,9 +226,7 @@ class PostController extends Controller
 
                 if (  2000000 < $_FILES['files'.$i]['size'] ) {
 
-                    $response = new Response(
-                        Response::HTTP_PARTIAL_CONTENT,
-                    );
+                    $response = new Response(Response::HTTP_PARTIAL_CONTENT);
 
                     return $response;
 
@@ -223,15 +238,12 @@ class PostController extends Controller
 
             }
             
-            $response = new Response(
-                Response::HTTP_OK,
-            );
+            $response = new Response(Response::HTTP_OK);
         
         } else {
 
-            $response = new Response(
-                Response::HTTP_NOT_FOUND,
-            );
+            $response = new Response(Response::HTTP_NOT_FOUND);
+
         }
 
         return $response;
@@ -239,10 +251,13 @@ class PostController extends Controller
     }
 
     /**
+     * Suppression d'un commentaire
+     * 
+     * @param Request
      * @Route("/delete/commentaire", name="post_delete", options={"expose"=true}, requirements={"post"="\d+"})
      * @Method({"POST"})
      */
-    public function delete(Request $request)
+    public function deleteComment(Request $request)
     {
 
         if ( !$this->isGranted('ROLE_USER') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
@@ -265,23 +280,18 @@ class PostController extends Controller
                 $this->manager->remove($post);
                 $this->manager->flush();
 
-                $response = new Response(
-                    Response::HTTP_OK,
-                );
+                $response = new Response(Response::HTTP_OK);
 
             } else {
 
-                $response = new Response(
-                    Response::HTTP_NOT_FOUND,
-                );
+                $response = new Response(Response::HTTP_NOT_FOUND);
 
             }
 
         } else {
 
-            $response = new Response(
-                Response::HTTP_NOT_FOUND,
-            );
+            $response = new Response(Response::HTTP_NOT_FOUND);
+
         }
 
         return $response;
@@ -289,6 +299,9 @@ class PostController extends Controller
     }
 
     /**
+     * Suppression d'une image spécifique associée à un commentaire
+     * 
+     * @param Picture
      * @Route("delete/picture/{id}", options={"expose"=true}, name="picture_delete", methods={"GET"})
      */
     public function deletePicture(Picture $picture)
@@ -304,15 +317,18 @@ class PostController extends Controller
         $this->manager->remove($picture);
         $this->manager->flush();
 
-        $response = new Response(
-            Response::HTTP_OK,
-        );
+        $response = new Response(Response::HTTP_OK);
 
         return $response;
 
     }
      
     /**
+     * Fonction utilisée pour liker ou disliker un commentaire
+     * 
+     * @param User
+     * @param Post
+     * @param int
      * @Route("/like/{user}/{post}/{param}", name="post_like", options = {"expose" = true}, methods={"GET"})
      */
     public function like(User $user, Post $post, $param)
@@ -387,24 +403,24 @@ class PostController extends Controller
         
         $this->manager->flush();
 
-        $response = new Response(
-            Response::HTTP_OK,
-        );
+        $response = new Response(Response::HTTP_OK);
 
         return $response;
 
     }
 
     /**
+     * Cette fonction retourne le nombre de commentaire présents dans un sujet.
+     * Elle est utilisée pour rafraichir la page côté client si il existe un changement dans le nombre de commentaires.
+     * 
+     * @param Sujet
      * @Route("/count/{sujet}", name="post_count", options = {"expose" = true}, methods={"GET", "POST"})
      */
     public function countPost(Sujet $sujet)
     {
         $result = $this->manager->getRepository(Sujet::class)->countPostQuery3($sujet);
 
-        $response = new Response(
-            json_encode($result)
-        );
+        $response = new Response(json_encode($result));
 
         return $response;
     }

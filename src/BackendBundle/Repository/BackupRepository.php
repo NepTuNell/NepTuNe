@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace BackendBundle\Repository;
 
 use BackendBundle\Entity\Backup;
@@ -13,6 +16,9 @@ use BackendBundle\Entity\Backup;
 class BackupRepository extends \Doctrine\ORM\EntityRepository
 {
 
+    /**
+     * Fonction qui renvoie toutes les sauvegardes du site
+     */
     public function fetchAllBackup() 
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
@@ -23,7 +29,12 @@ class BackupRepository extends \Doctrine\ORM\EntityRepository
                                 
         return $result; 
     }
-
+    
+    /**
+     * Fonction qui renvoie une sauvegarde selon son nom
+     * 
+     * @param string
+     */
     public function fetchBackup($libelle) 
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();

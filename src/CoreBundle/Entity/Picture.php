@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
+
 namespace CoreBundle\Entity;
 
 use CoreBundle\Entity\Post;
@@ -19,7 +23,7 @@ class Picture
 {
     
     /**
-     * @var int
+     * ID de l'image
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -28,26 +32,28 @@ class Picture
     private $id;
 
     /**
+     * Commentaire de l'image
+     * 
      * @ORM\ManyToOne(targetEntity="post", inversedBy="pictures")
      */
     private $post;
 
     /**
-     * @var string
+     * Nom de l'image
      *
      * @ORM\Column(name="pictureName", type="string", length=255)
      */
     private $pictureName;
 
     /**
-     * @var string
+     * Extension de l'image
      *
      * @ORM\Column(name="pictureExtension", type="string", length=255)
      */
     private $pictureExtension;
 
     /**
-     * Fichier en lui même
+     * Fichier uploadé
      */
     private $file;
 
@@ -56,6 +62,12 @@ class Picture
      */
     private $tmpFile;
 
+    /**
+     * Constructeur de la classe
+     * 
+     * @param File
+     * @param Post
+     */
     public function __construct( $file, Post $post )
     {
         $this->setFile($file);
@@ -75,7 +87,7 @@ class Picture
     /**
      * Set pictureName
      *
-     * @param string $pictureName
+     * @param string
      *
      * @return Logo
      */
@@ -97,9 +109,7 @@ class Picture
     /**
      * Set pictureExtension
      *
-     * @param string pictureExtension
-     *
-     * @return 
+     * @param string
      */
     public function setPictureExtension($pictureExtension)  
     {
@@ -116,6 +126,11 @@ class Picture
         return $this->pictureExtension;
     }
 
+    /**
+     * Set post
+     * 
+     * @param Post
+     */
     public function setPost(Post $post)
     {
         $this->post = $post;
@@ -123,6 +138,9 @@ class Picture
         return $this;
     }
 
+    /**
+     * Get post
+     */
     public function getPost()
     {
         return $this->post;
@@ -139,7 +157,7 @@ class Picture
     }
  
     /**
-     * GetPath
+     * Get Path
      * 
      * @return string
      */
@@ -148,17 +166,30 @@ class Picture
         return '/home/jimmy/html/FORUM/web/upload/images';
     }
 
+    /**
+     * Set file
+     * 
+     * @param File
+     */
     public function setFile($file)
     {
         $this->file = $file;
        
     }
 
+    /**
+     * Get file
+     */
     public function getFile()
     {
         return $this->file;
     }
 
+    /**
+     * Set tempfile
+     * 
+     * @param string
+     */
     public function setTmpFile($fullName)
     {
         $this->tmpFile = $fullName;
@@ -166,16 +197,20 @@ class Picture
         return $this;
     }
 
+    /**
+     * Get tempfile
+     */
     public function getTmpFile()
     {
         return $this->tmpFile;
     }
 
     /**
+     * Fonction exécutée avant le persist en base de données
+     * 
+     * @param File
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
-     * 
-     * Avant le persist en base de données
      */
     public function preupload($file)
     {
@@ -187,10 +222,11 @@ class Picture
     }
 
     /**
+     * Fonction exécutée après le persist en base de données
+     * 
+     * @param File
      * @ORM\PostPersist()
      * @ORM\PostUpdate()
-     * 
-     * Après le persist en base de données
      */
     public function upload($file)
     {
@@ -199,11 +235,11 @@ class Picture
     
     }
 
-    /**
-     * @ORM\PreRemove()
-     * 
+    /** 
      * Sauvegarde du nom dans une variable temporaire avant suppression dans la base
      * de données pour suppression du fichier physique via la fonction remove
+     * 
+     * @ORM\PreRemove()
      */
     public function preRemove()
     {
@@ -212,16 +248,15 @@ class Picture
     }
    
     /**
-     * @ORM\PostRemove()
-     * 
      * Suppression du fichier physique
+     * 
+     * @ORM\PostRemove()
      */
     public function remove()
     {
 
         if( file_exists( $this->getPath()."/".$this->getTmpFile() ) ) {
 
-            var_dump( $this->getPath()."/".$this->getTmpFile() );
             unlink( $this->getPath()."/".$this->getTmpFile() );
 
         }

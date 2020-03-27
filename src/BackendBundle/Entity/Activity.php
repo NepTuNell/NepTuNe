@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace BackendBundle\Entity;
 
 use CoreBundle\Entity\User;
@@ -15,7 +18,7 @@ use BackendBundle\Entity\Univers;
 class Activity
 {
     /**
-     * @var int
+     * ID de l'activité
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -24,23 +27,29 @@ class Activity
     private $id;
 
     /**
-     * @var \DateTime
+     * Date de l'activité
      *
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
     /**
+     * Utilisateur associé à l'activité
+     * 
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="activities")
      */
     private $user;
 
     /**
+     * Univers
+     * 
      * @ORM\ManyToOne(targetEntity=Univers::class, inversedBy="activities")
      */
     private $univers;
 
     /**
+     * Thème
+     * 
      * @ORM\ManyToOne(targetEntity=Theme::class, inversedBy="activities")
      */
     private $theme;
@@ -58,9 +67,7 @@ class Activity
     /**
      * Set date
      *
-     * @param \DateTime $date
-     *
-     * @return Activity
+     * @param \DateTime  
      */
     public function setDate($date)
     {
@@ -82,9 +89,8 @@ class Activity
     /**
      * Set user
      *
-     * @param string $user
-     *
-     * @return Activity
+     * @param User
+     * @return User
      */
     public function setUser($user)
     {
@@ -96,7 +102,7 @@ class Activity
     /**
      * Get user
      *
-     * @return string
+     * @return User
      */
     public function getUser()
     {
@@ -116,7 +122,7 @@ class Activity
     /**
      * Set univers
      * 
-     * @return Univers
+     * @param Univers
      */
     public function setUnivers(Univers $univers)
     {
@@ -136,7 +142,7 @@ class Activity
     /**
      * Set Theme
      * 
-     * @return Theme
+     * @param Theme
      */
     public function setTheme(Theme $theme)
     {

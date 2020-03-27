@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace CoreBundle\Entity;
 
 use CoreBundle\Entity\User;
@@ -19,7 +22,7 @@ class Post
 {
 
     /**
-     * @var int
+     * ID du commentaire
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -28,46 +31,56 @@ class Post
     private $id;
 
     /**
+     * Sujet du commentaire
+     * 
      * @ORM\ManyToOne(targetEntity=Sujet::class, inversedBy="posts")
      */
     private $sujet;
 
     /**
+     * Utilisateur qui a posté le commentaire
+     * 
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
      */
     private $user;
 
     /**
-     * @var string
+     * Texte du commentaire
      *
      * @ORM\Column(name="commentaire", type="text")
      */
     private $commentaire;
 
     /**
-     * @var string
+     * Date à laquelle le commentaire est posté
      *
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
 
     /**
+     * Images associées au commentaire
+     * 
      * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="post", cascade={"persist", "remove"})
      */
     private $pictures;
 
     /**
+     * Nombre de j'aime pour ce commentaire
+     * 
      * @ORM\OneToMany(targetEntity=PostLike::class, mappedBy="post", cascade={"persist", "remove"})
      */
     private $postLikes;
 
     /**
+     * Nombre de signalement pour ce commentaire
+     * 
      * @ORM\OneToMany(targetEntity=PostControl::class, mappedBy="post", cascade={"persist", "remove"})
      */
     private $postsControl;
     
     /**
-     * Constructor
+     * Constructeur de la classe
      */
     public function __construct()
     {
@@ -89,8 +102,7 @@ class Post
     /**
      * Set Sujet
      *
-     * @param Sujet $sujet
-     *
+     * @param Sujet
      * @return Sujet
      */
     public function setSujet(Sujet $sujet)
@@ -110,6 +122,11 @@ class Post
         return $this->sujet;
     }
 
+    /**
+     * Set user
+     * 
+     * @param User
+     */
     public function setUser(User $user)
     {
         $this->user = $user;
@@ -130,8 +147,7 @@ class Post
     /**
      * Set commentaire
      *
-     * @param string $commentaire
-     *
+     * @param string
      * @return Post
      */
     public function setCommentaire($commentaire)
@@ -153,6 +169,8 @@ class Post
 
     /**
      * Set date
+     * 
+     * @param Date
      */
     public function setDate($date)
     {
@@ -172,7 +190,9 @@ class Post
     }
 
     /**
-     * add picture
+     * Ajout d'une image (méthode de type Collection)
+     * 
+     * @param Picture
      */
     public function addPicture(Picture $picture)
     {
@@ -180,7 +200,9 @@ class Post
     }
 
     /**
-     * remove picture
+     * Suppression d'une image (méthode de type Collection)
+     * 
+     * @param Picture
      */
     public function removePicture(Picture $picture)
     {

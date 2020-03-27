@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
+
 namespace BackendBundle\Controller;
 
 use DateTime;
@@ -28,7 +32,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
- * 
  * Theme controller.
  *
  * @Route("admin")
@@ -36,37 +39,38 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class AdminController extends Controller
 {
 
-   /**
-     * Undocumented variable
+    /**
+     * Objet utilisé pour stocker l'EntityManagerInterface de Doctrine.
+     * Sert à administrer la base de données.
      *
      * @var EntityManagerInterface
      */
     private $manager;
     
     /**
-     * Undocumented variable
+     * Objet symfony, utilisé principalement pour la récupération de l'utilisateur courant
      *
      * @var TokenStorageInterface
      */
     private $token;                                                                    
     
     /**
-     * Undocumented variable
+     * Object symfony (cryptage et décryptage)
      *
      * @var UserPasswordEncoderInterface
      */
     private $security;
     
     /**
-     * Undocumented variable
+     * Object utilisé pour l'envoi des emails.
      *
-     * @var Mailer
+     * @var Mailer@var Mailer
      */
     private $mailer;
 
     /**
-     * Undocumented function
-     *
+     * Constructeur de la classe
+     * 
      * @param EntityManagerInterface $manager
      * @param TokenStorageInterface $token
      * @param UserPasswordEncoderInterface $security
@@ -80,12 +84,9 @@ class AdminController extends Controller
         $this->mailer   = $mailer;
     }
 
-
-    /*************************************************
-     *               TABLEAU DE BORD
-     *************************************************/
-
     /**
+     * Affiche le tableau de bord de l'administrateur.
+     * 
      * @Route("/dashboard", name="admin_dashboard")
      * @Method("GET")
      */
@@ -108,15 +109,10 @@ class AdminController extends Controller
 
     }
 
-    /*************************************************
-     *              CONTROLE DU FORUM
-     *************************************************/
-
     /**
-     * Undocumented function
+     * Renvoie la page de contrôle global du forum.
      * 
      * @Route("/dashboard/forum", name="admin_control_forum", methods={"GET"})
-     * @return void
      */
     public function controlForum()
     {
@@ -134,16 +130,11 @@ class AdminController extends Controller
         ]);
 
     }
-
-    /*************************************************
-     *  AFFICHAGE ET GESTION DES COMPTES UTILISATEUR 
-     *************************************************/
     
     /**
-     * Undocumented function
+     * Liste des comptes utilisateurs accessible via la partie administration du site.
      * 
      * @Route("/dashboard/accounts", name="admin_view_accounts", methods={"GET"})
-     * @return void
      */
     public function viewAccounts ()
     {
@@ -164,12 +155,11 @@ class AdminController extends Controller
     }
     
     /**
-     * Undocumented function
+     * Activation ou désactivation d'un compte utilisateur.
      * 
+     * @param User
+     * @param int
      * @Route("/dashboard/account/{user}/{param}", name="admin_control_account", methods={"GET"})
-     * @param User $user
-     * @param [type] $param
-     * @return void
      */
     public function accountActivated (User $user, $param)
     {
@@ -199,6 +189,9 @@ class AdminController extends Controller
     }
     
     /**
+     * Cette fonction retourne la page d'un utilisateur sélectionner via la section administration du site.
+     * 
+     * @param User
      * @Route("/show/account/{id}", name="admin_show_user_account", methods={"GET"})
      */
     public function showAccount(User $user)
@@ -218,12 +211,11 @@ class AdminController extends Controller
     }
 
     /**
-     * Undocumented function
+     * Fonction utilisée pour définir le rôle d'un utilisateur.
      * 
+     * @param User
+     * @param int
      * @Route("/dashboard/roles/{user}/{param}", name="admin_control_role", methods={"GET"})
-     * @param User $user
-     * @param [type] $param
-     * @return void
      */
     public function accountRoles (User $user, $param)
     {
@@ -256,6 +248,10 @@ class AdminController extends Controller
     }
     
     /**
+     * Cette fonction permet d'obtenir les autorisations d'un utilisateur (si l'utilisateur est connecté ou non ainsi que son rôle).
+     * Si l'utilisateur est connecté et si il est administrateur ou modérateur alors la variable $authorised sera à true.
+     * Elle retourne l'id de l'utilisateur ainsi que ses droits.
+     * 
      * @Route("/user/authorised", name="user_authorised", options = {"expose" = true}, methods={"GET"})
      */
     public function userAuthorised()
@@ -263,7 +259,6 @@ class AdminController extends Controller
 
         $authorised = false;
 
-        // Si pas d'instance de user alors pas d'ID
         if ( !$this->isGranted('ROLE_USER') && !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
 
             $userId  = 0;
@@ -292,11 +287,11 @@ class AdminController extends Controller
 
     }
 
-    /*************************************************
-     *          SIGNALEMENT DES COMMENTAIRES
-     *************************************************/
-
     /**
+     * Fonction permettant de signaler ou de retirer un signalement sur un commentaire.
+     * 
+     * @param User
+     * @param Post
      * @Route("signalement/{post}/{user}", options = {"expose" = true}, name="post_user_reclamation", methods={"GET"})
      */
     public function reclamation(User $user, Post $post)
@@ -334,11 +329,11 @@ class AdminController extends Controller
 
     }
 
-    /**************************************************************
-     *      AFFICHAGE ET GESTION DES COMMENTAIRES SIGNALES
-     *************************************************************/
-
     /**
+     * Cette fonction affiche la page qui listera les commentaires signalés.
+     * Les commentaires signalés seront retournés avec la fonction ("listPostReclamation").
+     * 
+     * @param Request
      * @Route("/view/post", name="admin_post_view", options = {"expose" = true})
      * @Method({"GET", "POST"})
      */
@@ -354,6 +349,12 @@ class AdminController extends Controller
     }
 
     /**
+     * Ce code renvoi la liste des commentaires signalés pour traitement via Javascript.
+     * 
+     * @param Request
+     * @param Sujet
+     * @param Date
+     * @param int
      * @Route("/signalement/list/{sujet}/{date}/{reclamation}", name="admin_post_list", options = {"expose" = true}, requirements={"sujet"="\d+"})
      * @Method({"GET", "POST"})
      */
@@ -390,15 +391,17 @@ class AdminController extends Controller
 
         $commentaires = json_encode($data);
 
-        $response = new Response(
-            $commentaires,
-        );
+        $response = new Response($commentaires);
 
         return $response;
     
     }
 
     /**
+     * Fonction permettant d'envoyer le formulaire de restauration de la base de données et de traiter la restauration lors de la soumission du formulaire.
+     * Lors de la soumission du formulaire en "POST", la fonction créer une restauration des images.
+     * 
+     * @param Request
      * @Route("/backup/bdd/list", name="admin_backup_restaure")
      * @Method({"GET", "POST"})
      */
@@ -424,7 +427,6 @@ class AdminController extends Controller
 
                     $libelle = $form->get('backups')->getData()->getLibelle();
                 
-                    // Restauration du nom des backups dans la bdd
                     $directoryPath = "/home/jimmy/html/FORUM/web/backup/BDD/";
                     $files = scandir($directoryPath);
 
@@ -452,24 +454,19 @@ class AdminController extends Controller
                     
                     }
 
-                    // Restauration des images dans le dossier public images
                     foreach ( $picturesList as $picture ) {
 
                         if ( '.' !== $picture && '..' !== $picture ) {
 
-                            // Nom de l'image
                             $pos1 = strripos($picture, '.');
                             $name = substr($picture, 0, $pos1);
                             $ext  = substr($picture, $pos1);
                             
-                            // Id de l'image
                             $pos2  = strripos($name, '_')+1;
                             $id    = substr($name, $pos2);
                          
-                            // Lecture de l'image dans la base de donnée
                             $imgExist = $this->manager->getRepository(Picture::class)->find($id);
                             
-                            // Si elle existe j'utilise rsync vers le répertoire des images affichées (pour être sûr de son existence)
                             if ( null !== $imgExist ) {
                                 exec('rsync /home/jimmy/html/FORUM/web/backup/images/"'.$name.$ext.'" /home/jimmy/html/FORUM/web/upload/images/"'.$name.$ext.'"');
                             }
@@ -478,24 +475,19 @@ class AdminController extends Controller
 
                     }
 
-                    // Restauration des images des profils dans le dossier public imgProfil
                     foreach ( $picturesProfilList as $picture ) {
 
                         if ( '.' !== $picture && '..' !== $picture ) {
 
-                            // Nom de l'image
                             $pos1 = strripos($picture, '.');
                             $name = substr($picture, 0, $pos1);
                             $ext  = substr($picture, $pos1);
-                            
-                            // Id de l'image
+
                             $pos2  = strripos($name, '_')+1;
                             $id    = substr($name, $pos2);
                              
-                            // Lecture de l'image dans la base de donnée
                             $imgExist = $this->manager->getRepository(PictureProfile::class)->find($id);
                             
-                            // Si elle existe j'utilise rsync vers le répertoire des images affichées (pour être sûr de son existence)
                             if ( null !== $imgExist ) {
                                 exec('rsync /home/jimmy/html/FORUM/web/backup/imgProfil/"'.$name.$ext.'" /home/jimmy/html/FORUM/web/upload/imgProfil/"'.$name.$ext.'"');
                             }
@@ -525,6 +517,8 @@ class AdminController extends Controller
     }
 
     /**
+     * Créer un point de restauration du site internet.
+     * 
      * @Route("/backup/bdd/create", name="admin_backup_bdd")
      * @Method({"GET", "POST"})
      */
@@ -550,13 +544,8 @@ class AdminController extends Controller
         $backup->setLibelle($libelle);
         $backup->setDate($date);
         
-        // Backup de la base de données
         exec('mysqldump -ujimmy -p2018 --databases jimmy_forum > /home/jimmy/html/FORUM/web/backup/BDD/'.$libelle);
-
-        // Backup des images
         exec('rsync -r /home/jimmy/html/FORUM/web/upload/images/ /home/jimmy/html/FORUM/web/backup/images/');
-
-        // Backup des images des profils
         exec('rsync -r /home/jimmy/html/FORUM/web/upload/imgProfil/ /home/jimmy/html/FORUM/web/backup/imgProfil/');
 
         $this->manager->persist($backup);

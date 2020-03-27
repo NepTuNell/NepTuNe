@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * author: CHU VAN Jimmy
+ */
 namespace BackendBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -8,9 +11,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
+/**
+ * FormType du thème
+ */
 class ThemeType extends AbstractType
 {
     /**
+     * FormType des themes
+     * 
+     * @param FormBuilderInterface
+     * @param array
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -20,6 +30,9 @@ class ThemeType extends AbstractType
     }
     
     /**
+     * Options du FormType des themes
+     * 
+     * @param OptionsResolver
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
@@ -30,6 +43,8 @@ class ThemeType extends AbstractType
     }
 
     /**
+     * Préfixe du FormType lors du rendu de la vue
+     * 
      * {@inheritdoc}
      */
     public function getBlockPrefix()
