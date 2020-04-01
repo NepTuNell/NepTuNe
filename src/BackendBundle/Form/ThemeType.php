@@ -26,7 +26,15 @@ class ThemeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('libelle', TextType::class)
-                ->add('subdivise', CheckboxType::class);
+                ->add('subdivise', CheckboxType::class, [
+                    'label' => "Diviser en section",
+                    'attr'  => [ 
+                        'style' => 'margin-right: 5%;'
+                    ],
+                    'label_attr' => [
+                        'class' => "col-12 textColor"
+                    ]
+                ]);
     }
     
     /**

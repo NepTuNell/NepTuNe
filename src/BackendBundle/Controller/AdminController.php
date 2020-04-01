@@ -93,7 +93,7 @@ class AdminController extends Controller
     public function dashboard()
     {
 
-        if ( !$this->isGranted('ROLE_ADMIN') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
+        if ( !$this->isGranted('ROLE_MODERATOR') || !$this->isGranted('IS_AUTHENTICATED_FULLY') ) {
 
             throw $this->createAccessDeniedException('Vous n\'avez pas les droits nécessaires pour accéder à cette section !');
 
@@ -361,7 +361,7 @@ class AdminController extends Controller
     public function listPostReclamation(Request $request, $sujet = null, $date = null, $reclamation = null)
     {
 
-        if ( !$this->isGranted('ROLE_ADMIN') ) {
+        if ( !$this->isGranted('ROLE_MODERATOR') ) {
             throw $this->createAccessDeniedException('Vous essayer d\'accéder à des ressources protégées !');
         }
 

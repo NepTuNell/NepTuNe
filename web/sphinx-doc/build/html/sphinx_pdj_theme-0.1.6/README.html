@@ -1,0 +1,194 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xml:lang="" lang="" version="-//W3C//DTD XHTML 1.1//EN" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  <title>PdJ Sphinx Theme &mdash; documentation NepTuNe 1</title>
+  
+
+  
+
+  
+
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet" href="../_static/css/pdj.css" type="text/css" />
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Recherche" href="../search.html"/>
+    <link rel="top" title="documentation NepTuNe 1" href="../index.html"/>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="cache-control" content="public" />
+    <meta name="robots" content="follow, all" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Add jQuery library -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+  </head>
+
+  <body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="fa fa-home"> NepTuNe </a>
+        <div role="search">
+	  <form id ="rtd-search-form" class="wy-form"
+		action="../search.html" method="get">
+	    <input type="text" name="q" placeholder="Search docs" />
+	    <input type="hidden" name="check_keywords" value="yes" />
+	    <input type="hidden" name="area" value="default" />
+	  </form>
+	</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../Chapitre 1.html">Premiers pas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Chapitre 1.html#creation-du-compte">Création du compte</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Chapitre 1.html#connexion">Connexion</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Chapitre 2.html">Utilisateur</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Chapitre 2.html#gestion-du-compte">Gestion du compte</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Chapitre 2.html#creation-des-sujets-et-des-commentaires">Création des sujets et des commentaires</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Chapitre 2.html#gestion-de-la-page-d-accueil">Gestion de la page d&#8217;accueil</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Chapitre 3.html">Administration et modération</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Chapitre 3.html#administration-du-site">Administration du site</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Chapitre 3.html#moderation-du-site">Modération du site</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../Chapitre 4.html">Documentation technique</a></li>
+</ul>
+
+          
+        
+
+      </div>
+      &nbsp;
+    </nav>
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      <nav class="wy-nav-top" id="barra-mobile" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">Porão do Juca</a>
+      </nav>
+
+      <div class="wy-nav-content">
+	<div class="fundo-claro">
+	</div>
+	<div class="fundo-escuro">
+	</div>
+
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+	    
+	    <!-- <ul class="wy-breadcrumbs"> -->
+	    <!--   <li><a href="#">Docs</a> &raquo;</li> -->
+
+	    <!--   <li>Features</li> -->
+	    <!--   <li class="wy-breadcrumbs-aside"> -->
+
+	    <!-- 	<a href="_sources/index.txt" rel="nofollow"> View page source</a> -->
+
+	    <!--   </li> -->
+	    <!-- </ul> -->
+	    <!-- <hr/> -->
+	  </div>
+
+          <div role="main" class="">
+
+	    <div id="content" class="hfeed entry-container hentry">
+  <div class="section" id="pdj-sphinx-theme">
+<h1>PdJ Sphinx Theme<a class="headerlink" href="#pdj-sphinx-theme" title="Lien permanent vers ce titre">¶</a></h1>
+<p>This theme is a dark theme for sphinx documentation based on the
+read the docs theme.</p>
+<p>To install it, use pip:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>$ pip install sphinx_pdj_theme
+</pre></div>
+</div>
+<p>To enable it in your project documentation, set the following in
+your conf.py file.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sphinx_pdj_theme</span>
+<span class="n">html_theme</span> <span class="o">=</span> <span class="s1">&#39;sphinx_pdj_theme&#39;</span>
+<span class="n">htm_theme_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">sphinx_pdj_theme</span><span class="o">.</span><span class="n">get_html_theme_path</span><span class="p">()]</span>
+</pre></div>
+</div>
+</div>
+
+
+	    </div>
+            <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, CHU VAN Jimmy.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/jucacrispim/sphinx_pdj_theme">theme</a> provided by <a href="http://poraodojuca.net">Porão do Juca</a>.
+
+</footer>
+	</div>
+	</div>
+	  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js">
+
+    </script>
+    <script type="text/javascript" src="../_static/underscore.js">
+
+    </script>
+    <script type="text/javascript" src="../_static/doctools.js">
+
+    </script>
+    <script type="text/javascript" src="../_static/translations.js">
+
+    </script>
+
+  
+
+   <script type="text/javascript"
+           src="../_static/js/theme.js"></script>
+
+   <script type="text/javascript"
+           src="../_static/js/pdj.js"></script>
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+  </body>
+</html>

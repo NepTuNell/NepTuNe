@@ -21,10 +21,7 @@
                                     {{ form_label(form.libelle, 'Libelle', {'label_attr': {'class': 'col-6 textSize textColor'}}) }}
                                     {{ form_widget(form.libelle, {'attr': {'class': 'form-control col-6'} }) }}
                                 </div>
-                                <div class="form-group row">
-                                    {{ form_label(form.subdivise, 'Divisé en section', {'label_attr': {'class': 'col-6 textSize textColor'}}) }}
-                                    {{ form_widget(form.subdivise, {'attr': {'class': 'form-control col-1'} }) }}
-                                </div>
+                                {{ form_row(form.subdivise) }}
 						    </td>
 					    </tr>
 			            <tr>

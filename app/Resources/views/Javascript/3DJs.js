@@ -1,4 +1,4 @@
- 
+
 $('document').ready( function ( ) {
 
     var container = document.getElementById('NepTuNe');
@@ -13,6 +13,9 @@ $('document').ready( function ( ) {
         animate();
     }
 
+    /**
+     * 
+     */
     function init() {
 
         //////////////////////////////////////////////////////
@@ -175,6 +178,11 @@ $('document').ready( function ( ) {
 
     }
 
+    
+    /**
+     * @param  {} a
+     * @param  {} b
+     */
     function intersect(a, b) {
         
         return (a.min.x <= b.max.x && a.max.x >= b.min.x) &&
@@ -183,6 +191,9 @@ $('document').ready( function ( ) {
 
     }
 
+    /**
+     * Animation des objets (lunes)
+     */
     function animate() {
 
         requestAnimationFrame( animate );
@@ -198,19 +209,9 @@ $('document').ready( function ( ) {
 
     }
 
-    /*function followCamera(event) {
-
-        var mouseX = event.clientX - window.innerWidth/2;
-        var mouseY = event.clientY - window.innerHeight/2;
-
-        camera.position.x += (mouseX - camera.position.x)*0.0005;
-        camera.position.y += (mouseY - camera.position.y)*0.0005;
-        camera.position.z = 250;
-        camera.lookAt( scene.position )
-        renderer.render( scene, camera );
-
-    }*/
-
+    /**
+     * Modification de la taille
+     */
     window.addEventListener('resize', () => {
         let width = window.innerWidth
         let height = window.innerHeight
@@ -218,21 +219,7 @@ $('document').ready( function ( ) {
         camera.aspect = width / height
         camera.updateProjectionMatrix()
     })
-    /*
-    window.addEventListener('mousemove', t) ;
-
-    function t(event) {
-
-        // création de l'étoile
-        var geometry = new THREE.CircleGeometry( 10, 32 );
-        var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-        var circle   = new THREE.Mesh( geometry, material );
-        circle.position.x = event.clientX;
-        circle.position.y = -event.clientY;         
-        scene.add( circle );
-
-    }
-    */
+   
 });
     
  
